@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS Posts (
 CREATE TABLE IF NOT EXISTS Comments (
   comment_id varchar(8) PRIMARY KEY,
   comment_content TEXT NOT NULL,
+  comment_likes SMALLINT NOT NULL,
   user_id varchar(8) NOT NULL REFERENCES Users(user_id),
   post_id varchar(8) NOT NULL REFERENCES Posts(post_id),
   reply_id varchar(8) REFERENCES Comments(comment_id)
