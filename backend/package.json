@@ -2,15 +2,18 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "chalk": "^3.0.0",
     "express": "^4.17.1",
-    "qunit": "^2.9.3"
+    "qunit": "^2.9.3",
+    "yargs": "^15.1.0"
   },
   "devDependencies": {
     "eslint": "^6.1.0",
