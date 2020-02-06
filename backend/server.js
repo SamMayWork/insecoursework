@@ -42,7 +42,7 @@ if (argv.verbose) {
 // /forum/get?board=[param]&order=[param] - Gets a list of posts in a board in a given order
 // Since the forum allows unregistered users to access the site, there is no need for authentication here
 app.get('/forum/get', (req, res) => {
-  handleLogging(req);
+  handleLogging(req, "GET");
 
   if (req.query.thread !== undefined) {
     // handleThreadGet();
@@ -61,7 +61,7 @@ app.get('/forum/get', (req, res) => {
 // /forum/create?post=[param] - Create a comment using the provided information in the POST body, or
 //                               if the comment already exists, updates the comment with the edited content
 app.post('/forum/create', (req, res) => {
-  handleLogging(req);
+  handleLogging(req, "POST");
 
   res.end();
 });
@@ -71,7 +71,7 @@ app.post('/forum/create', (req, res) => {
 // /forum/like?like=[param]&comment=[param] - If like==true then it likes the comment with the given ID
 // if like==false then it will dislike the associated post
 app.post('/forum/like', (req, res) => {
-  handleLogging(req);
+  handleLogging(req, "POST");
 
   if (req.query.like !== undefined && req.query.post != undefined) {
     // handleLike();
@@ -88,7 +88,7 @@ app.post('/forum/like', (req, res) => {
 // /forum/report?post=[param] - Reports a post using the given ID
 // /forum/report?comment=[param] - Reports a comment using the given ID
 app.post('forum/report', (req, res) => {
-  handleLogging(req);
+  handleLogging(req, "POST");
 
   if (req.query.post !== undefined) {
     // handlePostReport();
@@ -105,7 +105,7 @@ app.post('forum/report', (req, res) => {
 
 // Catch-all for 404's
 app.get('*', (req, res) => {
-  handleLogging(req);
+  handleLogging(req, "GET");
   res.end('Could not process request');
 });
 
@@ -116,8 +116,8 @@ app.listen(8080);
  * Handles the logging function whenever a request comes in to the sever
  * @param {Request} req The Request for the server to handle 
  */
-function handleLogging (req) {
+function handleLogging (req, type) {
   if (argv.logging) {
-    console.logging(`${postMessage} ${req.originalUrl} ${Date.now()} ${req.ip}`);
+    console.log(`${type == "POST" ? postMessage : getMessage} ${req.originalUrl} ${Date.now()} ${req.ip}`);
   }
 }
