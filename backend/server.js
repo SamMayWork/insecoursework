@@ -1,10 +1,14 @@
-// / Created 04/02/2020
-// /
-// / Main backend server file for the INSE coursework project
-// / This file starts an express server listening on the port 8080 for incoming connections
-// / Options for startup:
-// /  : --verbose, makes the startup procedure for the application verbose
-// /  : --logging, logs every HTTP request made to the server
+// Created 04/02/2020
+//
+// Main backend server file for the INSE coursework project
+// This file starts an express server listening on the port 8080 for incoming connections
+//
+// This module is essentially a switch-board for backend of the system, accepting
+// incoming connecition and routing them to the correct destination 
+//
+// Options for startup:
+//  : --verbose, makes the startup procedure for the application verbose
+//  : --logging, logs every HTTP request made to the server
 
 //////////////////////////////////////////////////////////////// ESLINT-DISABLES
 
