@@ -105,19 +105,20 @@ app.post('forum/report', (req, res) => {
 
 // Catch-all for 404's
 app.get('*', (req, res) => {
-  handleLogging(req, "GET");
+  handleLogging(req, "GET", "Resource not found: 404");
   res.end('Could not process request');
 });
 
 app.listen(8080);
 
-
 /**
- * Handles the logging function whenever a request comes in to the sever
- * @param {Request} req The Request for the server to handle 
+ * Handles the logging option to show all incoming http connections
+ * @param {*} req The Request to log
+ * @param {*} type The type of the request
+ * @param {*} message The message to append to the end of the string (optional)
  */
-function handleLogging (req, type) {
+function handleLogging (req, type, message="") {
   if (argv.logging) {
-    console.log(`${type == "POST" ? postMessage : getMessage} ${req.originalUrl} ${Date.now()} ${req.ip}`);
+    console.log(`${type == "POST" ? postMessage : getMessage} ${req.originalUrl} ${Date.now()} ${req.ip} ${message}`);
   }
 }
