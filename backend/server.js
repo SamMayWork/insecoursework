@@ -20,6 +20,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { argv } = require('yargs');
 const chalk = require('chalk');
+const logging = require('./logging');
 
 const app = express();
 
@@ -38,7 +39,7 @@ app.use(bodyParser.json());
 // ////////////////////////////////////////////////////////////// COMMAND LINE ARGUMENTS
 
 if (argv.verbose) {
-  console.log(`${warnMessage}Starting the server...`);
+  logging.warningMessage("Starting the server...");
 }
 
 // ////////////////////////////////////////////////////////////// API END POINT HANDLERS
@@ -49,7 +50,7 @@ if (argv.verbose) {
 // /forum/get?board=[param]&order=[param] - Gets a list of posts in a board in a given order
 // Since the forum allows unregistered users to access the site, there is no need for authentication here
 app.get('/forum/get', (req, res) => {
-  handleLogging(req, 'GET');
+  logging.logHttpGetMessage(req);
 
   if (req.query.thread !== undefined) {
     // handleThreadGet();
@@ -68,7 +69,7 @@ app.get('/forum/get', (req, res) => {
 // /forum/create?post=[param] - Create a comment using the provided information in the POST body, or
 //                               if the comment already exists, updates the comment with the edited content
 app.post('/forum/create', (req, res) => {
-  handleLogging(req, 'POST');
+  logging.logHttpPostMessage(req);
 
   res.end();
 });
@@ -78,7 +79,7 @@ app.post('/forum/create', (req, res) => {
 // /forum/like?like=[param]&comment=[param] - If like==true then it likes the comment with the given ID
 // if like==false then it will dislike the associated post
 app.post('/forum/like', (req, res) => {
-  handleLogging(req, 'POST');
+  logging.logHttpPostMessage(req);
 
   if (req.query.like !== undefined && req.query.post !== undefined) {
     // handleLike();
@@ -95,7 +96,7 @@ app.post('/forum/like', (req, res) => {
 // /forum/report?post=[param] - Reports a post using the given ID
 // /forum/report?comment=[param] - Reports a comment using the given ID
 app.post('forum/report', (req, res) => {
-  handleLogging(req, 'POST');
+  logging.logHttpPostMessage(req);
 
   if (req.query.post !== undefined) {
     // handlePostReport();
@@ -112,21 +113,14 @@ app.post('forum/report', (req, res) => {
 
 // Catch-all for 404's
 app.get('*', (req, res) => {
-  handleLogging(req, 'GET', 'Resource not found: 404');
+  logging.logHttpGetMessage(req, "404");
   res.end('Could not process request');
 });
 
-console.log(`${warnMessage}Server initialised, listening for incoming connections on port ${listeningPort}`);
-app.listen(listeningPort);
+app.post('*', (req, res) => {
+  logging.logHttpPosttMessage(req, "404");
+  res.end('Could not process request');
+});
 
-/**
- * Handles the logging option to show all incoming http connections
- * @param {*} req The Request to log
- * @param {*} type The type of the request
- * @param {*} message The message to append to the end of the string (optional)
- */
-function handleLogging(req, type, message = '') {
-  if (argv.logging) {
-    console.log(`${type === 'POST' ? postMessage : getMessage} ${req.originalUrl} ${Date.now()} ${req.ip} ${message}`);
-  }
-}
+logging.warningMessage(`Server initialised and listening on port ${listeningPort}`);
+app.listen(listeningPort);
