@@ -4,7 +4,7 @@
 // This file starts an express server listening on the port 8080 for incoming connections
 //
 // This module is essentially a switch-board for backend of the system, accepting
-// incoming connecition and routing them to the correct destination
+// incoming connection and routing them to the correct destination
 //
 // Options for startup:
 //  : --verbose, makes the startup procedure for the application verbose
@@ -21,6 +21,9 @@ const bodyParser = require('body-parser');
 const { argv } = require('yargs');
 const logging = require('./logging');
 const maintain = require('./maintainmodule');
+
+//Still editing this, working on connecting the db
+//const db = require('./model-dbstructure');
 
 const app = express();
 
