@@ -62,7 +62,7 @@ async function createBoard(board_name, board_year) {
   await sqlConnection.query(query, generateID(8), board_name, board_year);
   return true;
 }
-
+function createPost() {}
 function createComment() {}
 function createUser() {}
 function editPost() {}
