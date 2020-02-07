@@ -6,12 +6,36 @@
 // and converts them into SQL queries that are then run against the database
 
 const pg = require('pg').Client;
+const logging = require('./logging');
 
 // ////////////////////////////////////////////////////////////// ESLINT-DISABLES
 
 /* eslint-disable no-console */
 /* eslint-disable max-len */
 /* eslint-disable no-use-before-define */
+
+// ////////////////////////////////////////////////////////////// ESTABLISHING-CONNECTION
+
+let sqlConnection;
+
+try {
+  sqlConnection = new Postgres({
+    database: 'forumbackend',
+    statement_timeout: 2000,
+    host: '/var/run/postgresql',
+  });
+
+  logging.warningMessage('Connecting to the Database');
+  sql.connect();
+
+  sql.on('error', (err) => {
+    console.log(err);
+    sql.end();
+  });
+} catch (error) {
+  logging.errorMessage(error);
+  logging.errorMessage('Unable to connect to the DB');
+}
 
 // ////////////////////////////////////////////////////////////// GETTING-CONTENT
 
