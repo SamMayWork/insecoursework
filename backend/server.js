@@ -9,6 +9,7 @@
 // Options for startup:
 //  : --verbose, makes the startup procedure for the application verbose
 //  : --logging, logs every HTTP request made to the server
+//  : --coldstart, cold starts the system and creates all of the files in the database
 
 // ////////////////////////////////////////////////////////////// ESLINT-DISABLES
 
@@ -39,7 +40,6 @@ if (argv.verbose) {
 }
 
 if (argv.coldstart) {
-  // Start the cold-start procedure and generate a new DB
   maintain.coldStart();
 }
 
