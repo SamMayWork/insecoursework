@@ -43,7 +43,7 @@ try {
  * Gets a post and all of its content (including comments)
  * @param {string} postid The ID of the post to get
  */
-function getPost (postid) {}
+function getPost(postid) {}
 
 function getBoard(board_name, board_year) {
 
@@ -63,38 +63,38 @@ async function createBoard(board_name, board_year) {
   return true;
 }
 
-function createComment () {}
-function createUser () {}
-function editPost () {}
-function editComment () {}
+function createComment() {}
+function createUser() {}
+function editPost() {}
+function editComment() {}
 
 // ////////////////////////////////////////////////////////////// REPORTING-CONTENT
 
-function reportPost () {}
-function reportComment () {}
+function reportPost() {}
+function reportComment() {}
 
 // ////////////////////////////////////////////////////////////// LIKING/DISLIKING COMMENTS?POSTS
 
 /**
  * Function for liking/disliking a post
  * @param {boolean} like if true, the post is liked, if false it is disliked
- * @param {string} postId is the id of the post that is being liked/disliked 
+ * @param {string} postId is the id of the post that is being liked/disliked
  */
 
-try {async function ratePost (postid, like) {
-  let query;
-  const results = await sql.query(query, [postid]);
-  if(like == true){
-    query = `update Posts set post_likes = post_likes + 1 where post_id = ${postid};`
+async function ratePost(postid, like) {
+  try {
+    let query;
+    const results = await sqlConnection.query(query, [postid]);
+    if (like === true) {
+      query = `update Posts set post_likes = post_likes + 1 where post_id = ${postid};`;
+    } else {
+      query = `update Posts set post_likes = post_likes - 1 where post_id = ${postid};`;
+    }
+    return true;
+  } catch (error) {
+    logging.errorMessage(error);
+    return false;
   }
-  else{
-    query = `update Posts set post_likes = post_likes - 1 where post_id = ${postid};`
-  };
-  return true;
-}
-} catch(error) {
-logging.errorMessage(error);
-  return false;
 }
 
 /**
@@ -103,19 +103,18 @@ logging.errorMessage(error);
  * @param {boolean} like if true, the post is like, if false it is disliked
  */
 
-try {async function rateComment (commentid, like) {
-  let query;
-  const results = await sql.query(query, [commentid]);
-  if(like == true){
-    query = `update Comments set comment_likes = comment_likes + 1 where comment_id = ${commentid};`
+async function rateComment(commentid, like) {
+  try {
+    let query;
+    const results = await sqlConnection.query(query, [commentid]);
+    if (like === true) {
+      query = `update Comments set comment_likes = comment_likes + 1 where comment_id = ${commentid};`;
+    } else {
+      query = `update Comments set comment_likes = comment_likes - 1 where comment_id = ${commentid}`;
+    }
+    return true;
+  } catch (error) {
+    logging.errorMessage(error);
+    return false;
   }
-  else{
-    query = `update Comments set comment_likes = comment_likes - 1 where comment_id = ${commentid}`
-  };
-  return true;
 }
-} catch(error) {
-  logging.errorMessage(error);
-  return false;
-}
-
