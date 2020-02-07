@@ -20,6 +20,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { argv } = require('yargs');
 const logging = require('./logging');
+const maintain = require('./maintainmodule');
 
 const app = express();
 
@@ -35,6 +36,11 @@ app.use(bodyParser.json());
 
 if (argv.verbose) {
   logging.warningMessage('Starting the server...');
+}
+
+if (argv.coldstart) {
+  // Start the cold-start procedure and generate a new DB
+  maintain.coldStart();
 }
 
 // ////////////////////////////////////////////////////////////// API END POINT HANDLERS

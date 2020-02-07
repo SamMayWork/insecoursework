@@ -15,6 +15,7 @@ const chalk = require('chalk');
 const warnMessage = `${chalk.bgYellow.black('WARN')} `;
 const getMessage = `${chalk.bgGreen.black('GET')} `;
 const postMessage = `${chalk.bgRed.white('POST')} `;
+const coldMessage = `${chalk.bgCyan.white('COLDSTART')} `;
 
 /**
  * Prints a warning message to the screen with proper formatting
@@ -42,8 +43,17 @@ function logHttpGetMessage(req, message) {
   console.log(`${getMessage} ${req.originalUrl} ${Date.now()} ${req.ip} ${message}`);
 }
 
+/**
+ * Prints cold-start logging information
+ * @param {strimg} message
+ */
+function coldStartMessage(message) {
+  console.log(`${coldMessage} ${message}`);
+}
+
 // ////////////////////////////////////////////////////////////// EXPORTS
 
 module.exports.warningMessage = warningMessage;
 module.exports.logHttpPostMessage = logHttpPostMessage;
 module.exports.logHttpGetMessage = logHttpGetMessage;
+module.exports.coldStartMessage = coldStartMessage;
