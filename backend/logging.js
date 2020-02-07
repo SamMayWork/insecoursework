@@ -12,18 +12,19 @@ const chalk = require('chalk');
 
 // ////////////////////////////////////////////////////////////// LOGGING-CODE
 
-const warnMessage = `${chalk.bgYellow.black('WARN')} `;
-const getMessage = `${chalk.bgGreen.black('GET')} `;
-const postMessage = `${chalk.bgRed.white('POST')} `;
-const coldMessage = `${chalk.bgCyan.white('COLDSTART')} `;
-const successStyle = `${chalk.bgCyan.white('COLDSTART')} `;
+const warnStyle = `${chalk.bgYellow.black('WARN')} `;
+const getStyle = `${chalk.bgGreen.black('GET')} `;
+const postStyle = `${chalk.bgRed.white('POST')} `;
+const coldStyle = `${chalk.bgCyan.white('COLDSTART')} `;
+const successStyle = `${chalk.bgGreen.black('SUCCESS')} `;
+const errorStyle = `${chalk.bgRed.white('ERROR')} `;
 
 /**
  * Prints a warning message to the screen with proper formatting
  * @param {string} message Message to be printed
  */
 function warningMessage(message) {
-  console.log(warnMessage + message);
+  console.log(warnStyle + message);
 }
 
 /**
@@ -31,8 +32,8 @@ function warningMessage(message) {
  * @param {HttpRequest} req The Request to print to the screen
  * @param {string} message Optional message to append to the end of logs
  */
-function logHttpPostMessage(req, message = '') {
-  console.log(`${postMessage} ${req.originalUrl} ${Date.now()} ${req.ip} ${message}`);
+function logHttpPostStyle(req, message = '') {
+  console.log(`${postStyle} ${req.originalUrl} ${Date.now()} ${req.ip} ${message}`);
 }
 
 /**
@@ -40,8 +41,8 @@ function logHttpPostMessage(req, message = '') {
  * @param {HttpRequest} req The Request to print to the screen
  * @param {string} message Optional message to append to the end of logs
  */
-function logHttpGetMessage(req, message) {
-  console.log(`${getMessage} ${req.originalUrl} ${Date.now()} ${req.ip} ${message}`);
+function logHttpGetStyle(req, message) {
+  console.log(`${getStyle} ${req.originalUrl} ${Date.now()} ${req.ip} ${message}`);
 }
 
 /**
@@ -49,20 +50,30 @@ function logHttpGetMessage(req, message) {
  * @param {string} message
  */
 function coldStartMessage(message) {
-  console.log(`${coldMessage} ${message}`);
+  console.log(`${coldStyle} ${message}`);
 }
 
 /**
  * Prints a success message to the screen
- * @param {string} message Message to be printed to the screem
+ * @param {string} message Message to be printed to the screen
  */
 function successMessage(message) {
   console.log(`${successStyle} ${message} `);
 }
 
+/**
+ * Prints an error message to the screen
+ * @param {string} message Message to be printed to the screen
+ */
+function errorMessage(message) {
+  console.log(`${errorStyle} ${message} `);
+}
+
 // ////////////////////////////////////////////////////////////// EXPORTS
 
 module.exports.warningMessage = warningMessage;
-module.exports.logHttpPostMessage = logHttpPostMessage;
-module.exports.logHttpGetMessage = logHttpGetMessage;
+module.exports.logHttpPostStyle = logHttpPostStyle;
+module.exports.logHttpGetStyle = logHttpGetStyle;
 module.exports.coldStartMessage = coldStartMessage;
+module.exports.successMessage = successMessage;
+module.exports.errorMessage = errorMessage;
