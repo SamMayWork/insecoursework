@@ -1,0 +1,4 @@
+git pull origin backend
+git add .
+git commit -m "What I have done"
+git push origin master
