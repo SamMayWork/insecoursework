@@ -19,14 +19,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { argv } = require('yargs');
-const chalk = require('chalk');
 const logging = require('./logging');
 
 const app = express();
-
-const warnMessage = `${chalk.bgYellow.black('WARN')} `;
-const getMessage = `${chalk.bgGreen.black('GET')} `;
-const postMessage = `${chalk.bgRed.white('POST')} `;
 
 const listeningPort = 8080;
 
@@ -39,7 +34,7 @@ app.use(bodyParser.json());
 // ////////////////////////////////////////////////////////////// COMMAND LINE ARGUMENTS
 
 if (argv.verbose) {
-  logging.warningMessage("Starting the server...");
+  logging.warningMessage('Starting the server...');
 }
 
 // ////////////////////////////////////////////////////////////// API END POINT HANDLERS
@@ -113,12 +108,12 @@ app.post('forum/report', (req, res) => {
 
 // Catch-all for 404's
 app.get('*', (req, res) => {
-  logging.logHttpGetMessage(req, "404");
+  logging.logHttpGetMessage(req, '404');
   res.end('Could not process request');
 });
 
 app.post('*', (req, res) => {
-  logging.logHttpPosttMessage(req, "404");
+  logging.logHttpPosttMessage(req, '404');
   res.end('Could not process request');
 });
 

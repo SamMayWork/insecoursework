@@ -20,25 +20,25 @@ const postMessage = `${chalk.bgRed.white('POST')} `;
  * Prints a warning message to the screen with proper formatting
  * @param {string} message Message to be printed
  */
-function warningMessage (message) {
+function warningMessage(message) {
   console.log(warnMessage + message);
 }
 
 /**
  * Prints a log for a HTTP POST to the screen
  * @param {HttpRequest} req The Request to print to the screen
- * @param {string} message Optional message to append to the end of logs 
+ * @param {string} message Optional message to append to the end of logs
  */
-function logHttpPostMessage (req, message='') {
+function logHttpPostMessage(req, message = '') {
   console.log(`${postMessage} ${req.originalUrl} ${Date.now()} ${req.ip} ${message}`);
 }
 
 /**
  * Prints a log for a HTTP GET to the screen
  * @param {HttpRequest} req The Request to print to the screen
- * @param {string} message Optional message to append to the end of logs 
+ * @param {string} message Optional message to append to the end of logs
  */
-function logHttpGetMessage (req, message) {
+function logHttpGetMessage(req, message) {
   console.log(`${getMessage} ${req.originalUrl} ${Date.now()} ${req.ip} ${message}`);
 }
 
