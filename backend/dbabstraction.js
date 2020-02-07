@@ -45,16 +45,24 @@ try {
  */
 function getPost (postid) {}
 
-/**
- * Gets a board and all of the posts on that board
- * @param {string} boardid The ID of the board to get
- * @param {string} order The order to show the posts in
- */
-function getBoard (boardid, order) {}
+function getBoard(board_name, board_year) {
+
+}
 
 // ////////////////////////////////////////////////////////////// CREATING-CONTENT
 
-function createPost () {}
+
+/**
+ * Creates a board on the forum
+ * @param {string} board_name Name of the board to create
+ * @param {string} board_year Year of the board to create
+ */
+async function createBoard(board_name, board_year) {
+  const query = 'INSERT INTO Board (board_id, board_module, board_year) VALUES ($1, $2, $3);';
+  await sqlConnection.query(query, generateID(8), board_name, board_year);
+  return true;
+}
+
 function createComment () {}
 function createUser () {}
 function editPost () {}

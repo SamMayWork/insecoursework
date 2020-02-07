@@ -23,8 +23,8 @@ const { argv } = require('yargs');
 const logging = require('./logging');
 const maintain = require('./maintainmodule');
 
-//Still editing this, working on connecting the db
-//const db = require('./model-dbstructure');
+// Still editing this, working on connecting the db
+// const db = require('./model-dbstructure');
 
 const app = express();
 
