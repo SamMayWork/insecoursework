@@ -27,3 +27,23 @@ function getPost (postid, sql) {
         userid: results.rows[0].user_id,
     };
 }
+
+/**
+ * 
+ * @param {bool} like 
+ */
+try{  async function ratePost (postid, like) {
+    let query;
+    const results = await sql.query(query, [postid]);
+    if(like == true){
+      query = `update Posts set post_likes = post_likes + 1 where post_id = ${postid};`
+    }
+    else{
+      query = `update Posts set post_likes = post_likes - 1 where post_id = ${postid};`
+    };
+    return true;
+  }
+} catch(error) {
+  logging.errorMessage(error);
+  return false;
+}
