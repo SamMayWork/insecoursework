@@ -16,6 +16,7 @@ const warnMessage = `${chalk.bgYellow.black('WARN')} `;
 const getMessage = `${chalk.bgGreen.black('GET')} `;
 const postMessage = `${chalk.bgRed.white('POST')} `;
 const coldMessage = `${chalk.bgCyan.white('COLDSTART')} `;
+const successStyle = `${chalk.bgCyan.white('COLDSTART')} `;
 
 /**
  * Prints a warning message to the screen with proper formatting
@@ -45,10 +46,18 @@ function logHttpGetMessage(req, message) {
 
 /**
  * Prints cold-start logging information
- * @param {strimg} message
+ * @param {string} message
  */
 function coldStartMessage(message) {
   console.log(`${coldMessage} ${message}`);
+}
+
+/**
+ * Prints a success message to the screen
+ * @param {string} message Message to be printed to the screem
+ */
+function successMessage(message) {
+  console.log(`${successStyle} ${message} `);
 }
 
 // ////////////////////////////////////////////////////////////// EXPORTS
