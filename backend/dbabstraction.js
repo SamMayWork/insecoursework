@@ -78,13 +78,44 @@ function reportComment () {}
 /**
  * Function for liking/disliking a post
  * @param {boolean} like if true, the post is liked, if false it is disliked
+ * @param {string} postId is the id of the post that is being liked/disliked 
  */
-function ratePost (like) {}
+
+try {async function ratePost (postid, like) {
+  let query;
+  const results = await sql.query(query, [postid]);
+  if(like == true){
+    query = `update Posts set post_likes = post_likes + 1 where post_id = ${postid};`
+  }
+  else{
+    query = `update Posts set post_likes = post_likes - 1 where post_id = ${postid};`
+  };
+  return true;
+}
+} catch(error) {
+logging.errorMessage(error);
+  return false;
+}
 
 /**
- * Function for liking/disliking a comment
- * @param {boolean} like if true, the comment is liked, if false it is disliked
+ * Function for liking/disliking comments on posts
+ * @param {string} commentid is the id of the comment that is being liked/disliked
+ * @param {boolean} like if true, the post is like, if false it is disliked
  */
-function rateComment (like) {}
 
+try {async function rateComment (commentid, like) {
+  let query;
+  const results = await sql.query(query, [commentid]);
+  if(like == true){
+    query = `update Comments set comment_likes = comment_likes + 1 where comment_id = ${commentid};`
+  }
+  else{
+    query = `update Comments set comment_likes = comment_likes - 1 where comment_id = ${commentid}`
+  };
+  return true;
+}
+} catch(error) {
+  logging.errorMessage(error);
+  return false;
+}
 
