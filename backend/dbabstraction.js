@@ -19,22 +19,41 @@ const logging = require('./logging');
 let sqlConnection;
 
 try {
-  sqlConnection = new Postgres({
+  sqlConnection = new pg({
     database: 'forumbackend',
     statement_timeout: 2000,
     host: '/var/run/postgresql',
   });
 
   logging.warningMessage('Connecting to the Database');
-  sql.connect();
+  sqlConnection.connect();
 
-  sql.on('error', (err) => {
+  sqlConnection.on('error', (err) => {
     console.log(err);
-    sql.end();
+    sqlConnection.end();
   });
+
+  logging.successMessage ('Connection to DB provider established');
 } catch (error) {
   logging.errorMessage(error);
   logging.errorMessage('Unable to connect to the DB');
+}
+
+// ////////////////////////////////////////////////////////////// ID GENERATOR
+
+/**
+ * Generates a psuedo-random ID of a given length
+ * @param {number} length The length of the ID to return
+ */
+function generateId(length) {
+  const values = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  const generatedId = [];
+
+  for (let i = 0; i < length; i++) {
+    generatedId.unshift(values[Math.floor(Math.random() * values.length)]);
+  }
+
+  return generatedId.join('');
 }
 
 // ////////////////////////////////////////////////////////////// GETTING-CONTENT
@@ -59,9 +78,9 @@ function getBoard(board_name, board_year) {
  */
 async function createBoard(board_name, board_year) {
   const query = 'INSERT INTO Board (board_id, board_module, board_year) VALUES ($1, $2, $3);';
-  await sqlConnection.query(query, generateID(8), board_name, board_year);
-  return true;
+  await sqlConnection.query(query, [generateId(8), board_name, board_year]);
 }
+
 function createPost() {}
 function createComment() {}
 function createUser() {}
@@ -118,3 +137,16 @@ async function rateComment(commentid, like) {
     return false;
   }
 }
+
+// ////////////////////////////////////////////////////////////// DELETING CONTENT
+
+/**
+ * Deletes all of the content from the table board
+ */
+async function deleteRecordBoard () {
+  const query = "DELETE FROM board;";
+  await sqlConnection.query(query);
+}
+
+module.exports.deleteRecordBoard = deleteRecordBoard;
+module.exports.createBoard = createBoard;
