@@ -22,6 +22,7 @@ const bodyParser = require('body-parser');
 const { argv } = require('yargs');
 const logging = require('./logging');
 const maintain = require('./maintainmodule');
+const readline = require('readline');
 
 // Still editing this, working on connecting the db
 // const db = require('./model-dbstructure');
@@ -38,12 +39,27 @@ app.use(bodyParser.json());
 
 // ////////////////////////////////////////////////////////////// COMMAND LINE ARGUMENTS
 
+const rl = readline.createInterface({
+  input : process.stdin,
+  output : process.stdout,
+});
+
 if (argv.verbose) {
   logging.warningMessage('Starting the server...');
 }
 
 if (argv.coldstart) {
   maintain.coldStart();
+}
+
+if (argv.softreset) {
+  logging.warningMessage("SOFT RESET OPTION HAS BEEN ENABLED, ARE YOU SURE?");
+  rl.question ('Continue? y/n: ', (answer) => {
+    if (answer === 'y') {
+      logging.warningMessage("I hope you know what you're doing.");
+      maintain.softReset();
+    }
+  });
 }
 
 // ////////////////////////////////////////////////////////////// API END POINT HANDLERS
