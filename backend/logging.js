@@ -32,7 +32,7 @@ function warningMessage(message) {
  * @param {HttpRequest} req The Request to print to the screen
  * @param {string} message Optional message to append to the end of logs
  */
-function logHttpPostStyle(req, message = '') {
+function logHttpPostMessage(req, message = '') {
   console.log(`${postStyle} ${req.originalUrl} ${Date.now()} ${req.ip} ${message}`);
 }
 
@@ -41,7 +41,7 @@ function logHttpPostStyle(req, message = '') {
  * @param {HttpRequest} req The Request to print to the screen
  * @param {string} message Optional message to append to the end of logs
  */
-function logHttpGetStyle(req, message) {
+function logHttpGetMessage(req, message) {
   console.log(`${getStyle} ${req.originalUrl} ${Date.now()} ${req.ip} ${message}`);
 }
 
@@ -72,8 +72,8 @@ function errorMessage(message) {
 // ////////////////////////////////////////////////////////////// EXPORTS
 
 module.exports.warningMessage = warningMessage;
-module.exports.logHttpPostStyle = logHttpPostStyle;
-module.exports.logHttpGetStyle = logHttpGetStyle;
+module.exports.logHttpPostMessage = logHttpPostMessage;
+module.exports.logHttpGetMessage = logHttpGetMessage;
 module.exports.coldStartMessage = coldStartMessage;
 module.exports.successMessage = successMessage;
 module.exports.errorMessage = errorMessage;
