@@ -31,7 +31,18 @@ async function retrievePost(req, res) {
   const postResult = await dbabs.getPost(threadid);
   const commentsResult = await dbabs.getComments(threadid);
   res.json(await generateRetrievePostContent(postResult, commentsResult));
+  res.status(200);
   res.end();
+}
+
+// ////////////////////////////////////////////////////////////// POSTING CONTENT
+
+/**
+ * Stores a given post inside of the database
+ * @param {request} req The request from the user
+ * @param {response} res The response to the user
+ */
+async function storePost(req, res) {
 }
 
 // ////////////////////////////////////////////////////////////// DATA-PACKERS

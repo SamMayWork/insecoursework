@@ -160,6 +160,19 @@ async function rateComment(commentid, like) {
   }
 }
 
+// ////////////////////////////////////////////////////////////// USER ACCOUNT QUERIES
+
+/**
+ * Checks to see if a user exists inside of the database
+ * @param {string} postid The ID of the post to get 
+ */
+async function checkUserExists (postid) {
+  const query = 'SELECT * FROM users WHERE user_id = $1';
+  const response = sqlConnection.query(query, [postid]);
+  return response !== undefined ? true : false;
+}
+
+
 // ////////////////////////////////////////////////////////////// DELETING CONTENT
 
 /**

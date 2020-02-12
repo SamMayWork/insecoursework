@@ -24,6 +24,7 @@ const readline = require('readline');
 const logging = require('./logging');
 const maintain = require('./maintainmodule');
 const pms = require('./postmodule');
+const uac = require('./useraccountsystem');
 
 // Still editing this, working on connecting the db
 // const db = require('./model-dbstructure');
@@ -139,7 +140,15 @@ app.post('forum/report', (req, res) => {
   res.end();
 });
 
-// //////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////// USER ACCOUNT SYSTEM
+
+app.post('forum/uac', async (req, res) => {
+  if (res.query.existsid) {
+    await uac.checkUserExists(req, res);
+  }
+});
+
+// ////////////////////////////////////////////////////////////// CATCH-ALLS
 
 // Catch-all for 404's
 app.get('*', (req, res) => {
