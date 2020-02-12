@@ -14,7 +14,8 @@ const dbabs = require('./dbabstraction');
  * @param {response} res The response to the user
  */
 function getPost (req, res) { 
-  const id = req.query.id;
+  const id = req.query.thread;
+  logging.warningMessage(id);
   const result = dbabs.getPost(id);
   res.json(result);
   res.end();

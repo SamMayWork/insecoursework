@@ -91,7 +91,7 @@ app.get('/forum/get', async (req, res) => {
     res.end();
   }
 
-  return;
+  return; 
 });
 
 // Handler for the HTTP Posts coming to create posts/comments on the server, end points for thois are

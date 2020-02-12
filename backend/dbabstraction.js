@@ -62,10 +62,9 @@ function generateId(length) {
  * Gets a post and all of its content (including comments)
  * @param {string} postid The ID of the post to get
  */
-function getPost(postid) {
+async function getPost(postid) {
   const query = "SELECT * FROM posts WHERE post_id = $1";
-  const results = sqlConnection.query(query, [postid]);
-  
+  const results = await sqlConnection.query(query, [postid]);
   return {
     id : results.rows[0].post_id,
     title : results.rows[0].post_title,
