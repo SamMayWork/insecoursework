@@ -164,11 +164,11 @@ async function rateComment(commentid, like) {
 
 /**
  * Checks to see if a user exists inside of the database
- * @param {string} postid The ID of the post to get 
+ * @param {string} userid The ID of the user to check 
  */
-async function checkUserExists (postid) {
+async function checkUserExists (userid) {
   const query = 'SELECT * FROM users WHERE user_id = $1';
-  const response = sqlConnection.query(query, [postid]);
+  const response = await sqlConnection.query(query, [userid]);
   return response !== undefined ? true : false;
 }
 
@@ -201,3 +201,4 @@ module.exports.deleteRecordBoard = deleteRecordBoard;
 module.exports.createBoard = createBoard;
 module.exports.getPost = getPost;
 module.exports.getComments = getComments;
+module.exports.checkUserExists = checkUserExists;

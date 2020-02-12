@@ -142,8 +142,8 @@ app.post('forum/report', (req, res) => {
 
 // ////////////////////////////////////////////////////////////// USER ACCOUNT SYSTEM
 
-app.get('forum/uac', async (req, res) => {
-  if (res.query.existsid !== undefined) {
+app.get('/forum/uac', async (req, res) => {
+  if (req.query.existsid !== undefined) {
     await uac.checkUserExists(req, res);
   }
 });
