@@ -29,11 +29,11 @@ async function retrievePost (req, res) {
 function generateRetrievePostContent (post, comments)  {
   const info =  {
     post_information : {
-      id : post.rows[0].post_id,
-      title : post.rows[0].post_title,
-      content : post.rows[0].post_content,
-      likes : post.rows[0].post_likes,
-      author : post.rows[0].user_id
+      id : post.id,
+      title : post.title,
+      content : post.content,
+      likes : post.likes,
+      author : post.authorid
     },
 
     comments_information : [

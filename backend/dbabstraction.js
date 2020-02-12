@@ -185,3 +185,4 @@ function generalQuery (query, callback) {
 module.exports.deleteRecordBoard = deleteRecordBoard;
 module.exports.createBoard = createBoard;
 module.exports.getPost = getPost;
+module.exports.getComments = getComments;
