@@ -109,13 +109,13 @@ class Navbar extends Component {
 class Card extends Component {
 	constructor(title) {
 		super(title);
-		
+		let name = "Post Name goes here"
 		let elem = Component.createElem("div");
 		elem.id = "card-" + title;
 		elem.innerHTML = `
 		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
 			<div class="mdl-card__title">
-				<h2 class="mdl-card__title-text">Welcome</h2>
+				<h2 class="mdl-card__title-text">${name}</h2>
 			</div>
 			<div class="mdl-card__supporting-text">
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -136,16 +136,62 @@ class Card extends Component {
 	}
 }
 
-/*
-class PostCard extends Card {
-	constructor() {
-		
+
+class PostCard extends Component {
+	constructor(title) {
+		super(title);
+		let postTitle = "Post title";
+		let elem = Component.createElem("div");
+		elem.id = "postcard-" + title;
+		elem.innerHTML = `
+		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
+			<div class="mdl-card__title">
+				<h2 class="mdl-card__title-text">${postTitle}</h2>
+			</div>
+			<div class="mdl-card__supporting-text">
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+				Mauris sagittis pellentesque lacus eleifend lacinia...
+			</div>
+			<div class="mdl-card__actions mdl-card--border">
+				<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+				Double Espresso Shot
+				</a>
+			</div>
+			<div class="mdl-card__menu">
+				<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+				<i class="material-icons">share</i>
+			</button>
+			</div>
+		</div>`;
+		this.elements.push(elem);
 	}
 }
 
-class CommentCard extends Card {
-	constructor() {
+class CommentCard extends Component {
+	constructor(title) {
+		super(title);
 		
+		let elem = Component.createElem("div");
+		elem.id = "commentcard-" + title;
+		elem.innerHTML = `
+		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
+			<div class="mdl-card__title">
+				<h2 class="mdl-card__title-text">Welcome</h2>
+			</div>
+			<div class="mdl-card__supporting-text">
+			Hello Sam
+			</div>
+			<div class="mdl-card__actions mdl-card--border">
+				<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+				Hello Sam
+				</a>
+			</div>
+			<div class="mdl-card__menu">
+				<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+				<i class="material-icons">share</i>
+			</button>
+			</div>
+		</div>`;
+		this.elements.push(elem);
 	}
 }
-*/
