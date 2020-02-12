@@ -109,6 +109,7 @@ class Navbar extends Component {
 class Card extends Component {
 	constructor(title) {
 		super(title);
+		let PostContent = "TEST CONTENT"
 		let name = "Post Name goes here"
 		let elem = Component.createElem("div");
 		elem.id = "card-" + title;
@@ -118,8 +119,7 @@ class Card extends Component {
 				<h2 class="mdl-card__title-text">${name}</h2>
 			</div>
 			<div class="mdl-card__supporting-text">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-				Mauris sagittis pellentesque lacus eleifend lacinia...
+				${PostContent}
 			</div>
 			<div class="mdl-card__actions mdl-card--border">
 				<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
@@ -203,7 +203,6 @@ function functionName() {
 		text: 'Learn web development on MDN!',
 		url: 'https://developer.mozilla.org',
 	  }
-
 
 	navigator.share(shareData)
 }
