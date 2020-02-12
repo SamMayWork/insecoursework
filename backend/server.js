@@ -79,10 +79,9 @@ app.get('/forum/get', async (req, res) => {
     logging.logHttpGetMessage(req);
   }
 
-  // If we've just been supplied with the ID for a post, then get all of the information
-  // for the post and return it to the caller
+  // Find a specific thread
   if (req.query.thread !== undefined) {
-    await pms.getPost (req, res);
+    await pms.retrievePost (req, res);
   }
 
   if (req.query.board !== undefined && req.query.order !== undefined) {

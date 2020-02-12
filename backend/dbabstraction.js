@@ -74,6 +74,16 @@ async function getPost(postid) {
   };
 }
 
+/**
+ * Returns all of the comments related to a given post
+ * @param {string} postid The ID of the posts to get the comments for 
+ */
+async function getComments (postid) {
+  const query = "SELECT * FROM comments WHERE post_id = $1";
+  const results = await sqlConnection.query(query, [postid]);
+  return results;
+}
+
 function getBoard(board_name, board_year) {
 
 }
