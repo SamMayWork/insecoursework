@@ -41,7 +41,7 @@ function logHttpPostMessage(req, message = '') {
  * @param {HttpRequest} req The Request to print to the screen
  * @param {string} message Optional message to append to the end of logs
  */
-function logHttpGetMessage(req, message) {
+function logHttpGetMessage(req, message = '') {
   console.log(`${getStyle} ${req.originalUrl} ${Date.now()} ${req.ip} ${message}`);
 }
 
