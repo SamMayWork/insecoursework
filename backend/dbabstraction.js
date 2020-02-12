@@ -33,7 +33,7 @@ try {
     sqlConnection.end();
   });
 
-  logging.successMessage ('Connection to DB provider established');
+  logging.successMessage('Connection to DB provider established');
 } catch (error) {
   logging.errorMessage(error);
   logging.errorMessage('Unable to connect to the DB');
@@ -59,27 +59,29 @@ function generateId(length) {
 // ////////////////////////////////////////////////////////////// GETTING-CONTENT
 
 /**
- * Gets a post and all of its content (including comments)
+ * Gets a post and all of its content (including comments), this method hides the
+ * raw database output in a JSON object with aliases for the column names to simplify use
  * @param {string} postid The ID of the post to get
  */
 async function getPost(postid) {
-  const query = "SELECT * FROM posts WHERE post_id = $1";
+  const query = 'SELECT * FROM posts WHERE post_id = $1';
   const results = await sqlConnection.query(query, [postid]);
   return {
-    id : results.rows[0].post_id,
-    title : results.rows[0].post_title,
-    content : results.rows[0].post_content,
-    likes : results.rows[0].post_likes,
-    authorid : results.rows[0].user_id
+    id: results.rows[0].post_id,
+    title: results.rows[0].post_title,
+    content: results.rows[0].post_content,
+    likes: results.rows[0].post_likes,
+    authorid: results.rows[0].user_id,
   };
 }
 
 /**
- * Returns all of the comments related to a given post
- * @param {string} postid The ID of the posts to get the comments for 
+ * Returns all of the comments related to a given post, this method does not hide
+ * raw database output as processing all comments to change the format would be too costly
+ * @param {string} postid The ID of the posts to get the comments for
  */
-async function getComments (postid) {
-  const query = "SELECT * FROM comments WHERE post_id = $1";
+async function getComments(postid) {
+  const query = 'SELECT * FROM comments WHERE post_id = $1';
   const results = await sqlConnection.query(query, [postid]);
   return results;
 }
@@ -163,8 +165,8 @@ async function rateComment(commentid, like) {
 /**
  * Deletes all of the content from the table board
  */
-async function deleteRecordBoard () {
-  const query = "DELETE FROM board;";
+async function deleteRecordBoard() {
+  const query = 'DELETE FROM board;';
   await sqlConnection.query(query);
 }
 
@@ -172,13 +174,13 @@ async function deleteRecordBoard () {
 
 /**
  * Runs a general query against the databse and returns the result to the caller
- * 
+ *
  * This method is unsafe and does not check for SQL Injection, so only use if you
  * know what you're doing...
  * @param {string} query Query to be executed on the database
- * @param {callback} callback Callback to be executed once the command has been run 
+ * @param {callback} callback Callback to be executed once the command has been run
  */
-function generalQuery (query, callback) {
+function generalQuery(query, callback) {
   sqlConnection.query(query);
 }
 
