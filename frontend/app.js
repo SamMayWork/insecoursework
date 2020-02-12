@@ -56,8 +56,9 @@ class Screen extends Component {
 }
 
 class Navbar extends Component {
-	constructor(title) {
+	constructor(title, display_title) {
 		super(title);
+		this.display_title = display_title;
 		let elem = Component.createElem("div");
 		elem.id = "navbar-" + title;
 		elem.innerHTML = `
@@ -80,9 +81,11 @@ class Navbar extends Component {
 				</div>
 				</header>
 				<div class="mdl-layout__drawer">
-				<span class="mdl-layout-title">Title</span>
+				<span class="mdl-layout-title">${display_title}</span>
 				<nav class="mdl-navigation">
-				<a class="mdl-navigation__link" href="">Link</a>
+				<a class="mdl-navigation__link" href="">Dashboard</a>
+				<a class="mdl-navigation__link" href="">Module Finder</a>
+				<a class="mdl-navigation__link" href="">Account Settings</a>
 				</nav>
 				</div>
 				<main class="mdl-layout__content">
