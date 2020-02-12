@@ -1,27 +1,26 @@
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/home-page.css">
-  <script src="js/home-page.js"></script>
-  <title>INSE Forum Backend</title>
-</head>
-<body>
-  <div class="login-controls">
-    <p id=signup>Sign Up</p>
-    <p id=signin>Sign In</p>
-  </div>
-  <div class="container">
-    <h1>Peregrine.</h1>
-    <h2>The unofficial forum page for University of Portsmouth modules</h2>
-    <div class="search-container">
-      <p>Try searching for your module here!</p>
-      <input type="text" id="searchedContent">
-    </div>
-    <div class="hidden-search-results">
-
-    </div>
-  </div>
-</body>
+<!DOCTYPE html>
+	<head>
+		<title>uopforum</title>
+	</head>
+	<body>
+		<div id="root"></div>
+		<script src="app.js"></script>
+		<script>
+			// 1. Declare and init components
+			let app			= new App("uopforum");
+			let main_screen	= new Screen("main");
+			let navbar 		= new Navbar("navbar");
+			
+			// 2. Add Screens
+			app.addScreen(main_screen);
+			
+			// 3. Add Navbar to Main
+			main_screen.addComponent(navbar);
+			
+			// 4. Display Components
+			app.display($("root"));
+			
+			console.log(main_screen);
+		</script>
+	</body>
 </html>
