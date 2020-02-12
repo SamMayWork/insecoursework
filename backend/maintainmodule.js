@@ -28,6 +28,9 @@ modules = [
 function coldStart () {
   logging.coldStartMessage("Cold-start option selected, running cold-start procedure...");
 
+  logging.coldStartMessage("Running the create table commands...");
+
+
   logging.coldStartMessage('Starting to create boards...');
 
   for (let imodule of modules) {

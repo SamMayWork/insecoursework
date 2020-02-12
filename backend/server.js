@@ -23,6 +23,7 @@ const { argv } = require('yargs');
 const readline = require('readline');
 const logging = require('./logging');
 const maintain = require('./maintainmodule');
+const pms = require('./postmodule');
 
 // Still editing this, working on connecting the db
 // const db = require('./model-dbstructure');
@@ -72,18 +73,25 @@ if (argv.softreset) {
 // /forum/get?thread=[param] - Gets the thread with the given ID
 // /forum/get?board=[param]&order=[param] - Gets a list of posts in a board in a given order
 // Since the forum allows unregistered users to access the site, there is no need for authentication here
-app.get('/forum/get', (req, res) => {
-  logging.logHttpGetMessage(req);
+app.get('/forum/get', async (req, res) => {
 
+  if (argv.logging) {
+    logging.logHttpGetMessage(req);
+  }
+
+  // If we've just been supplied with the ID for a post, then get all of the information
+  // for the post and return it to the caller
   if (req.query.thread !== undefined) {
-    // handleThreadGet();
+    await pms.getPost (req, res);
   }
 
   if (req.query.board !== undefined && req.query.order !== undefined) {
     // handleBoardGet();
+
+    res.end();
   }
 
-  res.end();
+  return;
 });
 
 // Handler for the HTTP Posts coming to create posts/comments on the server, end points for thois are
