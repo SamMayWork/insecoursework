@@ -24,7 +24,7 @@ async function createUser(req, res) {
  * @param {response} res The Response to the user
  */
 async function checkUserExists(req, res) {
-  const id = req.body.id;
+  const id = req.query.existsid;
   const exists = await dbabs.checkUserExists(id);
   res.json({
     userexists : exists,
