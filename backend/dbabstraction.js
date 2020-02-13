@@ -125,14 +125,15 @@ function reportComment() {}
 async function ratePost(postid, like) {
   try {
     let query;
-    const results = await sqlConnection.query(query, [postid]);
     if (like === true) {
       query = `update Posts set post_likes = post_likes + 1 where post_id = ${postid};`;
     } else {
       query = `update Posts set post_likes = post_likes - 1 where post_id = ${postid};`;
     }
     return true;
-  } catch (error) {
+  } 
+  const results = await sqlConnection.query(query, [postid]);  
+  catch (error) {
     logging.errorMessage(error);
     return false;
   }
@@ -147,17 +148,18 @@ async function ratePost(postid, like) {
 async function rateComment(commentid, like) {
   try {
     let query;
-    const results = await sqlConnection.query(query, [commentid]);
     if (like === true) {
       query = `update Comments set comment_likes = comment_likes + 1 where comment_id = ${commentid};`;
     } else {
       query = `update Comments set comment_likes = comment_likes - 1 where comment_id = ${commentid}`;
     }
     return true;
-  } catch (error) {
+  } 
+  const results = await sqlConnection.query(query, [commentid]);
+  catch (error) {
     logging.errorMessage(error);
     return false;
-  }
+  } 
 }
 
 // ////////////////////////////////////////////////////////////// USER ACCOUNT QUERIES
