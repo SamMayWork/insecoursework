@@ -167,9 +167,9 @@ async function rateComment(commentid, like) {
  * @param {string} userid The ID of the user to check 
  */
 async function checkUserExists (userid) {
-  const query = 'SELECT * FROM users WHERE user_id = $1';
+  const query = 'SELECT * FROM users WHERE user_id = $1;';
   const response = await sqlConnection.query(query, [userid]);
-  return response !== undefined ? true : false;
+  return response.rows.length !== 0 ? true : false;
 }
 
 
