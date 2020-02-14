@@ -128,22 +128,19 @@ function reportComment() {}
  * Function for liking/disliking a post
  * @param {boolean} like if true, the post is liked, if false it is disliked
  * @param {string} postId is the id of the post that is being liked/disliked
- */
-
+//  */
 // async function ratePost(postid, like) {
 //   try {
 //     let query;
 //     if (like === true) {
-//       query = `update Posts set post_likes = post_likes + 1 where post_id = ${postid};`;
+//       query = `update Posts set post_likes = post_likes + 1 where post_id = $1;`;
 //     } else {
-//       query = `update Posts set post_likes = post_likes - 1 where post_id = ${postid};`;
+//       query = `update Posts set post_likes = post_likes - 1 where post_id = $1;`;
 //     }
-//     return true;
+//     await sqlConnection.query(query, [postid]);
 //   } 
-//   const results = await sqlConnection.query(query, [postid]);  
 //   catch (error) {
 //     logging.errorMessage(error);
-//     return false;
 //   }
 // }
 
