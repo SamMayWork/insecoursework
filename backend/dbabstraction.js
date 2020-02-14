@@ -19,31 +19,72 @@ const logging = require('./logging');
 let sqlConnection;
 
 try {
-  sqlConnection = new Postgres({
+  sqlConnection = new pg({
     database: 'forumbackend',
     statement_timeout: 2000,
     host: '/var/run/postgresql',
   });
 
   logging.warningMessage('Connecting to the Database');
-  sql.connect();
+  sqlConnection.connect();
 
-  sql.on('error', (err) => {
+  sqlConnection.on('error', (err) => {
     console.log(err);
-    sql.end();
+    sqlConnection.end();
   });
+
+  logging.successMessage('Connection to DB provider established');
 } catch (error) {
   logging.errorMessage(error);
   logging.errorMessage('Unable to connect to the DB');
 }
 
+// ////////////////////////////////////////////////////////////// ID GENERATOR
+
+/**
+ * Generates a psuedo-random ID of a given length
+ * @param {number} length The length of the ID to return
+ */
+function generateId(length) {
+  const values = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  const generatedId = [];
+
+  for (let i = 0; i < length; i++) {
+    generatedId.unshift(values[Math.floor(Math.random() * values.length)]);
+  }
+
+  return generatedId.join('');
+}
+
 // ////////////////////////////////////////////////////////////// GETTING-CONTENT
 
 /**
- * Gets a post and all of its content (including comments)
+ * Gets a post and all of its content (including comments), this method hides the
+ * raw database output in a JSON object with aliases for the column names to simplify use
  * @param {string} postid The ID of the post to get
  */
-function getPost(postid) {}
+async function getPost(postid) {
+  const query = 'SELECT * FROM posts WHERE post_id = $1';
+  const results = await sqlConnection.query(query, [postid]);
+  return {
+    id: results.rows[0].post_id,
+    title: results.rows[0].post_title,
+    content: results.rows[0].post_content,
+    likes: results.rows[0].post_likes,
+    authorid: results.rows[0].user_id,
+  };
+}
+
+/**
+ * Returns all of the comments related to a given post, this method does not hide
+ * raw database output as processing all comments to change the format would be too costly
+ * @param {string} postid The ID of the posts to get the comments for
+ */
+async function getComments(postid) {
+  const query = 'SELECT * FROM comments WHERE post_id = $1';
+  const results = await sqlConnection.query(query, [postid]);
+  return results;
+}
 
 function getBoard(board_name, board_year) {
 
@@ -59,9 +100,9 @@ function getBoard(board_name, board_year) {
  */
 async function createBoard(board_name, board_year) {
   const query = 'INSERT INTO Board (board_id, board_module, board_year) VALUES ($1, $2, $3);';
-  await sqlConnection.query(query, generateID(8), board_name, board_year);
-  return true;
+  await sqlConnection.query(query, [generateId(8), board_name, board_year]);
 }
+
 function createPost() {}
 function createComment() {}
 function createUser() {}
@@ -84,14 +125,15 @@ function reportComment() {}
 async function ratePost(postid, like) {
   try {
     let query;
-    const results = await sqlConnection.query(query, [postid]);
     if (like === true) {
       query = `update Posts set post_likes = post_likes + 1 where post_id = ${postid};`;
     } else {
       query = `update Posts set post_likes = post_likes - 1 where post_id = ${postid};`;
     }
     return true;
-  } catch (error) {
+  } 
+  const results = await sqlConnection.query(query, [postid]);  
+  catch (error) {
     logging.errorMessage(error);
     return false;
   }
@@ -106,15 +148,59 @@ async function ratePost(postid, like) {
 async function rateComment(commentid, like) {
   try {
     let query;
-    const results = await sqlConnection.query(query, [commentid]);
     if (like === true) {
       query = `update Comments set comment_likes = comment_likes + 1 where comment_id = ${commentid};`;
     } else {
       query = `update Comments set comment_likes = comment_likes - 1 where comment_id = ${commentid}`;
     }
     return true;
-  } catch (error) {
+  } 
+  const results = await sqlConnection.query(query, [commentid]);
+  catch (error) {
     logging.errorMessage(error);
     return false;
-  }
+  } 
 }
+
+// ////////////////////////////////////////////////////////////// USER ACCOUNT QUERIES
+
+/**
+ * Checks to see if a user exists inside of the database
+ * @param {string} userid The ID of the user to check 
+ */
+async function checkUserExists (userid) {
+  const query = 'SELECT * FROM users WHERE user_id = $1;';
+  const response = await sqlConnection.query(query, [userid]);
+  return response.rows.length !== 0 ? true : false;
+}
+
+
+// ////////////////////////////////////////////////////////////// DELETING CONTENT
+
+/**
+ * Deletes all of the content from the table board
+ */
+async function deleteRecordBoard() {
+  const query = 'DELETE FROM board;';
+  await sqlConnection.query(query);
+}
+
+// ////////////////////////////////////////////////////////////// RAW ACCESS
+
+/**
+ * Runs a general query against the databse and returns the result to the caller
+ *
+ * This method is unsafe and does not check for SQL Injection, so only use if you
+ * know what you're doing...
+ * @param {string} query Query to be executed on the database
+ * @param {callback} callback Callback to be executed once the command has been run
+ */
+function generalQuery(query, callback) {
+  sqlConnection.query(query);
+}
+
+module.exports.deleteRecordBoard = deleteRecordBoard;
+module.exports.createBoard = createBoard;
+module.exports.getPost = getPost;
+module.exports.getComments = getComments;
+module.exports.checkUserExists = checkUserExists;

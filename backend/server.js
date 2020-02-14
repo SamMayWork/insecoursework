@@ -20,8 +20,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { argv } = require('yargs');
+const readline = require('readline');
 const logging = require('./logging');
 const maintain = require('./maintainmodule');
+const pms = require('./postmodule');
+const uac = require('./useraccountsystem');
 
 // Still editing this, working on connecting the db
 // const db = require('./model-dbstructure');
@@ -38,12 +41,30 @@ app.use(bodyParser.json());
 
 // ////////////////////////////////////////////////////////////// COMMAND LINE ARGUMENTS
 
+// Set the interface for coversing with the user
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
 if (argv.verbose) {
   logging.warningMessage('Starting the server...');
 }
 
 if (argv.coldstart) {
   maintain.coldStart();
+}
+
+// If we're running a "soft rest" (deleting all of the records but preserving the structure)
+// check with the user that they meant to run this option
+if (argv.softreset) {
+  logging.warningMessage('SOFT RESET OPTION HAS BEEN ENABLED, ARE YOU SURE?');
+  rl.question('Continue? y/n: ', (answer) => {
+    if (answer === 'y') {
+      logging.warningMessage("I hope you know what you're doing.");
+      maintain.softReset();
+    }
+  });
 }
 
 // ////////////////////////////////////////////////////////////// API END POINT HANDLERS
@@ -53,18 +74,24 @@ if (argv.coldstart) {
 // /forum/get?thread=[param] - Gets the thread with the given ID
 // /forum/get?board=[param]&order=[param] - Gets a list of posts in a board in a given order
 // Since the forum allows unregistered users to access the site, there is no need for authentication here
-app.get('/forum/get', (req, res) => {
-  logging.logHttpGetMessage(req);
+app.get('/forum/get', async (req, res) => {
 
+  if (argv.logging) {
+    logging.logHttpGetMessage(req);
+  }
+
+  // Find a specific thread
   if (req.query.thread !== undefined) {
-    // handleThreadGet();
+    await pms.retrievePost (req, res);
   }
 
   if (req.query.board !== undefined && req.query.order !== undefined) {
     // handleBoardGet();
+
+    res.end();
   }
 
-  res.end();
+  return; 
 });
 
 // Handler for the HTTP Posts coming to create posts/comments on the server, end points for thois are
@@ -113,7 +140,15 @@ app.post('forum/report', (req, res) => {
   res.end();
 });
 
-// //////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////// USER ACCOUNT SYSTEM
+
+app.get('/forum/uac', async (req, res) => {
+  if (req.query.existsid !== undefined) {
+    await uac.checkUserExists(req, res);
+  }
+});
+
+// ////////////////////////////////////////////////////////////// CATCH-ALLS
 
 // Catch-all for 404's
 app.get('*', (req, res) => {
