@@ -102,20 +102,59 @@ async function createBoard(board_name, board_year) {
   const query = 'INSERT INTO Board (board_id, board_module, board_year) VALUES ($1, $2, $3);';
   await sqlConnection.query(query, [generateId(8), board_name, board_year]);
 }
-
+/**
+ * 
+ * @param {*} title 
+ * @param {*} content 
+ * @param {*} authorid 
+ * @param {*} boardid 
+ */
 
 async function createPost(title, content, authorid, boardid) {
-  const query = 'INSERT INTO posts VALUES($1, $2, $3, $4, $5, $6);';
+  const query = 'INSERT INTO Posts VALUES($1, $2, $3, $4, $5, $6);';
   await sqlConnection.query(query, [generateId(8), title, content, 0, authorid, boardid]);
+}
+
+
+/**
+ * 
+ * @param {*} comment_content 
+ * @param {*} user_id 
+ * @param {*} post_id 
+ */
+
+async function createComment(comment_content, user_id, post_id) {
+  const query = 'INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id) VALUES($1, $2, $3, $4, $5);';
+  await sqlConnection.query(query, [generateId(8), comment_content, 0, user_id, post_id]);
+}
+
+/**
+ * 
+ * @param {*} comment_content 
+ * @param {*} user_id 
+ * @param {*} post_id 
+ * @param {*} reply_id 
+ */
+
+async function createReplyComment(comment_content, user_id, post_id, reply_id) {
+  const query = 'INSERT INTO Comments VALUES($1, $2, $3, $4, $5, $6);';
+  await sqlConnection.query(query, [generateId(8), comment_content, 0, user_id, post_id, reply_id]);
+}
+/**
+ * adds user to the database
+ * @param {string} user_email the users email
+ * @param {Date} user_dateofregistration the date of registration
+ */
+async function createUser(user_email, user_dateofregistration) {
+  const query = 'INSERT INTO User VALUES($1, $2, $3);';
+  await sqlConnection.query(query, [generateId(8), user_email, user_dateofregistration]);
 }
 
 
 
 
-function createComment() {}
-function createUser() {}
-function editPost() {}
-function editComment() {}
+async function editPost() {}
+async function editComment() {}
 
 // ////////////////////////////////////////////////////////////// REPORTING-CONTENT
 
@@ -213,3 +252,5 @@ module.exports.getPost = getPost;
 module.exports.getComments = getComments;
 module.exports.checkUserExists = checkUserExists;
 module.exports.createPost = createPost;
+module.exports.createComment = createComment;
+module.exports.createReplyComment = createComment;
