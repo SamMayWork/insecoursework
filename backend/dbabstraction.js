@@ -103,7 +103,15 @@ async function createBoard(board_name, board_year) {
   await sqlConnection.query(query, [generateId(8), board_name, board_year]);
 }
 
-function createPost() {}
+
+async function createPost(title, content, authorid, boardid) {
+  const query = 'INSERT INTO posts VALUES($1, $2, $3, $4, $5, $6);';
+  await sqlConnection.query(query, [generateId(8), title, content, 0, authorid, boardid]);
+}
+
+
+
+
 function createComment() {}
 function createUser() {}
 function editPost() {}
@@ -122,22 +130,22 @@ function reportComment() {}
  * @param {string} postId is the id of the post that is being liked/disliked
  */
 
-async function ratePost(postid, like) {
-  try {
-    let query;
-    if (like === true) {
-      query = `update Posts set post_likes = post_likes + 1 where post_id = ${postid};`;
-    } else {
-      query = `update Posts set post_likes = post_likes - 1 where post_id = ${postid};`;
-    }
-    return true;
-  } 
-  const results = await sqlConnection.query(query, [postid]);  
-  catch (error) {
-    logging.errorMessage(error);
-    return false;
-  }
-}
+// async function ratePost(postid, like) {
+//   try {
+//     let query;
+//     if (like === true) {
+//       query = `update Posts set post_likes = post_likes + 1 where post_id = ${postid};`;
+//     } else {
+//       query = `update Posts set post_likes = post_likes - 1 where post_id = ${postid};`;
+//     }
+//     return true;
+//   } 
+//   const results = await sqlConnection.query(query, [postid]);  
+//   catch (error) {
+//     logging.errorMessage(error);
+//     return false;
+//   }
+// }
 
 /**
  * Function for liking/disliking comments on posts
@@ -145,22 +153,22 @@ async function ratePost(postid, like) {
  * @param {boolean} like if true, the post is like, if false it is disliked
  */
 
-async function rateComment(commentid, like) {
-  try {
-    let query;
-    if (like === true) {
-      query = `update Comments set comment_likes = comment_likes + 1 where comment_id = ${commentid};`;
-    } else {
-      query = `update Comments set comment_likes = comment_likes - 1 where comment_id = ${commentid}`;
-    }
-    return true;
-  } 
-  const results = await sqlConnection.query(query, [commentid]);
-  catch (error) {
-    logging.errorMessage(error);
-    return false;
-  } 
-}
+// async function rateComment(commentid, like) {
+//   try {
+//     let query;
+//     if (like === true) {
+//       query = `update Comments set comment_likes = comment_likes + 1 where comment_id = ${commentid};`;
+//     } else {
+//       query = `update Comments set comment_likes = comment_likes - 1 where comment_id = ${commentid}`;
+//     }
+//     return true;
+//   } 
+//   const results = await sqlConnection.query(query, [commentid]);
+//   catch (error) {
+//     logging.errorMessage(error);
+//     return false;
+//   } 
+// }
 
 // ////////////////////////////////////////////////////////////// USER ACCOUNT QUERIES
 
@@ -204,3 +212,4 @@ module.exports.createBoard = createBoard;
 module.exports.getPost = getPost;
 module.exports.getComments = getComments;
 module.exports.checkUserExists = checkUserExists;
+module.exports.createPost = createPost;
