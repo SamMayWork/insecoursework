@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<title>uopforum</title>
+		<link rel="stylesheet" href="app.css"/>
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+		<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css"/>
+	</head>
+	<body>
+		<div id="root">
+			<!-- Goes here pal -->
+		</div>
+		<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+		<script src="app.js"></script>
+		<script>
+			let app			= new App("uopforum");
+			let main_screen	= new Screen("main");
+			let navbar 		= new Navbar("navbar", "Dashboard");
+
+			app.addComponent(navbar);
+			navbar.addComponent(main_screen);
+			
+			for (let i=0; i<3; i++){
+				main_screen.addComponent(new Card());
+				main_screen.addComponent(new CommentCard());
+				main_screen.addComponent(new PostCard());
+			}
+
+			
+			app.display($("root"));
+		</script>
+	</body>
+</html>
