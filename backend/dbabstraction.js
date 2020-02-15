@@ -151,10 +151,30 @@ async function createUser(user_email, user_dateofregistration) {
 }
 
 
+/**
+ * Edits the given post 
+ * @param {string} newTitle the new title 
+ * @param {string} newContent the new content
+ * @param {string} user_id the use ID of the user that is editing the post
+ * @param {string} post_id the post ID
+ */
 
+async function editPost(newTitle, newContent, user_id, post_id) {
+  const query = 'UPDATE Posts SET post_title = $1, post_content = $2 WHERE user_id = $3 AND post_id = $4;';
+  await sqlConnection.query(query, [newTitle, newContent, user_id, post_id]);
+}
 
-async function editPost() {}
-async function editComment() {}
+/**
+ * Editing the given comment 
+ * @param {String} comment_content 
+ * @param {String} user_id 
+ * @param {String} post_id 
+ * @param {String} comment_id
+ */
+async function editComment(comment_content, user_id, post_id, comment_id) {
+  const query = 'UPDATE Comments SET omment_content = $1 WHERE user_id = $2 AND post_id = $3 AND comment_id = $4;';
+  await sqlConnection.query(query, [comment_content, user_id, post_id, comment_id]);
+}
 
 // ////////////////////////////////////////////////////////////// REPORTING-CONTENT
 

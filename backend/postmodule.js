@@ -26,6 +26,7 @@ const dbabs = require('./dbabstraction');
  * @param {request} req The Request from the user
  * @param {response} res The Response to the user
  */
+
 async function retrievePost(req, res) {
   const threadid = req.query.thread;
   const postResult = await dbabs.getPost(threadid);
@@ -42,7 +43,8 @@ async function retrievePost(req, res) {
  * @param {request} req The request from the user
  * @param {response} res The response to the user
  */
-async function storePost(req, res) {
+async function createPost(req, res) {
+
 }
 
 // ////////////////////////////////////////////////////////////// DATA-PACKERS
