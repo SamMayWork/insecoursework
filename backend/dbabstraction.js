@@ -18,26 +18,34 @@ const logging = require('./logging');
 
 let sqlConnection;
 
-try {
-  sqlConnection = new pg({
-    database: 'forumbackend',
-    statement_timeout: 2000,
-    host: '/var/run/postgresql',
-  });
-
-  logging.warningMessage('Connecting to the Database');
-  sqlConnection.connect();
-
-  sqlConnection.on('error', (err) => {
-    console.log(err);
-    sqlConnection.end();
-  });
-
-  logging.successMessage('Connection to DB provider established');
-} catch (error) {
-  logging.errorMessage(error);
-  logging.errorMessage('Unable to connect to the DB');
+/**
+ * Initialises the DB connection when the module has been started
+ */
+function initialiseDB(connection) {
+  try {
+    connection = new pg({
+      database: 'forumbackend',
+      statement_timeout: 2000,
+      host: '/var/run/postgresql',
+    });
+  
+    logging.warningMessage('Connecting to the Database');
+    connection.connect();
+  
+    connection.on('error', (err) => {
+      console.log(err);
+      connection.end();
+      connection = undefined;
+    });
+    logging.successMessage('Connection to DB provider established');
+  } catch (error) {
+    logging.errorMessage(error);
+    logging.errorMessage('Unable to connect to the DB');
+    connection = undefined;
+  }  
 }
+
+initialiseDB(sqlConnection);
 
 // ////////////////////////////////////////////////////////////// ID GENERATOR
 
@@ -56,6 +64,33 @@ function generateId(length) {
   return generatedId.join('');
 }
 
+// ////////////////////////////////////////////////////////////// QUERY EXECUTOR
+
+/**
+ * Executes a query on the database, providing the raw feedback to the caller
+ * @param {string} queryString The String to be executed on the database
+ * @param {array} queryParameters An array of strings of values to be inserted into the query
+ */
+async function executeQuery (queryString, queryParameters) {
+  try {
+    let results;
+    if (queryParameters === undefined) {
+      results = await sqlConnection.query(queryString);
+    } else {
+      results = await sqlConnection.query(queryString, queryParameters);
+    }
+    return results;
+  } catch (exception) {
+    // Print the string that caused the error, the parameters and the stacktrace 
+    logging.warningMessage(`Error trying to query the database using the query ${queryString}, using the following parameters`);
+    for (let i = 0; i < queryParameters.length; i++) {
+      logging.warningMessage(`${i} - ${queryParameters[i]}`);
+    }
+    logging.warningMessage("Printing stack trace...");
+    logging.warningMessage(exception);
+  }
+}
+
 // ////////////////////////////////////////////////////////////// GETTING-CONTENT
 
 /**
@@ -65,7 +100,7 @@ function generateId(length) {
  */
 async function getPost(postid) {
   const query = 'SELECT * FROM posts WHERE post_id = $1';
-  const results = await sqlConnection.query(query, [postid]);
+  const results = await executeQuery(query, [postid]);
   return {
     id: results.rows[0].post_id,
     title: results.rows[0].post_title,
@@ -110,8 +145,6 @@ async function createPost(title, content, authorid, boardid) {
 }
 
 
-
-
 function createComment() {}
 function createUser() {}
 function editPost() {}
@@ -138,7 +171,7 @@ function reportComment() {}
 //       query = `update Posts set post_likes = post_likes - 1 where post_id = $1;`;
 //     }
 //     await sqlConnection.query(query, [postid]);
-//   } 
+//   }
 //   catch (error) {
 //     logging.errorMessage(error);
 //   }
@@ -159,24 +192,24 @@ function reportComment() {}
 //       query = `update Comments set comment_likes = comment_likes - 1 where comment_id = ${commentid}`;
 //     }
 //     return true;
-//   } 
+//   }
 //   const results = await sqlConnection.query(query, [commentid]);
 //   catch (error) {
 //     logging.errorMessage(error);
 //     return false;
-//   } 
+//   }
 // }
 
 // ////////////////////////////////////////////////////////////// USER ACCOUNT QUERIES
 
 /**
  * Checks to see if a user exists inside of the database
- * @param {string} userid The ID of the user to check 
+ * @param {string} userid The ID of the user to check
  */
-async function checkUserExists (userid) {
+async function checkUserExists(userid) {
   const query = 'SELECT * FROM users WHERE user_id = $1;';
   const response = await sqlConnection.query(query, [userid]);
-  return response.rows.length !== 0 ? true : false;
+  return response.rows.length !== 0;
 }
 
 
