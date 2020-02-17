@@ -31,7 +31,7 @@ async function retrievePost(req, res) {
   const threadid = req.query.thread;
   const postResult = await dbabs.getPost(threadid);
   const commentsResult = await dbabs.getComments(threadid);
-  res.json(await generateRetrievePostContent(postResult, commentsResult));
+  res.json(generateRetrievePostContent(postResult, commentsResult));
   res.status(200);
   res.end();
 }
