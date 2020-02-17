@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+git pull 
+>>>>>>> a206566a2a072a02f8371747a93a2d0ad2bbb68e
 git pull origin backend
 git add .
 git commit -m "What I have done"
