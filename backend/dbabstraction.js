@@ -117,7 +117,7 @@ async function getPost(postid) {
  */
 async function getComments(postid) {
   const query = 'SELECT * FROM comments WHERE post_id = $1';
-  const results = await sqlConnection.query(query, [postid]);
+  const results = await executeQuery(query, [postid]);
   return results;
 }
 
