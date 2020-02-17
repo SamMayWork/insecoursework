@@ -135,7 +135,8 @@ function getBoard(board_name, board_year) {
  */
 async function createBoard(board_name, board_year) {
   const query = 'INSERT INTO Board (board_id, board_module, board_year) VALUES ($1, $2, $3);';
-  await sqlConnection.query(query, [generateId(8), board_name, board_year]);
+  const results = await executeQuery(query, [generateId(8), board_name, board_year]);
+  return results;
 }
 /**
  * 
@@ -147,7 +148,8 @@ async function createBoard(board_name, board_year) {
 
 async function createPost(title, content, authorid, boardid) {
   const query = 'INSERT INTO Posts VALUES($1, $2, $3, $4, $5, $6);';
-  await sqlConnection.query(query, [generateId(8), title, content, 0, authorid, boardid]);
+  const results = await executeQuery(query, [generateId(8), title, content, 0, authorid, boardid]);
+  return results;
 }
 
 
@@ -160,7 +162,8 @@ async function createPost(title, content, authorid, boardid) {
 
 async function createComment(comment_content, user_id, post_id) {
   const query = 'INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id) VALUES($1, $2, $3, $4, $5);';
-  await sqlConnection.query(query, [generateId(8), comment_content, 0, user_id, post_id]);
+  const results = await executeQuery(query, [generateId(8), comment_content, 0, user_id, post_id]);
+  return results;
 }
 
 /**
@@ -173,7 +176,8 @@ async function createComment(comment_content, user_id, post_id) {
 
 async function createReplyComment(comment_content, user_id, post_id, reply_id) {
   const query = 'INSERT INTO Comments VALUES($1, $2, $3, $4, $5, $6);';
-  await sqlConnection.query(query, [generateId(8), comment_content, 0, user_id, post_id, reply_id]);
+  const results = await executeQuery(query, [generateId(8), comment_content, 0, user_id, post_id, reply_id]);
+  return results;
 }
 /**
  * adds user to the database
@@ -182,7 +186,8 @@ async function createReplyComment(comment_content, user_id, post_id, reply_id) {
  */
 async function createUser(user_email, user_dateofregistration) {
   const query = 'INSERT INTO User VALUES($1, $2, $3);';
-  await sqlConnection.query(query, [generateId(8), user_email, user_dateofregistration]);
+  const results = await executeQuery(query, [generateId(8), user_email, user_dateofregistration]);
+  return results;
 }
 
 
@@ -196,7 +201,8 @@ async function createUser(user_email, user_dateofregistration) {
 
 async function editPost(newTitle, newContent, user_id, post_id) {
   const query = 'UPDATE Posts SET post_title = $1, post_content = $2 WHERE user_id = $3 AND post_id = $4;';
-  await sqlConnection.query(query, [newTitle, newContent, user_id, post_id]);
+  const results = await executeQuery(query, [newTitle, newContent, user_id, post_id]);
+  return results;
 }
 
 /**
@@ -208,7 +214,8 @@ async function editPost(newTitle, newContent, user_id, post_id) {
  */
 async function editComment(comment_content, user_id, post_id, comment_id) {
   const query = 'UPDATE Comments SET omment_content = $1 WHERE user_id = $2 AND post_id = $3 AND comment_id = $4;';
-  await sqlConnection.query(query, [comment_content, user_id, post_id, comment_id]);
+  const results = await executeQuery(query, [comment_content, user_id, post_id, comment_id]);
+  return results;
 }
 
 // ////////////////////////////////////////////////////////////// REPORTING-CONTENT
