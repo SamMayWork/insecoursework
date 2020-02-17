@@ -151,7 +151,6 @@ async function createPost(title, content, authorid, boardid) {
 }
 
 
-<<<<<<< HEAD
 /**
  * 
  * @param {*} comment_content 
@@ -211,12 +210,6 @@ async function editComment(comment_content, user_id, post_id, comment_id) {
   const query = 'UPDATE Comments SET omment_content = $1 WHERE user_id = $2 AND post_id = $3 AND comment_id = $4;';
   await sqlConnection.query(query, [comment_content, user_id, post_id, comment_id]);
 }
-=======
-function createComment() {}
-function createUser() {}
-function editPost() {}
-function editComment() {}
->>>>>>> f9bbf9f5574e3c00d4c93c5bcd196a86dbb4e740
 
 // ////////////////////////////////////////////////////////////// REPORTING-CONTENT
 
@@ -311,8 +304,5 @@ module.exports.getPost = getPost;
 module.exports.getComments = getComments;
 module.exports.checkUserExists = checkUserExists;
 module.exports.createPost = createPost;
-<<<<<<< HEAD
 module.exports.createComment = createComment;
 module.exports.createReplyComment = createComment;
-=======
->>>>>>> f9bbf9f5574e3c00d4c93c5bcd196a86dbb4e740
