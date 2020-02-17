@@ -5,56 +5,100 @@ function $(id) {
 }
 
 class Component {
-	constructor(title, parentElement) {
+	constructor(title, options) {
 		this.title = title;
-		this.elements = [];
-		this.components = [];
+		this.options = options;
+		this.root = null;
+		this.components = {};
+		this.parent = null;
+		this.state = [];
 	}
-	getTitle() {
-		return this.title;
+	add() {
+		for (let i=0; i<arguments.length; i++) {
+			let component = arguments[i];
+			component.parent = this;
+			this.components[component.title] = component;
+		}
+		return this;
 	}
-	getParent() {
-		return this.elements[0];
-	}
-	display(parentElem) {
-		this.components.forEach((component) => {
-			parentElem.appendChild(component.getParent());
-			component.display(this.elements[0]);
-		});
-	}
-	addComponent(component) {
-		this.components.push(component);
+	render(parent) {
+		for (let title in this.components)
+			this.components[title].render(parent);
 	}
 	static createElem(tag) {
-		return document.createElement(tag);
+		let elem = document.createElement(tag);
+		return elem;
+	}
+	showOnly(title) {
+		for (let title in this.components) {
+			let component = this.components[title];
+			if (component.title == title) {
+				component.show();
+			} else {
+				component.hide();
+			}
+		}
 	}
 }
 
 class App extends Component {
-	constructor(title) {
-		super(title);
-
+	constructor(title, options) {
+		super(title, options);
+		return this;
 	}
-	display(root) {
-		this.elements.push(root);
-		this.components.forEach((component) => {
-			component.display(this.elements[0]);
-		});
+	render(parent) {
+		super.render(parent);
+		return this;
 	}
 }
 
 class Screen extends Component {
-	constructor(title) {
-		super(title);
-		let elem = Component.createElem("div");
-		elem.id = "screen-" + title;
-		this.elements.push(elem);
+	constructor(title, options) {
+		super(title, options);
+	}
+	render(parent) {
+		// Root
+		let root = Component.createElem("div");
+		root.id = this.title;
+		root.classList.add("screen");
+		this.root = root;
+		parent.appendChild(root);
+		
+		// Children
+		super.render(root);
+	}
+	show() {
+		this.root.style.display = "flex";
+	}
+	hide() {
+		this.root.style.display = "none";
+	}
+	close() {
+		this.hide();
 	}
 }
 
 class Navbar extends Component {
+	constructor(title, options) {
+		super(title, options);
+	}
+	render(parent) {
+		// Root
+		let root = Component.createElem("div");
+		root.id = this.title;
+		root.classList.add("navbar");
+		this.root = root;
+		parent.appendChild(root);
+		
+		// Children
+		super.render(root);
+	}
+}
+
+/*
+class Navbar extends Component {
 	constructor(title, display_title) {
-		super(title);
+		super(title, options);
 		this.display_title = display_title;
 		let elem = Component.createElem("div");
 		elem.id = "navbar-" + title;
@@ -105,21 +149,225 @@ class Navbar extends Component {
 	}
 }
 
+class NavbarGroup extends Component {
+	constructor(title, options) {
+		super(title, options);
+	}
+	render(parent) {
+		// Root
+		let root = Component.createElem("div");
+		root.id = this.title;
+		root.classList.add("navbar-group");
+		this.root = root;
+		parent.appendChild(root);
+		
+		// Children
+		super.render(root);
+	}
+}
+
+class NavbarButton extends Component {
+	constructor(title, options) {
+		super(title, options);
+	}
+	render(parent) {
+		// Root
+		let root = Component.createElem("div");
+		root.id = this.title;
+		root.classList.add("navbar-option");
+		this.root = root;
+		
+		// Resolve icon
+		if (!this.options.hasOwnProperty("icon"))
+			this.options.icon = "";
+		
+		// Root Contents
+		root.innerHTML = `
+			<div id="${this.title}-button" class="navbar-icon"
+			style="background-image: url('${this.options.icon}')"></div>
+		`;
+		parent.appendChild(root);
+	}
+}
+
+class NavbarButtonMenu extends NavbarButton {
+	constructor(title, options) {
+		super(title, options);
+	}
+	render(parent) {
+		super.render(parent);
+		$(this.title + "-button").classList.add("navbar-icon-menu");
+	}
+}
+
+class NavbarDropdown extends Component {
+	constructor(title, options) {
+		super(title, options);
+	}
+	render(parent) {
+		let root = Component.createElem("div");
+		root.innerHTML = `
+			<div class="cal-header-month-label"></div>
+		`;
+		super.render(parent);
+	}
+}
+
+class NavbarSave extends Navbar {
+	constructor(title, options) {
+		super(title, options);
+	}
+	close() {
+		this.parent.close();
+	}
+	render(parent) {
+		super.render(parent);
+		$(this.title).innerHTML = `
+			<div class="navbar-group">
+				<div id="${this.title}-cancel" class="navbar-button icon"
+				style="background-image: url('images/cancel.svg')"></div>
+			</div>
+			<div class="navbar-group">
+				<div id="${this.title}-save" class="navbar-button">
+					<div class="button mdl-js-button mdl-js-ripple-effect" class="button">
+						Save
+					</div>
+				</div>
+			</div>
+		`;
+		$(this.title + "-cancel").addEventListener("click", () => {
+			this.close();
+		});
+		$(this.title + "-save").addEventListener("click", () => {
+			this.close();
+		});
+	}
+}
+
+class List extends Component {
+	constructor(title, options) {
+		super(title, options);
+	}
+}
+
+class ListGroup extends Component {
+	constructor(title, options) {
+		super(title, options);
+	}
+	render(parent) {
+		// Root
+		let root = Component.createElem("div");
+		root.id = this.title;
+		root.classList.add("list-group");
+		this.root = root;
+		parent.appendChild(root);
+		
+		// Children
+		super.render(root);
+	}
+}
+
+class ListOption extends Component {
+	constructor(title, options) {
+		super(title, options);
+	}
+	render(parent) {
+		// Root
+		let root = Component.createElem("div");
+		root.id = this.title;
+		root.classList.add("list-option");
+		this.root = root;
+		
+		// Resolve icon
+		if (!this.options.hasOwnProperty("icon"))
+			this.options.icon = "";
+		
+		// Root Contents
+		root.innerHTML = `
+			<div id="${this.title}-icon" class="icon"
+			style="background-image: url('${this.options.icon}')"></div>
+			<div id="${this.title}-data" class="list-option-input">
+			</div>
+		`;
+		parent.appendChild(root);
+	}
+}
+
+class ListOptionToggle extends ListOption {
+	render(parent) {
+		super.render(parent);
+		$(this.title + "-data").innerHTML = `
+			<div id="${this.title}-data-title" class="list-option-input-group">
+				${this.options.title}
+			</div>
+			<div id="${this.title}-data-toggle" class="list-option-input-group">
+				<label style="margin-left: -36px" class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-2">
+					<input type="checkbox" id="switch-2" class="mdl-switch__input">
+					<span class="mdl-switch__label"></span>
+				</label>
+			</div>
+		`;
+	}
+}
+
+class ListOptionText extends ListOption {
+	constructor(title, options) {
+		super(title, options);
+	}
+	render(parent) {
+		super.render(parent);
+		$(this.title + "-data").innerHTML = `
+			<div id="${this.title}-data-text" class="list-option-input-group">
+				${this.options.data}
+			</div>
+		`;
+		if (this.options.hasOwnProperty("topMost")) {
+			if (this.options.topMost == true) {
+				$(this.title + "-data-text").classList.add("list-option-input-text");
+			}
+		}
+	}
+}
+
+class ListOptionDatetime extends ListOption {
+	constructor(title, options) {
+		super(title, options);
+	}
+	render(parent) {
+		super.render(parent);
+		let date = this.options.data.toLocaleDateString("en-GB", {
+			weekday: "short", month: "short", day: "numeric", year: "numeric"
+		});
+		let time = this.options.data.toLocaleTimeString([], {
+			hour: "2-digit",
+			minute: "2-digit"
+		});
+		$(this.title + "-data").innerHTML = `
+			<div id="${this.title}-data-date" class="list-option-input-group">
+				${date}
+			</div>
+			<div id="${this.title}-data-time" class="list-option-input-group">
+				${time}
+			</div>
+		`;
+	}
+}
+*/
 
 class Card extends Component {
-	constructor(title) {
-		super(title);
-		let PostContent = "TEST CONTENT"
-		let name = "Post Name goes here"
-		let elem = Component.createElem("div");
-		elem.id = "card-" + title;
-		elem.innerHTML = `
+	constructor(title, options) {
+		super(title, options);
+	}
+	render(parent) {
+		let root = Component.createElem("div");
+		root.id = this.title;
+		root.innerHTML = `
 		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
 			<div class="mdl-card__title">
-				<h2 class="mdl-card__title-text">${name}</h2>
+				<h2 class="mdl-card__title-text">${this.options.name}</h2>
 			</div>
 			<div class="mdl-card__supporting-text">
-				${PostContent}
+				${this.options.postContent}
 			</div>
 			<div class="mdl-card__actions mdl-card--border">
 				<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
@@ -132,21 +380,22 @@ class Card extends Component {
 			</button>
 			</div>
 		</div>`;
-		this.elements.push(elem);
+		this.root = root;
+		parent.appendChild(root);
 	}
 }
 
-
 class PostCard extends Component {
-	constructor(title) {
-		super(title);
-		let postTitle = "Post title";
-		let elem = Component.createElem("div");
-		elem.id = "postcard-" + title;
-		elem.innerHTML = `
+	constructor(title, options) {
+		super(title, options);
+	}
+	render(parent) {
+		let root = Component.createElem("div");
+		root.id = this.title;
+		root.innerHTML = `
 		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
 			<div class="mdl-card__title">
-				<h2 class="mdl-card__title-text">${postTitle}</h2>
+				<h2 class="mdl-card__title-text">${this.options.name}</h2>
 			</div>
 			<div class="mdl-card__supporting-text">
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -154,7 +403,7 @@ class PostCard extends Component {
 			</div>
 			<div class="mdl-card__actions mdl-card--border">
 				<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-				Double Espresso Shot
+					${this.options.postContent}
 				</a>
 			</div>
 			<div class="mdl-card__menu">
@@ -163,27 +412,29 @@ class PostCard extends Component {
 			</button>
 			</div>
 		</div>`;
-		this.elements.push(elem);
+		this.root = root;
+		parent.appendChild(root);
 	}
 }
 
 class CommentCard extends Component {
-	constructor(title) {
-		super(title);
-		
-		let elem = Component.createElem("div");
-		elem.id = "commentcard-" + title;
-		elem.innerHTML = `
+	constructor(title, options) {
+		super(title, options);
+	}
+	render(parent) {
+		let root = Component.createElem("div");
+		root.id = this.title;
+		root.innerHTML = `
 		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
 			<div class="mdl-card__title">
-				<h2 class="mdl-card__title-text">Welcome</h2>
+				<h2 class="mdl-card__title-text">${this.options.name}</h2>
 			</div>
 			<div class="mdl-card__supporting-text">
 			Hello Room
 			</div>
 			<div class="mdl-card__actions mdl-card--border">
 				<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-				Hello Sam
+					${this.options.postContent}
 				</a>
 			</div>
 			<div class="mdl-card__menu">
@@ -192,10 +443,12 @@ class CommentCard extends Component {
 			</button>
 			</div>
 		</div>`;
-		this.elements.push(elem);
+		this.root = root;
+		parent.appendChild(root);
 	}
 }
 
+/*
 function functionName() {
 
 	const shareData = {
@@ -206,3 +459,4 @@ function functionName() {
 
 	navigator.share(shareData)
 }
+*/
