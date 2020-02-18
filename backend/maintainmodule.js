@@ -46,7 +46,7 @@ function coldStart () {
  * Please know what you're doing if you enable this option on startup.
  */
 function softReset () {
-  dbabs.deleteRecordBoard();
+  dbabs.deleteAllStoredContent();
 }
 
 module.exports.coldStart = coldStart;
