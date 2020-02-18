@@ -2,11 +2,27 @@
 
 window.onload = () => {
 	let app = new App("uopforum");
+	
+	
 	let mainScreen = new Screen("main");
+	let loginScreen = new Screen("loginscreen");
+	let commentScreen = new Screen("commentscreen");
+	let postScreen = new Screen("postscreen");
+	let threadScreen = new Screen("threadscreen");
+
 	let navbar = new Navbar("navbar", {
 		title: "Dashboard"
 	});
+
+
 	app.add(navbar);
+	app.add(loginScreen);
+	app.add(commentScreen);
+	app.add(postScreen);
+	app.add(threadScreen);
+
+
+
 	navbar.add(mainScreen);
 	
 	/*
@@ -27,5 +43,16 @@ window.onload = () => {
 			postContent: "Double Espresso Shot"
 		}));
 	}
+
+
+	loginScreen.add(
+		new Button("loginButton", {
+			text: "Login with Google"
+		})
+	);
+
+
 	app.render($("root"));
+	app.showOnly("loginscreen");
+	console.log(app);
 }

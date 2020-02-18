@@ -11,7 +11,7 @@ class Component {
 		this.root = null;
 		this.components = {};
 		this.parent = null;
-		this.state = [];
+		this.state = {};
 	}
 	add() {
 		for (let i=0; i<arguments.length; i++) {
@@ -29,12 +29,14 @@ class Component {
 		let elem = document.createElement(tag);
 		return elem;
 	}
-	showOnly(title) {
+	showOnly(target) {
 		for (let title in this.components) {
 			let component = this.components[title];
-			if (component.title == title) {
+			if (component.title == target) {
+				console.log(component.title, component);
 				component.show();
 			} else {
+				console.log("[HIDE]", component.title, component);
 				component.hide();
 			}
 		}
@@ -92,6 +94,12 @@ class Navbar extends Component {
 		
 		// Children
 		super.render(root);
+	}
+	show() {
+		this.root.style.display = "block";
+	}
+	hide() {
+		this.root.style.display = "none";
 	}
 }
 
@@ -371,7 +379,7 @@ class Card extends Component {
 			</div>
 			<div class="mdl-card__actions mdl-card--border">
 				<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-				Get Started
+				${this.options.button}
 				</a>
 			</div>
 			<div class="mdl-card__menu">
@@ -380,6 +388,25 @@ class Card extends Component {
 			</button>
 			</div>
 		</div>`;
+		this.root = root;
+		parent.appendChild(root);
+	}
+}
+
+class Button extends Component {
+	constructor(title, options) {
+		super(title, options);
+	}
+	render(parent) {
+		let root = Component.createElem("div");
+		root.id = this.title;
+		root.innerHTML = `
+		<div class="mdl-card__actions mdl-card--border">
+			<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+				${this.options.text}
+			</a>
+		</div>
+		`;
 		this.root = root;
 		parent.appendChild(root);
 	}
@@ -398,12 +425,11 @@ class PostCard extends Component {
 				<h2 class="mdl-card__title-text">${this.options.name}</h2>
 			</div>
 			<div class="mdl-card__supporting-text">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-				Mauris sagittis pellentesque lacus eleifend lacinia...
+				${this.options.postContent}
 			</div>
 			<div class="mdl-card__actions mdl-card--border">
 				<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-					${this.options.postContent}
+					TEST
 				</a>
 			</div>
 			<div class="mdl-card__menu">
