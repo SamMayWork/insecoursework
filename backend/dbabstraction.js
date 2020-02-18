@@ -284,11 +284,16 @@ async function checkUserExists(userid) {
 // ////////////////////////////////////////////////////////////// DELETING CONTENT
 
 /**
- * Deletes all of the content from the table board
+ * Deletes all of the content from all of the tables, preserving the structure of the tables
  */
-async function deleteRecordBoard() {
-  const query = 'DELETE FROM board;';
-  await sqlConnection.query(query);
+async function deleteAllStoredContent () {
+  await executeQuery("DELETE FROM Users;");
+  await executeQuery("DELETE FROM Board;");
+  await executeQuery("DELETE FROM Posts;");
+  await executeQuery("DELETE FROM Comments;");
+  await executeQuery("DELETE FROM Reports_Posts;");
+  await executeQuery("DELETE FROM Reports_Comments;");
+  await executeQuery("DELETE FROM Keywords;");
 }
 
 // ////////////////////////////////////////////////////////////// RAW ACCESS
