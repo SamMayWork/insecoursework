@@ -21,6 +21,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { argv } = require('yargs');
 const readline = require('readline');
+const googleAuth = require('simple-google-openid');
+
 const logging = require('./logging');
 const maintain = require('./maintainmodule');
 const pms = require('./postmodule');
@@ -38,6 +40,9 @@ app.use(express.static('../frontend/'));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// app.use(GoogleAuth(process.env.OUR GOOGLE ID));
+// app.use('/forum', guardMiddleware());
 
 // ////////////////////////////////////////////////////////////// COMMAND LINE ARGUMENTS
 
@@ -71,10 +76,10 @@ if (argv.softreset) {
 
 
 // Handler for the HTTP GET's coming into the server, the end points that we are handling are:
-// /forum/get?thread=[param] - Gets the thread with the given ID
-// /forum/get?board=[param]&order=[param] - Gets a list of posts in a board in a given order
+// /get?thread=[param] - Gets the thread with the given ID
+// /get?board=[param]&order=[param] - Gets a list of posts in a board in a given order
 // Since the forum allows unregistered users to access the site, there is no need for authentication here
-app.get('/forum/get', async (req, res) => {
+app.get('/get', async (req, res) => {
 
   if (argv.logging) {
     logging.logHttpGetMessage(req);

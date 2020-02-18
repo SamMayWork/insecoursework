@@ -274,9 +274,9 @@ function reportComment() {}
  * Checks to see if a user exists inside of the database
  * @param {string} userid The ID of the user to check
  */
-async function checkUserExists(userid) {
-  const query = 'SELECT * FROM users WHERE user_id = $1;';
-  const response = await sqlConnection.query(query, [userid]);
+async function checkEmail() {
+  const query = 'SELECT * FROM users WHERE user_email = $1;';
+  const response = await executeQuery(query, [userid]);
   return response.rows.length !== 0;
 }
 

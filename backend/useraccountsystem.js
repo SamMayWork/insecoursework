@@ -19,19 +19,19 @@ async function createUser(req, res) {
 // ////////////////////////////////////////////////////////////// GENERAL QUERIES
 
 /**
- * Indicates whether a given user ID exists inside of the database
+ * Checks to see if the signed-in user is authorised inside of the Database
+ * (i.e. if their UP number exists within our database)
+ * 
+ * THIS ONLY CHECKS IF WE'VE GOT A RECORD OF THEIR EMAIL ADDRESS, IT IS NOT PROPER AUTH
  * @param {request} req The Request from the user
- * @param {response} res The Response to the user
  */
-async function checkUserExists(req, res) {
-  const id = req.query.existsid;
-  const exists = await dbabs.checkUserExists(id);
-  res.json({
-    userexists : exists,
-    userid : id
-  });
-  res.status(200);
-  res.end();
+async function checkUserExists(req) {
+  let exists;
+  if (req.user.emails[0].value != undefined) {
+    exists = await dbabs.checkEmail();
+  }
+
+  return { "exists" : exists };
 }
 
 // ////////////////////////////////////////////////////////////// EXPORTS

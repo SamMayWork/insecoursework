@@ -4,7 +4,7 @@
 // the post management system (PMS) inside of the system architecture
 //
 // GETTING POSTS
-// The flow for getting posts from the sevrver is:
+// The flow for getting posts from the server is:
 // Incoming Request -> thismodule -> Get Post Data    --> package data -> send to client
 //                                -> Get Comment Data --^
 //
