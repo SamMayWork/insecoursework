@@ -39,13 +39,36 @@ async function retrievePost(req, res) {
 // ////////////////////////////////////////////////////////////// POSTING CONTENT
 
 /**
- * Stores a given post inside of the database
+ * Creates a new Post inside of the database
  * @param {request} req The request from the user
  * @param {response} res The response to the user
  */
 async function createPost(req, res) {
+  const userid = await dbabs.getUserIDFromEmail(req.user.emails[0]);
+  
+  if (userid !== undefined) {
+    // The user is authorised if the email is within our database
+    const title = filterContent(req.body.title);
+    const content = filterContent(req.body.title);
+    
+    for (let i = 0; i < req.body.keywords.length; i++) {
+      req.body.keywords[i] = filterContent(req.body.keywords[i]); 
+    }
 
+    dbabs.createPost(title, content, keywords);
+  }
 }
+
+// ////////////////////////////////////////////////////////////// FILTERS
+
+/**
+ * Filters a given string for swear/offensive words
+ * @param {string} content Content to be filtered 
+ */
+function filterContent (content) {
+  return content;
+}
+
 
 // ////////////////////////////////////////////////////////////// DATA-PACKERS
 

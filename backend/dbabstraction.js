@@ -138,17 +138,30 @@ async function createBoard(board_name, board_year) {
   const results = await executeQuery(query, [generateId(8), board_name, board_year]);
   return results;
 }
-/**
- * 
- * @param {*} title 
- * @param {*} content 
- * @param {*} authorid 
- * @param {*} boardid 
- */
 
-async function createPost(title, content, authorid, boardid) {
-  const query = 'INSERT INTO Posts VALUES($1, $2, $3, $4, $5, $6);';
+/**
+ * Creates a post inside of the database
+ * @param {string} title The title of the post
+ * @param {string} content The content of the post
+ * @param {[string]} keywords A list of keywords (max 5) to be associated with the post
+ * @param {string} authorid The ID of the user that is creating the post
+ * @param {string} boardid The ID of the board in which to create the post
+ */
+async function createPost(title, content, keywords, authorid, boardid) {
+  let query = 'INSERT INTO Posts VALUES($1, $2, $3, $4, $5, $6);';
   const results = await executeQuery(query, [generateId(8), title, content, 0, authorid, boardid]);
+  
+  query =  'INSERT INTO Keywords VALUES ($1,';
+  for (let i = 2; i < (keywords.length) + 2; i++) {
+    query += `$${i},`;
+  }
+
+  query = query.substring(0, query.length -1);
+  query += ');'
+
+  keywords.unshift(generateId(8));
+  await executeQuery(query, [keywords]);
+
   return results;
 }
 
@@ -296,18 +309,14 @@ async function deleteAllStoredContent () {
   await executeQuery("DELETE FROM Keywords;");
 }
 
-// ////////////////////////////////////////////////////////////// RAW ACCESS
-
 /**
- * Runs a general query against the databse and returns the result to the caller
- *
- * This method is unsafe and does not check for SQL Injection, so only use if you
- * know what you're doing...
- * @param {string} query Query to be executed on the database
- * @param {callback} callback Callback to be executed once the command has been run
+ * Gets the ID of a user using their email address
+ * @param {string} email The Email address of the user to find
  */
-function generalQuery(query, callback) {
-  sqlConnection.query(query);
+async function getUserIDFromEmail (email) {
+  const query = "SELECT user_id FROM users where user_email = $1;";
+  const results = await executeQuery(query, email);
+  return results.rows[0].user_id;
 }
 
 module.exports.deleteRecordBoard = deleteRecordBoard;
@@ -318,3 +327,4 @@ module.exports.checkUserExists = checkUserExists;
 module.exports.createPost = createPost;
 module.exports.createComment = createComment;
 module.exports.createReplyComment = createComment;
+module.exports.getUserIDFromEmail = getUserIDFromEmail;
