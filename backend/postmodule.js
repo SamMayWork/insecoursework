@@ -61,12 +61,21 @@ async function createPost(req, res) {
 
 // ////////////////////////////////////////////////////////////// FILTERS
 
+const offensivelanguage = {
+  words = [
+    { dirty : "hate", clean : "a subject of great displeasure within my personal and subjective opinion" },
+    { dirty : "stupid", clean : "ill-prepared for rational discourse"}
+  ]
+}
+
 /**
  * Filters a given string for swear/offensive words
  * @param {string} content Content to be filtered 
  */
 function filterContent (content) {
-  return content;
+  let filteredContent = content;
+  // Your code goes here!
+  return filteredContent;
 }
 
 
