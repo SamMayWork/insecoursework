@@ -21,3 +21,109 @@ html, body {
 		width:80%!important;
 	}
 }
+
+#root {
+	width: 100%;
+	height: 100%;
+}
+
+.button {
+	color: #FFF;
+	background-color: #1A73E8;
+	font-size: 0.7rem;
+	border-radius: 3px;
+	padding: 4px;
+	padding-left: 8px;
+	padding-right: 8px;
+	font-weight: 500;
+	position: relative;
+	height: 1rem;
+	align-items: center;
+	justify-content: center;
+}
+
+.screen {
+	z-index: 1000000000;
+	top: 0;
+	left: 0;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+}
+
+.icon {
+	position: relative;
+	width: 1rem;
+	height: 1rem;
+	padding: 1rem;
+	background-size: 1rem 1rem;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.navbar-icon {
+	width: 1.5rem;
+    height: 1.5rem;
+    padding: 1rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    background-size: 1.25rem 1.25rem;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.navbar-icon-menu {
+    background-size: 1.5rem 1.5rem;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 1rem;
+}
+
+.list-option-input {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 0.8rem;
+	color: rgba(0, 0, 0, 0.7);
+	padding: 1rem;
+	padding-left: 0;
+	width: 100%;
+	height: 1rem;
+}
+
+.list-option-input-text {
+	font-size: 1.1rem;
+}
+
+.navbar {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 100%;
+}
+
+.navbar-group {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.navbar-button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 1rem;
+}
+
+.navbar-dropdown {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	padding: 1rem;
+	height: 1.5rem;
+}
