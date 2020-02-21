@@ -58,7 +58,7 @@ function coldStartMessage(message) {
  * @param {string} message Message to be printed to the screen
  */
 function successMessage(message) {
-  console.log(`${successStyle} ${message} `);
+  console.log(`${successStyle} ${message}`);
 }
 
 /**
@@ -66,7 +66,7 @@ function successMessage(message) {
  * @param {string} message Message to be printed to the screen
  */
 function errorMessage(message) {
-  console.log(`${errorStyle} ${message} `);
+  console.log(`${errorStyle} ${message}`);
 }
 
 // ////////////////////////////////////////////////////////////// EXPORTS

@@ -21,6 +21,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { argv } = require('yargs');
 const readline = require('readline');
+const googleAuth = require('simple-google-openid');
+
 const logging = require('./logging');
 const maintain = require('./maintainmodule');
 const pms = require('./postmodule');
@@ -39,6 +41,9 @@ app.use(express.static('../frontend/'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// app.use(GoogleAuth(process.env.OUR GOOGLE ID));
+// app.use('/forum', guardMiddleware());
+
 // ////////////////////////////////////////////////////////////// COMMAND LINE ARGUMENTS
 
 // Set the interface for coversing with the user
@@ -46,6 +51,11 @@ const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
+
+if (argv.nodb) {
+  logging.warningMessage("Starting the server without the attached DB...");
+  logging.warningMessage("Only responding to requests with template");
+}
 
 if (argv.verbose) {
   logging.warningMessage('Starting the server...');
@@ -71,14 +81,12 @@ if (argv.softreset) {
 
 
 // Handler for the HTTP GET's coming into the server, the end points that we are handling are:
-// /forum/get?thread=[param] - Gets the thread with the given ID
-// /forum/get?board=[param]&order=[param] - Gets a list of posts in a board in a given order
+// /get?thread=[param] - Gets the thread with the given ID
+// /get?board=[param]&order=[param] - Gets a list of posts in a board in a given order
 // Since the forum allows unregistered users to access the site, there is no need for authentication here
-app.get('/forum/get', async (req, res) => {
-
-  if (argv.logging) {
-    logging.logHttpGetMessage(req);
-  }
+app.get('/get', async (req, res) => {
+  handleNoDB(req, res);
+  handleGetLogging(req);
 
   // Find a specific thread
   if (req.query.thread !== undefined) {
@@ -100,7 +108,8 @@ app.get('/forum/get', async (req, res) => {
 // /forum/create?post=[param] - Create a comment using the provided information in the POST body, or
 //                               if the comment already exists, updates the comment with the edited content
 app.post('/forum/create', (req, res) => {
-  logging.logHttpPostMessage(req);
+  handleNoDB(req, res);
+  handlePostLogging(req);
 
   res.end();
 });
@@ -110,7 +119,8 @@ app.post('/forum/create', (req, res) => {
 // /forum/like?like=[param]&comment=[param] - If like==true then it likes the comment with the given ID
 // if like==false then it will dislike the associated post
 app.post('/forum/like', (req, res) => {
-  logging.logHttpPostMessage(req);
+  handleNoDB(req, res);
+  handlePostLogging(req);
 
   if (req.query.like !== undefined && req.query.post !== undefined) {
     // handleLike();
@@ -127,7 +137,8 @@ app.post('/forum/like', (req, res) => {
 // /forum/report?post=[param] - Reports a post using the given ID
 // /forum/report?comment=[param] - Reports a comment using the given ID
 app.post('forum/report', (req, res) => {
-  logging.logHttpPostMessage(req);
+  handleNoDB(req, res);
+  handlePostLogging(req);
 
   if (req.query.post !== undefined) {
     // handlePostReport();
@@ -153,14 +164,52 @@ app.get('/forum/uac', async (req, res) => {
 
 // Catch-all for 404's
 app.get('*', (req, res) => {
-  logging.logHttpGetMessage(req, '404');
+  handleGetLogging(req, '404');
   res.end('Could not process request');
 });
 
 app.post('*', (req, res) => {
-  logging.logHttpPosttMessage(req, '404');
+  handlePostLogging(req, '404');
   res.end('Could not process request');
 });
+
+// ////////////////////////////////////////////////////////////// ODDS AND ENDS
+
+/**
+ * Handles logging for the servers HTTP Post's
+ * @param {request} req The incoming request
+ * @param {string} message Optional message to append (404's)
+ */
+function handlePostLogging (req, message='') {
+  if (argv.logging) {
+    logging.logHttpPostMessage(req, message);
+  }
+}
+
+/**
+ * Handles logging for the server for HTTP Get's
+ * @param {request} req The incoming request
+ * @param {string} message Optional message to append (404's)
+ */
+function handleGetLogging (req, message='') {
+  if (argv.logging) {
+    logging.logHttpGetMessage(req, message);
+  }
+}
+
+/**
+ * Handles Requests to the server when there is no DB attached
+ * @param {request} req Request from the client
+ * @param {response} res Repsonse to the client
+ */
+function handleNoDB (req, res) {
+  if (argv.nodb) {
+    res.status(200);
+    res.end(`Acknowledge ${req.ip}, server is running without attached DB`);  
+  }
+}
+
+// ////////////////////////////////////////////////////////////// DRIVING SCRIPT
 
 logging.warningMessage(`Server initialised and listening on port ${listeningPort}`);
 app.listen(listeningPort);

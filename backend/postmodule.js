@@ -4,7 +4,7 @@
 // the post management system (PMS) inside of the system architecture
 //
 // GETTING POSTS
-// The flow for getting posts from the sevrver is:
+// The flow for getting posts from the server is:
 // Incoming Request -> thismodule -> Get Post Data    --> package data -> send to client
 //                                -> Get Comment Data --^
 //
@@ -39,13 +39,45 @@ async function retrievePost(req, res) {
 // ////////////////////////////////////////////////////////////// POSTING CONTENT
 
 /**
- * Stores a given post inside of the database
+ * Creates a new Post inside of the database
  * @param {request} req The request from the user
  * @param {response} res The response to the user
  */
 async function createPost(req, res) {
+  const userid = await dbabs.getUserIDFromEmail(req.user.emails[0]);
+  
+  if (userid !== undefined) {
+    // The user is authorised if the email is within our database
+    const title = filterContent(req.body.title);
+    const content = filterContent(req.body.title);
+    
+    for (let i = 0; i < req.body.keywords.length; i++) {
+      req.body.keywords[i] = filterContent(req.body.keywords[i]); 
+    }
 
+    dbabs.createPost(title, content, keywords);
+  }
 }
+
+// ////////////////////////////////////////////////////////////// FILTERS
+
+const offensivelanguage = {
+  words = [
+    { dirty : "hate", clean : "a subject of great displeasure within my personal and subjective opinion" },
+    { dirty : "stupid", clean : "ill-prepared for rational discourse"}
+  ]
+}
+
+/**
+ * Filters a given string for swear/offensive words
+ * @param {string} content Content to be filtered 
+ */
+function filterContent (content) {
+  let filteredContent = content;
+  // Your code goes here!
+  return filteredContent;
+}
+
 
 // ////////////////////////////////////////////////////////////// DATA-PACKERS
 
