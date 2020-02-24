@@ -53,3 +53,11 @@ CREATE TABLE IF NOT EXISTS Keywords (
   keyword_4 varchar(30),
   keyword_5 varchar(30)
 );
+
+CREATE TABLE IF NOT EXISTS Notifications (
+  user_id varchar (8) NOT NULL REFERENCES Users(user_id),
+  notif_global Boolean NOT NULL,
+  notif_new_comment Boolean NOT NULL,
+  notif_activity Boolean NOT NULL,
+  notif_delete Boolean NOT NULL
+);
