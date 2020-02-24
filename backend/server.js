@@ -10,6 +10,7 @@
 //  : --verbose, makes the startup procedure for the application verbose
 //  : --logging, logs every HTTP request made to the server
 //  : --coldstart, cold starts the system and creates all of the files in the database
+//  : --nodb, starts the server with no attached Database (useful for testing)
 
 // ////////////////////////////////////////////////////////////// ESLINT-DISABLES
 

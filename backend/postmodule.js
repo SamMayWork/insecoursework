@@ -62,7 +62,7 @@ async function createPost(req, res) {
 // ////////////////////////////////////////////////////////////// FILTERS
 
 const offensivelanguage = {
-  words = [
+  words : [
     { dirty : "hate", clean : "a subject of great displeasure within my personal and subjective opinion" },
     { dirty : "stupid", clean : "ill-prepared for rational discourse"}
   ]
