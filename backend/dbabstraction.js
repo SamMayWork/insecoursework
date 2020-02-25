@@ -209,6 +209,7 @@ async function createReplyComment(comment_content, user_id, post_id, reply_id) {
   const results = await executeQuery(query, [generateId(8), comment_content, 0, user_id, post_id, reply_id]);
   return results;
 }
+
 /**
  * adds user to the database
  * @param {string} user_email the users email
