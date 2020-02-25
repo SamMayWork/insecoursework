@@ -125,6 +125,36 @@ function getBoard(board_name, board_year) {
 
 }
 
+/**
+ * Gets the content of a specific comment
+ * @param {string} commentid ID of the comment to get 
+ */
+async function getComment(commentid) {
+  const query = "SELECT * FROM comments WHERE comment_id = $1;";
+  const results = await executeQuery(query, [commentid]);
+  return results.rows[0];
+}
+
+/**
+ * Gets all of the replies for a given comment, this function is recursive
+ * @param {string} commentid The ID of the comment of which to get the replies for
+ */
+async function getReplies(commentid) {
+  const query = 'SELECT * FROM comments WHERE reply_id = $1';
+  let results;
+
+  recurQuery(commentid);
+
+  function recurQuery (id) {
+    results += await executeQuery(query, [id]);
+    for (let row in results.rows[0]) {
+      recurQuery(row.reply_id);
+    }
+  }
+ 
+  return results;
+}
+
 // ////////////////////////////////////////////////////////////// CREATING-CONTENT
 
 
@@ -328,3 +358,5 @@ module.exports.createPost = createPost;
 module.exports.createComment = createComment;
 module.exports.createReplyComment = createComment;
 module.exports.getUserIDFromEmail = getUserIDFromEmail;
+module.exports.getComment = getComment;
+module.exports.getReplies = getReplies;

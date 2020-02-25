@@ -66,27 +66,25 @@ if (argv.softreset) {
 
 // ////////////////////////////////////////////////////////////// API END POINT HANDLERS
 
-
-// Handler for the HTTP GET's coming into the server, the end points that we are handling are:
-// /get?thread=[param] - Gets the thread with the given ID
-// /get?board=[param]&order=[param] - Gets a list of posts in a board in a given order
-// Since the forum allows unregistered users to access the site, there is no need for authentication here
+// Handler for HTTP GET's for content from the server, endpoints are
+// /get?postid=[param] - Gets a specific post off of the server, along with all of the comments
+// /get?boardid=[param] - Gets a collection of posts from a specific board
+// /get?commentid=[param] - Gets a comment and all of its children
 app.get('/get', async (req, res) => {
   handleNoDB(req, res);
   handleGetLogging(req);
 
-  // Find a specific thread
-  if (req.query.thread !== undefined) {
-    await pms.retrievePost (req, res);
+  if (req.query.postid) {
+    await pms.retrievePost();
   }
 
-  if (req.query.board !== undefined && req.query.order !== undefined) {
-    // handleBoardGet();
+  if (req.query.boardid) {
 
-    res.end();
   }
 
-  return; 
+  if (req.query.commentid) {
+
+  }
 });
 
 // Handler for the HTTP Posts coming to create posts/comments on the server, end points for thois are
