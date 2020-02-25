@@ -371,3 +371,4 @@ module.exports.getComment = getComment;
 module.exports.getReplies = getReplies;
 module.exports.reportPost = reportPost;
 module.exports.reportComment = reportComment;
+module.exports.initialiseDB = initialiseDB;

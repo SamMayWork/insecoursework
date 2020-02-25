@@ -1,24 +1,21 @@
-// Created 04/02/2020
-// TESTS FILE FOR SERVER.JS
+// CREATED ON 25/02/2020
 
-QUnit.module('DbAbstraction Tests');
+// This is the tests file for the dbabstraction.js file
+//
+// Tests are done using Mocha JS and are run using Travis CI
 
-QUnit.test('DB: Connection Test', function (assert) {
-  let connection;
-  connection = initialiseDB(connection);
-  assert.notEqual(connection, undefined);
-});
+const assert = require('assert');
+const dbabs = require('../dbabstraction');
 
-QUnit.test('DB: Query Executor Test', function (assert) {
-  let query = "CREATE DATABASE test;";
-  executeQuery(query, undefined);
-  query = "CREATE TABLE testTable (id, title);"
-});
+// ////////////////////////////////////////////////////////////// CONNECTION TESTS
 
-QUnit.test('ID Generation: Variance Tests', function (assert) {
-  let v1 = generateID(8), v2 = generateID(8), v3 = generateID(8);
+describe('dbabstraction Tests', function () {
+  describe('initialiseDB', function () {
+    it('Should create a connection to the DB when called', function () {
+      let connection;
+      initialiseDB(connection);
 
-  if (v1 === v2 == v3) {
-    assert.notOk();
-  }
+      assert.notEqual(connection, undefined);
+    });
+  });
 });

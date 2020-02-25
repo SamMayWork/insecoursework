@@ -1,7 +1,9 @@
 language: node_js
 before_install:
-- npm i
-- npm install -g qunit
-- qunit --version
+  - npm i
+services:
+  - postgresql
+before_script:
+  - psql -c "CREATE DATABASE forumbackend;"; -U postrges
 script:
-- npm test
+  - npm test
