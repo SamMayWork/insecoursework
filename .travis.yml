@@ -7,7 +7,5 @@ services:
   - postgresql
 before_script:
   - psql -c "CREATE DATABASE forumbackend;" -U postgres
-jobs:
-  include:
-    - stage: test
-      script : npm test
+script:
+  - npm test
