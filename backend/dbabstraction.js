@@ -369,8 +369,5 @@ module.exports.createReplyComment = createComment;
 module.exports.getUserIDFromEmail = getUserIDFromEmail;
 module.exports.getComment = getComment;
 module.exports.getReplies = getReplies;
-<<<<<<< HEAD
 module.exports.reportPost = reportPost;
 module.exports.reportComment = reportComment;
-=======
->>>>>>> 7c197c45889489add1e509bda9f9514494ccbb05
