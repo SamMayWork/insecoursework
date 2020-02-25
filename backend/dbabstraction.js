@@ -16,12 +16,10 @@ const logging = require('./logging');
 
 // ////////////////////////////////////////////////////////////// ESTABLISHING-CONNECTION
 
-let sqlConnection;
-
 /**
  * Initialises the DB connection when the module has been started
  */
-function initialiseDB(connection) {
+function initialiseDBConnection() {
   try {
     connection = new pg({
       database: 'forumbackend',
@@ -31,12 +29,6 @@ function initialiseDB(connection) {
   
     logging.warningMessage('Connecting to the Database');
     connection.connect();
-  
-    connection.on('error', (err) => {
-      console.log(err);
-      connection.end();
-      connection = undefined;
-    });
     logging.successMessage('Connection to DB provider established');
   } catch (error) {
     logging.errorMessage(error);
@@ -45,7 +37,7 @@ function initialiseDB(connection) {
   }  
 }
 
-initialiseDB(sqlConnection);
+const sqlConnection = initialiseDB(sqlConnection);
 
 // ////////////////////////////////////////////////////////////// ID GENERATOR
 
@@ -372,4 +364,4 @@ module.exports.getComment = getComment;
 module.exports.getReplies = getReplies;
 module.exports.reportPost = reportPost;
 module.exports.reportComment = reportComment;
-module.exports.initialiseDB = initialiseDB;
+module.exports.initialiseDBConnection = initialiseDBConnection;
