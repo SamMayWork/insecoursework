@@ -30,12 +30,20 @@ CREATE TABLE IF NOT EXISTS Comments (
   reply_id varchar(8) REFERENCES Comments(comment_id)
 );
 
+
+
+/* 
+the user id is from the user that reported the post
+*/
 CREATE TABLE IF NOT EXISTS Reports_Posts (
   user_id varchar (8) NOT NULL REFERENCES Users(user_id),
   post_id varchar (8) NOT NULL REFERENCES Posts(post_id),
   PRIMARY KEY (user_id, post_id)
 );
 
+/* 
+the user id is from the user that reported the comment
+*/
 CREATE TABLE IF NOT EXISTS Reports_Comments (
   user_id varchar (8) NOT NULL REFERENCES Users(user_id),
   comment_id varchar (8) NOT NULL REFERENCES Comments(comment_id),
