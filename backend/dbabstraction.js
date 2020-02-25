@@ -256,7 +256,8 @@ async function reportPost(user_id, post_id) {
   const result = await executeQuery (query, [user_id, post_id]);
   return result;
 }
-function reportComment(user_id, comment_id) {
+
+async function reportComment(user_id, comment_id) {
   const query = 'INSERT INTO Reports_Comments VALUES($1, $2);';
   const result = await executeQuery (query, [user_id, comment_id]);
   return result;
