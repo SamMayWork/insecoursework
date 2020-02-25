@@ -26,9 +26,7 @@ modules = [
  * of the application
  */
 function coldStart () {
-
-  let modules = your loaded modules
-  
+    
   for (let imodule of modules) {
     const yearString = `${new Date().getFullYear()}/${new Date().getFullYear()+1}`;
     dbabs.createBoard(imodule, yearString);
