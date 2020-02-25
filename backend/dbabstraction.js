@@ -251,8 +251,16 @@ async function editComment(comment_content, user_id, post_id, comment_id) {
 
 // ////////////////////////////////////////////////////////////// REPORTING-CONTENT
 
-function reportPost() {}
-function reportComment() {}
+async function reportPost(user_id, post_id) {
+  const query = 'INSERT INTO Reports_Posts VALUES($1, $2);';
+  const result = await executeQuery (query, [user_id, post_id]);
+  return result;
+}
+function reportComment(user_id, comment_id) {
+  const query = 'INSERT INTO Reports_Comments VALUES($1, $2);';
+  const result = await executeQuery (query, [user_id, comment_id]);
+  return result;
+}
 
 // ////////////////////////////////////////////////////////////// LIKING/DISLIKING COMMENTS?POSTS
 
@@ -361,3 +369,5 @@ module.exports.createReplyComment = createComment;
 module.exports.getUserIDFromEmail = getUserIDFromEmail;
 module.exports.getComment = getComment;
 module.exports.getReplies = getReplies;
+module.exports.reportPost = reportPost;
+module.exports.reportComment = reportComment;
