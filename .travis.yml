@@ -3,7 +3,5 @@ node_js:
   - "node"
 before_install:
   - npm i
-before_script:
-  - psql -c "CREATE DATABASE forumbackend;" -U postgres
 script:
   - npm test
