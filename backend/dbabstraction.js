@@ -145,7 +145,7 @@ async function getReplies(commentid) {
 
   recurQuery(commentid);
 
-  function recurQuery (id) {
+  async function recurQuery (id) {
     results += await executeQuery(query, [id]);
     for (let row in results.rows[0]) {
       recurQuery(row.reply_id);
@@ -209,6 +209,7 @@ async function createReplyComment(comment_content, user_id, post_id, reply_id) {
   const results = await executeQuery(query, [generateId(8), comment_content, 0, user_id, post_id, reply_id]);
   return results;
 }
+
 /**
  * adds user to the database
  * @param {string} user_email the users email
