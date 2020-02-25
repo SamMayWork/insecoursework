@@ -145,7 +145,7 @@ async function getReplies(commentid) {
 
   recurQuery(commentid);
 
-  function recurQuery (id) {
+  async function recurQuery (id) {
     results += await executeQuery(query, [id]);
     for (let row in results.rows[0]) {
       recurQuery(row.reply_id);
