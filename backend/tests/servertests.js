@@ -10,9 +10,9 @@ const dbabs = require('../dbabstraction');
 // ////////////////////////////////////////////////////////////// CONNECTION TESTS
 
 describe('dbabstraction Tests', function () {
-  describe('initialiseDB', function () {
+  describe('initialiseDBConnection', function () {
     it('Should create a connection to the DB when called', function () {
-      let connection = dbabs.initialiseDB(connection);
+      let connection = dbabs.initialiseDBConnection(connection);
       assert.notEqual(connection, undefined);
     });
   });
