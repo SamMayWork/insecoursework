@@ -37,7 +37,7 @@ function initialiseDBConnection() {
   }  
 }
 
-const sqlConnection = initialiseDB(sqlConnection);
+const sqlConnection = initialiseDBConnection();
 
 // ////////////////////////////////////////////////////////////// ID GENERATOR
 

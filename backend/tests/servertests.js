@@ -12,7 +12,7 @@ const dbabs = require('../dbabstraction');
 describe('dbabstraction Tests', function () {
   describe('initialiseDBConnection', function () {
     it('Should create a connection to the DB when called', function () {
-      let connection = dbabs.initialiseDBConnection(connection);
+      let connection = dbabs.initialiseDBConnection();
       assert.notEqual(connection, undefined);
     });
   });
