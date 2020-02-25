@@ -27,11 +27,31 @@ const dbabs = require('./dbabstraction');
  * @param {response} res The Response to the user
  */
 
-async function retrievePost(req, res) {
+async function getPost(req, res) {
   const threadid = req.query.thread;
   const postResult = await dbabs.getPost(threadid);
   const commentsResult = await dbabs.getComments(threadid);
   res.json(generateRetrievePostContent(postResult, commentsResult));
+  res.status(200);
+  res.end();
+}
+
+/**
+ * Gets a comment and all of its replies
+ * @param {request} req The Request from the user 
+ * @param {response} res The Response to the user
+ */
+async function getComment(req, res) {
+  const comment = await dbabs.getComment();
+  const replies = await dbabs.getReplies();
+
+  if (comment === undefined) { 
+    req.status(404);
+    req.end();
+  }
+
+  const packagedContent = generateCommentReplies(comment, replies);
+  res.json(packagedContent);
   res.status(200);
   res.end();
 }
@@ -62,7 +82,7 @@ async function createPost(req, res) {
 // ////////////////////////////////////////////////////////////// FILTERS
 
 const offensivelanguage = {
-  words = [
+  words : [
     { dirty : "hate", clean : "a subject of great displeasure within my personal and subjective opinion" },
     { dirty : "stupid", clean : "ill-prepared for rational discourse"}
   ]
@@ -115,6 +135,19 @@ function generateRetrievePostContent(post, comments) {
   return info;
 }
 
+/**
+ * Packages a comment and its replies into a single JSON object
+ * @param {JSON} comment The searched comment
+ * @param {JSON} replies A Collection of its replies 
+ */
+function generateCommentReplies (comment, replies) {
+  if (replies !== undefined) {
+    return comment + replies;
+  }
+  return comment;
+}
+
 // ////////////////////////////////////////////////////////////// EXPORTS
 
-module.exports.retrievePost = retrievePost;
+module.exports.getPost = getPost;
+module.exports.getComment = getComment;

@@ -7,9 +7,10 @@
 // incoming connection and routing them to the correct destination
 //
 // Options for startup:
-//  : --verbose, makes the startup procedure for the application verbose
-//  : --logging, logs every HTTP request made to the server
-//  : --coldstart, cold starts the system and creates all of the files in the database
+//  : --logging, logs every HTTP request made to the server, listing the resource and the IP
+//  : --coldstart, cold starts the system and creates all of the tables in the DB, requires restart
+//  : --nodb, starts the server with no attached Database, responding to queries with a template JSON
+//  : --softreset, removes all records from the Database, requires restart
 
 // ////////////////////////////////////////////////////////////// ESLINT-DISABLES
 
@@ -17,10 +18,11 @@
 /* eslint-disable max-len */
 /* eslint-disable no-use-before-define */
 
+// ////////////////////////////////////////////////////////////// REQUIRES
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const { argv } = require('yargs');
-const readline = require('readline');
 const googleAuth = require('simple-google-openid');
 
 const logging = require('./logging');
@@ -28,16 +30,12 @@ const maintain = require('./maintainmodule');
 const pms = require('./postmodule');
 const uac = require('./useraccountsystem');
 
-// Still editing this, working on connecting the db
-// const db = require('./model-dbstructure');
-
 const app = express();
-
 const listeningPort = 8080;
 
-// Serve all of the static content for the front end
 app.use(express.static('../frontend/'));
 
+// Sets parameters for recieving information
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -46,60 +44,47 @@ app.use(bodyParser.json());
 
 // ////////////////////////////////////////////////////////////// COMMAND LINE ARGUMENTS
 
-// Set the interface for coversing with the user
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-
 if (argv.nodb) {
   logging.warningMessage("Starting the server without the attached DB...");
   logging.warningMessage("Only responding to requests with template");
 }
 
-if (argv.verbose) {
-  logging.warningMessage('Starting the server...');
-}
-
+// Run the cold-start prodedure and then exit the program
 if (argv.coldstart) {
+  logging.coldStartMessage("Starting the cold-start procedure");
   maintain.coldStart();
+  logging.coldStartMessage("Cold-Start procedure has been finished, continuing to start the server!");
 }
 
-// If we're running a "soft rest" (deleting all of the records but preserving the structure)
-// check with the user that they meant to run this option
 if (argv.softreset) {
-  logging.warningMessage('SOFT RESET OPTION HAS BEEN ENABLED, ARE YOU SURE?');
-  rl.question('Continue? y/n: ', (answer) => {
-    if (answer === 'y') {
-      logging.warningMessage("I hope you know what you're doing.");
-      maintain.softReset();
-    }
-  });
+  logging.warningMessage("Soft Reset mode has been enabled, clearing the server now.");
+  maintain.softreset();
+  logging.warningMessage("Content of the Database has been cleared and the structure has been preserved");
+  logging.warningMessage("Restart the server without the --softreset, but with the --coldstart operation to begin normal operation");
+  return;
 }
 
 // ////////////////////////////////////////////////////////////// API END POINT HANDLERS
 
-
-// Handler for the HTTP GET's coming into the server, the end points that we are handling are:
-// /get?thread=[param] - Gets the thread with the given ID
-// /get?board=[param]&order=[param] - Gets a list of posts in a board in a given order
-// Since the forum allows unregistered users to access the site, there is no need for authentication here
+// Handler for HTTP GET's for content from the server, endpoints are
+// /get?postid=[param] - Gets a specific post off of the server, along with all of the comments
+// /get?boardid=[param] - Gets a collection of posts from a specific board
+// /get?commentid=[param] - Gets a comment and all of its children
 app.get('/get', async (req, res) => {
   handleNoDB(req, res);
   handleGetLogging(req);
 
-  // Find a specific thread
-  if (req.query.thread !== undefined) {
-    await pms.retrievePost (req, res);
+  if (req.query.postid) {
+    await pms.retrievePost();
   }
 
-  if (req.query.board !== undefined && req.query.order !== undefined) {
-    // handleBoardGet();
+  if (req.query.boardid) {
 
-    res.end();
   }
 
-  return; 
+  if (req.query.commentid) {
+
+  }
 });
 
 // Handler for the HTTP Posts coming to create posts/comments on the server, end points for thois are

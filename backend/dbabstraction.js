@@ -125,6 +125,36 @@ function getBoard(board_name, board_year) {
 
 }
 
+/**
+ * Gets the content of a specific comment
+ * @param {string} commentid ID of the comment to get 
+ */
+async function getComment(commentid) {
+  const query = "SELECT * FROM comments WHERE comment_id = $1;";
+  const results = await executeQuery(query, [commentid]);
+  return results.rows[0];
+}
+
+/**
+ * Gets all of the replies for a given comment, this function is recursive
+ * @param {string} commentid The ID of the comment of which to get the replies for
+ */
+async function getReplies(commentid) {
+  const query = 'SELECT * FROM comments WHERE reply_id = $1';
+  let results;
+
+  recurQuery(commentid);
+
+  function recurQuery (id) {
+    results += await executeQuery(query, [id]);
+    for (let row in results.rows[0]) {
+      recurQuery(row.reply_id);
+    }
+  }
+ 
+  return results;
+}
+
 // ////////////////////////////////////////////////////////////// CREATING-CONTENT
 
 
@@ -138,39 +168,26 @@ async function createBoard(board_name, board_year) {
   const results = await executeQuery(query, [generateId(8), board_name, board_year]);
   return results;
 }
-
 /**
- * Creates a post inside of the database
- * @param {string} title The title of the post
- * @param {string} content The content of the post
- * @param {[string]} keywords A list of keywords (max 5) to be associated with the post
- * @param {string} authorid The ID of the user that is creating the post
- * @param {string} boardid The ID of the board in which to create the post
+ * Creates a post
+ * @param {String} title Title of the post
+ * @param {String} content Content of the post
+ * @param {String} authorid Authot id 
+ * @param {String} boardid Bord id
  */
-async function createPost(title, content, keywords, authorid, boardid) {
-  let query = 'INSERT INTO Posts VALUES($1, $2, $3, $4, $5, $6);';
+
+async function createPost(title, content, authorid, boardid) {
+  const query = 'INSERT INTO Posts VALUES($1, $2, $3, $4, $5, $6);';
   const results = await executeQuery(query, [generateId(8), title, content, 0, authorid, boardid]);
-  
-  query =  'INSERT INTO Keywords VALUES ($1,';
-  for (let i = 2; i < (keywords.length) + 2; i++) {
-    query += `$${i},`;
-  }
-
-  query = query.substring(0, query.length -1);
-  query += ');'
-
-  keywords.unshift(generateId(8));
-  await executeQuery(query, [keywords]);
-
   return results;
 }
 
 
 /**
- * 
- * @param {*} comment_content 
- * @param {*} user_id 
- * @param {*} post_id 
+ * Create a comment on a post
+ * @param {String} comment_content content of the comment 
+ * @param {String} user_id user id of the author of the comment
+ * @param {String} post_id post id with the comment
  */
 
 async function createComment(comment_content, user_id, post_id) {
@@ -180,11 +197,11 @@ async function createComment(comment_content, user_id, post_id) {
 }
 
 /**
- * 
- * @param {*} comment_content 
- * @param {*} user_id 
- * @param {*} post_id 
- * @param {*} reply_id 
+ * Create a reply to a existing comment 
+ * @param {String} comment_content Create a comment
+ * @param {String} user_id user id of the author of the comment
+ * @param {String} post_id post id with the comment
+ * @param {String} reply_id id of the comment reply
  */
 
 async function createReplyComment(comment_content, user_id, post_id, reply_id) {
@@ -220,10 +237,10 @@ async function editPost(newTitle, newContent, user_id, post_id) {
 
 /**
  * Editing the given comment 
- * @param {String} comment_content 
- * @param {String} user_id 
- * @param {String} post_id 
- * @param {String} comment_id
+ * @param {String} comment_content new comment content
+ * @param {String} user_id user id of the author of the existing comment
+ * @param {String} post_id id of the post with the comment
+ * @param {String} comment_id id of the comment
  */
 async function editComment(comment_content, user_id, post_id, comment_id) {
   const query = 'UPDATE Comments SET omment_content = $1 WHERE user_id = $2 AND post_id = $3 AND comment_id = $4;';
@@ -287,9 +304,9 @@ function reportComment() {}
  * Checks to see if a user exists inside of the database
  * @param {string} userid The ID of the user to check
  */
-async function checkEmail() {
-  const query = 'SELECT * FROM users WHERE user_email = $1;';
-  const response = await executeQuery(query, [userid]);
+async function checkUserExists(userid) {
+  const query = 'SELECT * FROM users WHERE user_id = $1;';
+  const response = await sqlConnection.query(query, [userid]);
   return response.rows.length !== 0;
 }
 
@@ -297,22 +314,35 @@ async function checkEmail() {
 // ////////////////////////////////////////////////////////////// DELETING CONTENT
 
 /**
- * Deletes all of the content from all of the tables, preserving the structure of the tables
+ * Deletes all of the content from the table board
  */
-async function deleteAllStoredContent () {
-  await executeQuery("DELETE FROM Users;");
-  await executeQuery("DELETE FROM Board;");
-  await executeQuery("DELETE FROM Posts;");
-  await executeQuery("DELETE FROM Comments;");
-  await executeQuery("DELETE FROM Reports_Posts;");
-  await executeQuery("DELETE FROM Reports_Comments;");
-  await executeQuery("DELETE FROM Keywords;");
+async function deleteRecordBoard() {
+  const query = 'DELETE FROM board;';
+  await sqlConnection.query(query);
 }
 
+// ////////////////////////////////////////////////////////////// RAW ACCESS
+
 /**
- * Gets the ID of a user using their email address
- * @param {string} email The Email address of the user to find
+ * Runs a general query against the databse and returns the result to the caller
+ *
+ * This method is unsafe and does not check for SQL Injection, so only use if you
+ * know what you're doing...
+ * @param {string} query Query to be executed on the database
+ * @param {callback} callback Callback to be executed once the command has been run
  */
+function generalQuery(query, callback) {
+  sqlConnection.query(query);
+}
+
+module.exports.deleteRecordBoard = deleteRecordBoard;
+module.exports.createBoard = createBoard;
+module.exports.getPost = getPost;
+module.exports.getComments = getComments;
+module.exports.checkUserExists = checkUserExists;
+module.exports.createPost = createPost;
+module.exports.createComment = createComment;
+module.exports.createReplyComment = createComment;
 async function getUserIDFromEmail (email) {
   const query = "SELECT user_id FROM users where user_email = $1;";
   const results = await executeQuery(query, email);
@@ -328,3 +358,5 @@ module.exports.createPost = createPost;
 module.exports.createComment = createComment;
 module.exports.createReplyComment = createComment;
 module.exports.getUserIDFromEmail = getUserIDFromEmail;
+module.exports.getComment = getComment;
+module.exports.getReplies = getReplies;
