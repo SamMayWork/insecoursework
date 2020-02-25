@@ -5,13 +5,15 @@
 // Tests are done using Mocha JS and are run using Travis CI
 
 const assert = require('assert');
+const dbabs = require('../dbabstraction');
 
 // ////////////////////////////////////////////////////////////// CONNECTION TESTS
 
 describe('dbabstraction Tests', function () {
   describe('initialiseDBConnection', function () {
     it('Should create a connection to the DB when called', function () {
-      assert.ok(1);
+      let connection = dbabs.initialiseDBConnection();
+      assert.notEqual(connection, undefined);
     });
   });
 });
