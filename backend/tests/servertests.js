@@ -13,7 +13,7 @@ describe('dbabstraction Tests', function () {
   describe('initialiseDB', function () {
     it('Should create a connection to the DB when called', function () {
       let connection;
-      initialiseDB(connection);
+      dbabs.initialiseDB(connection);
 
       assert.notEqual(connection, undefined);
     });
