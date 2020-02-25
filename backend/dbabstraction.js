@@ -20,6 +20,7 @@ const logging = require('./logging');
  * Initialises the DB connection when the module has been started
  */
 function initialiseDBConnection() {
+  let connection;
   try {
     connection = new pg({
       database: 'forumbackend',
@@ -27,13 +28,11 @@ function initialiseDBConnection() {
       host: '/var/run/postgresql',
     });
   
-    logging.warningMessage('Connecting to the Database');
     connection.connect();
-    logging.successMessage('Connection to DB provider established');
+    return connection;
   } catch (error) {
-    logging.errorMessage(error);
-    logging.errorMessage('Unable to connect to the DB');
     connection = undefined;
+    console.log(error);
   }  
 }
 
