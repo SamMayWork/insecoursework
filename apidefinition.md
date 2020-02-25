@@ -31,15 +31,15 @@ Authorisation inside of the POST body
 ## Viewing Content
 
 *GET* Get a Post
-``` /forum/get?postid=[param] ```
+``` /get?postid=[param] ```
 Gets a post from the backend with the associated ID
 
 *GET* Get a Board
-``` /forum/get?boardid=[param] ```
+``` /get?boardid=[param] ```
 Gets a collection of threads from the backend
 
 *GET* Get a Comment
-``` /forum/get?commentid=[param] ```
+``` /get?commentid=[param] ```
 Gets a specific comment and all of its children
 
 ## UAC (User Account Control)
