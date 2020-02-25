@@ -1,6 +1,0 @@
-language: node_js
-before_install:
-- npm i
-- npm install -g qunit
-script:
-- npm test
