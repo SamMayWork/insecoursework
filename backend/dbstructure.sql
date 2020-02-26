@@ -13,6 +13,15 @@ CREATE TABLE IF NOT EXISTS Board (
   board_year varchar(9) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS Keywords (
+  keyword_id varchar(8) PRIMARY KEY,
+  keyword_1 varchar(30) NOT NULL,
+  keyword_2 varchar(30),
+  keyword_3 varchar(30),
+  keyword_4 varchar(30),
+  keyword_5 varchar(30)
+);
+
 CREATE TABLE IF NOT EXISTS Posts (
   post_id varchar (8) PRIMARY KEY,
   keyword_id varchar(8) REFERENCES Keywords(keyword_id),
@@ -43,15 +52,6 @@ CREATE TABLE IF NOT EXISTS Reports_Comments (
   user_id varchar (8) NOT NULL REFERENCES Users(user_id),
   comment_id varchar (8) NOT NULL REFERENCES Comments(comment_id),
   PRIMARY KEY (user_id, comment_id)
-);
-
-CREATE TABLE IF NOT EXISTS Keywords (
-  keyword_id varchar(8) PRIMARY KEY,
-  keyword_1 varchar(30) NOT NULL,
-  keyword_2 varchar(30),
-  keyword_3 varchar(30),
-  keyword_4 varchar(30),
-  keyword_5 varchar(30)
 );
 
 CREATE TABLE IF NOT EXISTS Notifications (

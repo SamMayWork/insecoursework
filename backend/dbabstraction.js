@@ -5,8 +5,7 @@
 // This file provides an interface of functions for other components to use
 // and converts them into SQL queries that are then run against the database
 
-const pg = require('pg').Client;
-const logging = require('./logging');
+const { Pool } = require('pg');
 
 // ////////////////////////////////////////////////////////////// ESLINT-DISABLES
 
@@ -15,6 +14,37 @@ const logging = require('./logging');
 /* eslint-disable no-use-before-define */
 
 // ////////////////////////////////////////////////////////////// ESTABLISHING-CONNECTION
+
+let newPool = new Pool ({
+  host : "localhost",
+  user : "postgres",
+  password : null,
+  database : "forumbackend",
+  port : 5432
+});
+
+/**
+ * Executes a query on the Database using a pool
+ * @param {string} query 
+ * @param {list[string]} parameters 
+ */
+async function executeQuery (query, parameters) {
+  try {
+    const results = await newPool.query(query, parameters);
+    return results;
+  } catch (exception) {
+    console.warn(exception);
+  }
+}
+
+async function getAllBoards () {
+  const query = "SELECT * FROM Board;";
+  const results = await executeQuery(query);
+  return results.rows;
+}
+
+
+
 
 /**
  * Initialises the DB connection when the module has been started
@@ -35,8 +65,6 @@ function initialiseDBConnection() {
     console.log(error);
   }  
 }
-
-const sqlConnection = initialiseDBConnection();
 
 // ////////////////////////////////////////////////////////////// ID GENERATOR
 
@@ -364,3 +392,6 @@ module.exports.getReplies = getReplies;
 module.exports.reportPost = reportPost;
 module.exports.reportComment = reportComment;
 module.exports.initialiseDBConnection = initialiseDBConnection;
+
+
+module.exports.getAllBoards = getAllBoards;
