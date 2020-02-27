@@ -13,7 +13,7 @@ const { Pool } = require('pg');
 /* eslint-disable max-len */
 /* eslint-disable no-use-before-define */
 
-// ////////////////////////////////////////////////////////////// ESTABLISHING-CONNECTION
+// ////////////////////////////////////////////////////////////// QUERY EXECUTOR
 
 let newPool = new Pool ({
   host : "localhost",
@@ -37,14 +37,6 @@ async function executeQuery (query, parameters) {
   }
 }
 
-/**
- * Gets all of the boards 
- */
-async function getAllBoards () {
-  const query = "SELECT * FROM Board;";
-  const results = await executeQuery(query);
-  return results;
-}
 // ////////////////////////////////////////////////////////////// ID GENERATOR
 
 /**
@@ -66,34 +58,19 @@ function generateId(length) {
   return generatedId.join('');
 }
 
-// ////////////////////////////////////////////////////////////// QUERY EXECUTOR
-
-// /**
-//  * Executes a query on the database, providing the raw feedback to the caller
-//  * @param {string} queryString The String to be executed on the database
-//  * @param {array} queryParameters An array of strings of values to be inserted into the query
-//  */
-// async function executeQuery (queryString, queryParameters) {
-//   try {
-//     let results;
-//     if (queryParameters === undefined) {
-//       results = await sqlConnection.query(queryString);
-//     } else {
-//       results = await sqlConnection.query(queryString, queryParameters);
-//     }
-//     return results;
-//   } catch (exception) {
-//     // Print the string that caused the error, the parameters and the stacktrace 
-//     logging.warningMessage(`Error trying to query the database using the query ${queryString}, using the following parameters`);
-//     for (let i = 0; i < queryParameters.length; i++) {
-//       logging.warningMessage(`${i} - ${queryParameters[i]}`);
-//     }
-//     logging.warningMessage("Printing stack trace...");
-//     logging.warningMessage(exception);
-//   }
-// }
-
 // ////////////////////////////////////////////////////////////// GETTING-CONTENT
+
+/**
+ * Gets all of the boards 
+ */
+async function getAllBoards () {
+  const query = "SELECT * FROM Board;";
+  const results = await executeQuery(query);
+  return results;
+}
+
+
+
 
 /**
  * Gets a post and all of its content (including comments), this method hides the
@@ -123,8 +100,14 @@ async function getComments(postid) {
   return results;
 }
 
-function getBoard(board_name, board_year) {
-
+/**
+ * Gets a specific board
+ * @param {string} boardid 
+ */
+async function getBoard (boardid) {
+  const query = 'SELECT * FROM board WHERE board_id = $1;';
+  const results = await executeQuery(query, [boardid]);
+  return results;
 }
 
 /**
@@ -376,4 +359,6 @@ module.exports.reportPost = reportPost;
 module.exports.reportComment = reportComment;
 
 module.exports.generateId = generateId;
+
 module.exports.getAllBoards = getAllBoards;
+module.exports.getBoard = getBoard;

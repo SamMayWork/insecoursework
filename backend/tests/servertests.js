@@ -10,6 +10,18 @@ const dbabs = require('../dbabstraction');
 // ////////////////////////////////////////////////////////////// CONNECTION TESTS
 
 describe('dbabstraction Tests', function () {
+  
+  describe('getBoard', function () {
+    it('Should return all of the content for the given board', async function () {
+      let results = await dbabs.getBoard('d7227788');
+      assert.deepEqual(results.rows[0], {
+        board_id : 'd7227788',
+        board_module : 'Introduction to India',
+        board_year : '2020/2021'
+      });
+    });
+  });
+
   describe('getAllBoards', function () {
     it('Should return a result that is not undefined', async function () {
       let results = await dbabs.getAllBoards();
@@ -43,4 +55,6 @@ describe('dbabstraction Tests', function () {
       assert.equal(result, undefined);
     });
   });
+
+
 });
