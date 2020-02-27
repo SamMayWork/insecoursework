@@ -17,8 +17,8 @@ const { Pool } = require('pg');
 
 let newPool = new Pool ({
   host : "localhost",
-  user : "postgres",
-  password : null,
+  user : "test",
+  password : "test",
   database : "forumbackend",
   port : 5432
 });
@@ -37,35 +37,14 @@ async function executeQuery (query, parameters) {
   }
 }
 
+/**
+ * Gets all of the boards 
+ */
 async function getAllBoards () {
   const query = "SELECT * FROM Board;";
   const results = await executeQuery(query);
   return results;
 }
-
-
-
-
-/**
- * Initialises the DB connection when the module has been started
- */
-function initialiseDBConnection() {
-  let connection;
-  try {
-    connection = new pg({
-      database: 'forumbackend',
-      statement_timeout: 2000,
-      host: '/var/run/postgresql',
-    });
-  
-    connection.connect();
-    return connection;
-  } catch (error) {
-    connection = undefined;
-    console.log(error);
-  }  
-}
-
 // ////////////////////////////////////////////////////////////// ID GENERATOR
 
 /**
@@ -73,6 +52,10 @@ function initialiseDBConnection() {
  * @param {number} length The length of the ID to return
  */
 function generateId(length) {
+  if (length <= 0) {
+    return undefined;
+  }
+
   const values = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   const generatedId = [];
 
@@ -391,7 +374,6 @@ module.exports.getComment = getComment;
 module.exports.getReplies = getReplies;
 module.exports.reportPost = reportPost;
 module.exports.reportComment = reportComment;
-module.exports.initialiseDBConnection = initialiseDBConnection;
 
-
+module.exports.generateId = generateId;
 module.exports.getAllBoards = getAllBoards;
