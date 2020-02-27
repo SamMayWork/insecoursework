@@ -10,10 +10,10 @@ const dbabs = require('../dbabstraction');
 // ////////////////////////////////////////////////////////////// CONNECTION TESTS
 
 describe('dbabstraction Tests', function () {
-  describe('initialiseDBConnection', function () {
-    it('Should create a connection to the DB when called', function () {
-      let connection = dbabs.initialiseDBConnection();
-      assert.notEqual(connection, undefined);
+  describe('getAllBoards', function () {
+    it('Should return a result that is not undefined', async function () {
+      let results = await dbabs.getAllBoards();
+      assert.notEqual(results, undefined);
     });
   });
 });
