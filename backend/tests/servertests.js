@@ -20,6 +20,11 @@ describe('dbabstraction Tests', function () {
         board_year : '2020/2021'
       });
     });
+
+    it('Should return only one row', async function () {
+      let results = await dbabs.getBoard('d7227788');
+      assert.equal(results.rows.length, 1);
+    });
   });
 
   describe('getAllBoards', function () {
@@ -55,6 +60,4 @@ describe('dbabstraction Tests', function () {
       assert.equal(result, undefined);
     });
   });
-
-
 });

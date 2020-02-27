@@ -69,9 +69,6 @@ async function getAllBoards () {
   return results;
 }
 
-
-
-
 /**
  * Gets a post and all of its content (including comments), this method hides the
  * raw database output in a JSON object with aliases for the column names to simplify use
@@ -80,13 +77,7 @@ async function getAllBoards () {
 async function getPost(postid) {
   const query = 'SELECT * FROM posts WHERE post_id = $1';
   const results = await executeQuery(query, [postid]);
-  return {
-    id: results.rows[0].post_id,
-    title: results.rows[0].post_title,
-    content: results.rows[0].post_content,
-    likes: results.rows[0].post_likes,
-    authorid: results.rows[0].user_id,
-  };
+  return results.rows[0];
 }
 
 /**
