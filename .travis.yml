@@ -6,7 +6,6 @@ before_install:
 services:
   - postgresql
 before_script:
-  - psql -c "CREATE DATABASE forumbackend;" -U postgres
+  - psql -f backend/dbstructure.sql
 script:
   - npm test
-  - sudo pkill -u postgres

@@ -40,7 +40,7 @@ async function executeQuery (query, parameters) {
 async function getAllBoards () {
   const query = "SELECT * FROM Board;";
   const results = await executeQuery(query);
-  return results.rows;
+  return results;
 }
 
 
@@ -85,30 +85,30 @@ function generateId(length) {
 
 // ////////////////////////////////////////////////////////////// QUERY EXECUTOR
 
-/**
- * Executes a query on the database, providing the raw feedback to the caller
- * @param {string} queryString The String to be executed on the database
- * @param {array} queryParameters An array of strings of values to be inserted into the query
- */
-async function executeQuery (queryString, queryParameters) {
-  try {
-    let results;
-    if (queryParameters === undefined) {
-      results = await sqlConnection.query(queryString);
-    } else {
-      results = await sqlConnection.query(queryString, queryParameters);
-    }
-    return results;
-  } catch (exception) {
-    // Print the string that caused the error, the parameters and the stacktrace 
-    logging.warningMessage(`Error trying to query the database using the query ${queryString}, using the following parameters`);
-    for (let i = 0; i < queryParameters.length; i++) {
-      logging.warningMessage(`${i} - ${queryParameters[i]}`);
-    }
-    logging.warningMessage("Printing stack trace...");
-    logging.warningMessage(exception);
-  }
-}
+// /**
+//  * Executes a query on the database, providing the raw feedback to the caller
+//  * @param {string} queryString The String to be executed on the database
+//  * @param {array} queryParameters An array of strings of values to be inserted into the query
+//  */
+// async function executeQuery (queryString, queryParameters) {
+//   try {
+//     let results;
+//     if (queryParameters === undefined) {
+//       results = await sqlConnection.query(queryString);
+//     } else {
+//       results = await sqlConnection.query(queryString, queryParameters);
+//     }
+//     return results;
+//   } catch (exception) {
+//     // Print the string that caused the error, the parameters and the stacktrace 
+//     logging.warningMessage(`Error trying to query the database using the query ${queryString}, using the following parameters`);
+//     for (let i = 0; i < queryParameters.length; i++) {
+//       logging.warningMessage(`${i} - ${queryParameters[i]}`);
+//     }
+//     logging.warningMessage("Printing stack trace...");
+//     logging.warningMessage(exception);
+//   }
+// }
 
 // ////////////////////////////////////////////////////////////// GETTING-CONTENT
 
