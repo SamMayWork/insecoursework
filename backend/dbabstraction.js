@@ -17,8 +17,8 @@ const { Pool } = require('pg');
 
 let newPool = new Pool ({
   host : "localhost",
-  user : "test",
-  password : "test",
+  user : "Postgres",
+  password : null,
   database : "forumbackend",
   port : 5432
 });
