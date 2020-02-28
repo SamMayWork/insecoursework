@@ -15,13 +15,20 @@ const { Pool } = require('pg');
 
 // ////////////////////////////////////////////////////////////// QUERY EXECUTOR
 
+
 let newPool = new Pool ({
   host : "localhost",
-  user : "Postgres",
-  password : null,
+  user : "test",
+  password : "test",
   database : "forumbackend",
   port : 5432
 });
+
+if (process.env.TRAVIS !== undefined) {
+  newPool.user = "postgres";
+  newPool.password = null;
+}
+
 
 /**
  * Executes a query on the Database using a pool
