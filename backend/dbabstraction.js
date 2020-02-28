@@ -13,11 +13,11 @@ const { Pool } = require('pg');
 /* eslint-disable max-len */
 /* eslint-disable no-use-before-define */
 
-// ////////////////////////////////////////////////////////////// ESTABLISHING-CONNECTION
+// ////////////////////////////////////////////////////////////// QUERY EXECUTOR
 
 let newPool = new Pool ({
   host : "localhost",
-  user : "postgres",
+  user : "Postgres",
   password : null,
   database : "forumbackend",
   port : 5432
@@ -37,35 +37,6 @@ async function executeQuery (query, parameters) {
   }
 }
 
-async function getAllBoards () {
-  const query = "SELECT * FROM Board;";
-  const results = await executeQuery(query);
-  return results;
-}
-
-
-
-
-/**
- * Initialises the DB connection when the module has been started
- */
-function initialiseDBConnection() {
-  let connection;
-  try {
-    connection = new pg({
-      database: 'forumbackend',
-      statement_timeout: 2000,
-      host: '/var/run/postgresql',
-    });
-  
-    connection.connect();
-    return connection;
-  } catch (error) {
-    connection = undefined;
-    console.log(error);
-  }  
-}
-
 // ////////////////////////////////////////////////////////////// ID GENERATOR
 
 /**
@@ -73,6 +44,10 @@ function initialiseDBConnection() {
  * @param {number} length The length of the ID to return
  */
 function generateId(length) {
+  if (length <= 0) {
+    return undefined;
+  }
+
   const values = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   const generatedId = [];
 
@@ -83,34 +58,16 @@ function generateId(length) {
   return generatedId.join('');
 }
 
-// ////////////////////////////////////////////////////////////// QUERY EXECUTOR
-
-// /**
-//  * Executes a query on the database, providing the raw feedback to the caller
-//  * @param {string} queryString The String to be executed on the database
-//  * @param {array} queryParameters An array of strings of values to be inserted into the query
-//  */
-// async function executeQuery (queryString, queryParameters) {
-//   try {
-//     let results;
-//     if (queryParameters === undefined) {
-//       results = await sqlConnection.query(queryString);
-//     } else {
-//       results = await sqlConnection.query(queryString, queryParameters);
-//     }
-//     return results;
-//   } catch (exception) {
-//     // Print the string that caused the error, the parameters and the stacktrace 
-//     logging.warningMessage(`Error trying to query the database using the query ${queryString}, using the following parameters`);
-//     for (let i = 0; i < queryParameters.length; i++) {
-//       logging.warningMessage(`${i} - ${queryParameters[i]}`);
-//     }
-//     logging.warningMessage("Printing stack trace...");
-//     logging.warningMessage(exception);
-//   }
-// }
-
 // ////////////////////////////////////////////////////////////// GETTING-CONTENT
+
+/**
+ * Gets all of the boards 
+ */
+async function getAllBoards () {
+  const query = "SELECT * FROM Board;";
+  const results = await executeQuery(query);
+  return results;
+}
 
 /**
  * Gets a post and all of its content (including comments), this method hides the
@@ -120,13 +77,7 @@ function generateId(length) {
 async function getPost(postid) {
   const query = 'SELECT * FROM posts WHERE post_id = $1';
   const results = await executeQuery(query, [postid]);
-  return {
-    id: results.rows[0].post_id,
-    title: results.rows[0].post_title,
-    content: results.rows[0].post_content,
-    likes: results.rows[0].post_likes,
-    authorid: results.rows[0].user_id,
-  };
+  return results.rows[0];
 }
 
 /**
@@ -140,8 +91,14 @@ async function getComments(postid) {
   return results;
 }
 
-function getBoard(board_name, board_year) {
-
+/**
+ * Gets a specific board
+ * @param {string} boardid 
+ */
+async function getBoard (boardid) {
+  const query = 'SELECT * FROM board WHERE board_id = $1;';
+  const results = await executeQuery(query, [boardid]);
+  return results;
 }
 
 /**
@@ -391,7 +348,8 @@ module.exports.getComment = getComment;
 module.exports.getReplies = getReplies;
 module.exports.reportPost = reportPost;
 module.exports.reportComment = reportComment;
-module.exports.initialiseDBConnection = initialiseDBConnection;
 
+module.exports.generateId = generateId;
 
 module.exports.getAllBoards = getAllBoards;
+module.exports.getBoard = getBoard;
