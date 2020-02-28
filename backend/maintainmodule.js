@@ -5,19 +5,11 @@
 
 const logging = require('./logging');
 const dbabs = require('./dbabstraction');
+const modules = require("./modules");
 
 // ////////////////////////////////////////////////////////////// ESLINT-DISABLES
 
 /* eslint-disable no-use-before-define */
-
-// ////////////////////////////////////////////////////////////// BOARDS
-
-modules = [
-  "Introduction to Software Engineering",
-  "Data Structures and Algorithms",
-  "Computer Architecture",
-  "Web Foundations 1"
-];
 
 // ////////////////////////////////////////////////////////////// MAINTAIN MODULE
 
@@ -26,8 +18,7 @@ modules = [
  * of the application
  */
 function coldStart () {
-  import modules from modules.json
-  for (let imodule of modules) {
+  for (let imodule of moduleInformation.modules) {
     const yearString = `${new Date().getFullYear()}/${new Date().getFullYear()+1}`;
     dbabs.createBoard(imodule, yearString);
     logging.coldStartMessage(`Created board for ${imodule} of year ${yearString}`);
