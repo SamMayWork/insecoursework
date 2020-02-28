@@ -5,6 +5,8 @@ before_install:
   - npm i
 services:
   - postgresql
+env:
+  - CI=true
 before_script:
   - psql -f backend/dbstructure.sql
 script:
