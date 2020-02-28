@@ -24,7 +24,7 @@ let newPool = new Pool ({
   port : 5432
 });
 
-if (process.env.TRAVIS !== undefined) {
+if ('TRAVIS' in process.env) {
   newPool.user = "postgres";
   newPool.password = null;
 }
