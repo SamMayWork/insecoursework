@@ -75,7 +75,31 @@ describe('dbabstraction Tests', function () {
     });
   });
 
-  
+  describe('getPost', function () {
+    it('Should not return undefined for row for ID 11f3b99f', async function () {
+      let result = await dbabs.getPost('11f3b99f');
+      assert.notEqual(result, undefined);
+    });
+
+    it('Should return the expected content for the row 11f3b99f', async function () {
+      let result = await dbabs.getPost('11f3b99f');
+      assert.deepEqual(result, {
+        post_id : '11f3b99f',
+        keyword_id : '986fcdbe',
+        post_title : 'stems till wore stretch',
+        post_content : 'exclaimed scene ice game also closer became law damage hold mail hour care give definition spread bent step walk modern mad whole beautiful your tank sense cold picture listen hunt phrase construction grade direction shaking fastened summer chair purpose birds herd safety discover toward folks nature talk truck',
+        post_likes : 10,
+        user_id : 'acc45ba4',
+        created_date : new Date('2020-02-02T00:00:00.000Z'),
+        edited_date : new Date('2020-02-06T00:00:00.000Z')
+      });
+    });
+
+    it('Should return undefined if the post does not exist', async function () {
+      let result = await dbabs.getPost('DOESNOTE');
+      assert.equal(result, undefined);
+    })
+  });
 });
 
 describe("Maintenance Module", function () {
