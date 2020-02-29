@@ -118,17 +118,26 @@ app.post('/forum/create', (req, res) => {
 // /forum/like?like=[param]&post=[param] - If like==true then it likes the post with the given ID
 // /forum/like?like=[param]&comment=[param] - If like==true then it likes the comment with the given ID
 // if like==false then it will dislike the associated post
-app.post('/forum/like', (req, res) => {
+app.post('/forum/like', async (req, res) => {
   handleNoDB(req, res);
   handlePostLogging(req);
 
-  if (req.query.like !== undefined && req.query.post !== undefined) {
-    // handleLike();
+  if (req.query.postid === undefined || req.query.status === undefined) {
+    res.status(404);
+    res.end("Invalid parameters");
   }
 
-  if (req.query.like !== undefined && req.query.comment !== undefined) {
-    // handleLike();
+  // Handle for liking/disliking a post
+  if (req.query.postid !== undefined &&
+    req.query.status !== undefined && 
+    req.query.type === 'post') {
+      if(uac.checkUserExists(req)) {
+        await pms.likePost();
+      }
   }
+
+  if (req.query.postid)
+
 
   res.end();
 });
