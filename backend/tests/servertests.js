@@ -74,12 +74,14 @@ describe('dbabstraction Tests', function () {
       assert.equal(result, undefined);
     });
   });
+
+  
 });
 
 describe("Maintenance Module", function () {
   describe("Cold Start Procedure", function () {
     it("Should not throw any errors", async function () {
-      assert.doesNotThrow(mm.coldStart());
+      assert.doesNotThrow(mm.coldStart, Error, "Error Thrown");
     });
   });
 });
