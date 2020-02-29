@@ -14,6 +14,7 @@
 
 
 const dbabs = require('./dbabstraction');
+const logging = require('./logging');
 
 // ////////////////////////////////////////////////////////////// ESLINT DISABLES
 
@@ -76,6 +77,42 @@ async function createPost(req, res) {
     }
 
     dbabs.createPost(title, content, keywords);
+    res.status(200);
+    res.end();
+  }
+}
+
+/**
+ * Creates a comment
+ * @param {request} req 
+ * @param {response} res 
+ * @param {string} userid UserID for the database 
+ */
+async function createComment (req, res, userid) {
+  try {
+    let results;
+    if (req.body.reply === true) {
+      results = await dbabs.createReplyComment(
+        req.body.content,
+        userid,
+        req.body.postid,
+        req.body.replyid
+      );
+    } else {
+      results = await dbabs.createComment(
+        req.body.content,
+        userid,
+        req.body.postid
+      );
+    }
+    if (results) {
+      res.status(200);
+      res.end();
+    }
+  } catch (exception) {
+    logging.warningMessage(exception);
+    res.status(500);
+    res.end("The server was unable to fufil this request");
   }
 }
 
@@ -151,3 +188,5 @@ function generateCommentReplies (comment, replies) {
 
 module.exports.getPost = getPost;
 module.exports.getComment = getComment;
+
+module.exports.createComment = createComment;

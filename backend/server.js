@@ -87,16 +87,31 @@ app.get('/get', async (req, res) => {
   }
 });
 
-// Handler for the HTTP Posts coming to create posts/comments on the server, end points for thois are
-// /forum/create?board=[param] - Create a thread using the provided information in the POST body, or
-//                               if the post already exists, updates the post with the edited content
-// /forum/create?post=[param] - Create a comment using the provided information in the POST body, or
-//                               if the comment already exists, updates the comment with the edited content
+// Handler for the HTTP Posts coming to create posts/comments on the server, end points for this are
+// /forum/create?type=post - Create a post
+// /forum/create?type=comment - Create a comment
 app.post('/forum/create', (req, res) => {
   handleNoDB(req, res);
   handlePostLogging(req);
 
-  res.end();
+  // Check the type of the request -> Check for authorisation -> Authorised -> Generate the content
+  //                                                          -> Unauthorised -> forbidden
+
+  if (req.query.type === "post") {
+    if (uac.checkUserExists(req)) {
+      pms.createPost(req, res);
+    } else {
+      forbidden(res);
+    }
+  }
+
+  if (req.query.type === "comment") {
+    if (uac.checkUserExists(req)) {
+      pms.createComment(req, res);
+    } else {
+      forbidden();
+    }
+  }
 });
 
 // Handler for HTTP Posts incoming to "like" or "dislike" posts
@@ -159,6 +174,11 @@ app.post('*', (req, res) => {
 });
 
 // ////////////////////////////////////////////////////////////// ODDS AND ENDS
+
+function forbidden (res) {
+  res.status(403);
+  res.end("No valid sign-in");
+}
 
 /**
  * Handles logging for the servers HTTP Post's
