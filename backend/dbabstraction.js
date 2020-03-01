@@ -337,6 +337,7 @@ module.exports.createBoard = createBoard;
 module.exports.createPost = createPost;
 module.exports.createComment = createComment;
 module.exports.createReplyComment = createComment;
+module.exports.createUser;
 
 module.exports.deleteRecordBoard = deleteRecordBoard;
 

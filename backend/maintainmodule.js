@@ -5,7 +5,7 @@
 
 const logging = require('./logging');
 const dbabs = require('./dbabstraction');
-const modules = require("./modules");
+const modules = require('./modules');
 
 // ////////////////////////////////////////////////////////////// ESLINT-DISABLES
 
@@ -17,9 +17,9 @@ const modules = require("./modules");
  * Starts the cold-start prodedure for the forum by creating boards for all of the modules inside
  * of the application
  */
-function coldStart () {
-  for (let imodule of moduleInformation.modules) {
-    const yearString = `${new Date().getFullYear()}/${new Date().getFullYear()+1}`;
+function coldStart() {
+  for (const imodule of moduleInformation.modules) {
+    const yearString = `${new Date().getFullYear()}/${new Date().getFullYear() + 1}`;
     dbabs.createBoard(imodule, yearString);
     logging.coldStartMessage(`Created board for ${imodule} of year ${yearString}`);
   }
@@ -27,10 +27,10 @@ function coldStart () {
 
 /**
  * Performs a soft reset on the DB, deleting all of the records but preserving the structure
- * 
+ *
  * Please know what you're doing if you enable this option on startup.
  */
-function softReset () {
+function softReset() {
   dbabs.deleteAllStoredContent();
 }
 

@@ -1,32 +1,25 @@
 // Created on 12/02/2020
 //
-// This module represents the user account system for the application, it handles
-// the authorisation for user activities, it can also create and delete users/
+// This is User Account System for the forum backend.
+// Its main purpose is to create/delete user account but it also provides authentication
+// services
 
 const dbabs = require('./dbabstraction');
 
 // ////////////////////////////////////////////////////////////// CREATING USERS
 
 /**
- * Creates a user inside of the database
- * @param {request} req The Request from the user
- * @param {response} res The Response to the user
- */
-async function createUser(req, res) {
-
-}
-
-// ////////////////////////////////////////////////////////////// GENERAL QUERIES
-
-/**
- * Checks to see if we have a record of the email address of the selected user
+ * Stores a users' information inside of the database
  * @param {request} req 
+ * @param {response} res 
  */
-async function checkUserExists (req)  {
-  return await dbabs.checkUserExists();
+async function createUser (req, res) {
+  try {
+    const email = req.user.emails[0].value;
+    const currentDate = new Date();
+    dbabs.createUser(email, currentDate);
+  } catch (exception) {
+    res.status(500);
+    res.end(); 
+  }
 }
-
-// ////////////////////////////////////////////////////////////// EXPORTS
-
-module.exports.checkUserExists = checkUserExists;
-module.exports.createUser = createUser;

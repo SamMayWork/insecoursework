@@ -70,20 +70,21 @@ if (argv.softreset) {
 // /get?postid=[param] - Gets a specific post off of the server, along with all of the comments
 // /get?boardid=[param] - Gets a collection of posts from a specific board
 // /get?commentid=[param] - Gets a comment and all of its children
+// This is excluded from the guard middleware so there is no need for auth checking
 app.get('/get', async (req, res) => {
   handleNoDB(req, res);
   handleGetLogging(req);
 
   if (req.query.postid) {
-    await pms.retrievePost();
+    await pms.getPost(req, res);
   }
 
   if (req.query.boardid) {
-
+    await pms.getBoard(req, res);
   }
 
   if (req.query.commentid) {
-
+    await pms.getComment(res, res);
   }
 });
 
@@ -98,11 +99,7 @@ app.post('/forum/create', (req, res) => {
   //                                                          -> Unauthorised -> forbidden
 
   if (req.query.type === "post") {
-    if (uac.checkUserExists(req)) {
-      pms.createPost(req, res);
-    } else {
-      forbidden(res);
-    }
+    pms.createPost(req, res);
   }
 
   if (req.query.type === "comment") {
@@ -160,15 +157,6 @@ app.post('forum/report', (req, res) => {
   res.end();
 });
 
-// ////////////////////////////////////////////////////////////// USER ACCOUNT SYSTEM
-
-app.get('/forum/uac', async (req, res) => {
-  if (req.query.existsid !== undefined) {
-    await uac.checkUserExists(req, res);
-  }
-});
-
-
 // ////////////////////////////////////////////////////////////// CATCH-ALLS
 
 // Catch-all for 404's
@@ -183,6 +171,23 @@ app.post('*', (req, res) => {
 });
 
 // ////////////////////////////////////////////////////////////// ODDS AND ENDS
+
+/**
+ * Checks to see if the signed-in user is logged inside of the database, this does
+ * not mean that they are allowed to make any change they want!
+ * @param {request} req Request from client
+ * @param {response} res Response to the user
+ */
+async function handleAuth (req, res) {
+  const results = await uac.checkAuth(req);
+  if (results === false) {
+    res.status(403);
+    res.end();
+    return false;
+  } else {
+    return true;
+  }
+}
 
 function forbidden (res) {
   res.status(403);
