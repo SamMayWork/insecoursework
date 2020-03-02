@@ -29,6 +29,7 @@ const logging = require('./logging');
 const maintain = require('./maintainmodule');
 const pms = require('./postmodule');
 const uac = require('./useraccountsystem');
+const reporting = require('./reportingsystem');
 
 // ////////////////////////////////////////////////////////////// CONSTANTS
 
@@ -153,12 +154,16 @@ app.post('forum/report', (req, res) => {
   handleNoDB(req, res);
   handlePostLogging(req);
 
+  if (!uac.checkUserExists(req)) {
+    return;
+  }
+
   if (req.query.post !== undefined) {
-    // handlePostReport();
+    reporting.reportPost(req, res);
   }
 
   if (req.query.comment !== undefined) {
-    // handleCommentReport();
+    reporting.reportComment(req, res);
   }
 
   res.end();
