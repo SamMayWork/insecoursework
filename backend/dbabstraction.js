@@ -297,19 +297,24 @@ async function reportComment(user_id, comment_id) {
 // ////////////////////////////////////////////////////////////// USER ACCOUNT QUERIES
 
 /**
- * Checks to see if a user exists inside of the database
- * @param {string} userid The ID of the user to check
+ * Checks to see if we have a record of an email address in the DB, returns
+ * the ID of the user if a record is found
+ * @param {string} email Email address to search
  */
-async function checkUserExists(userid) {
-  const query = 'SELECT * FROM users WHERE user_id = $1;';
-  const response = await executeQuery(query, [userid]);
-  return response.rows.length !== 0;
-}
+async function checkUserExists (email) {
+  const query = "SELECT * FROM users WHERE user_email = $1;"
+  const results = await executeQuery(query. [email]);
 
-async function getUserIDFromEmail (email) {
-  const query = "SELECT user_id FROM users where user_email = $1;";
-  const results = await executeQuery(query, email);
-  return results.rows[0].user_id;
+  if (results !== undefined) {
+    return {
+      id : results.rows[0].user_id,
+      exists : true
+    };
+  } else {
+    return {
+      exsists : false
+    };
+  }
 }
 
 // ////////////////////////////////////////////////////////////// DELETING CONTENT

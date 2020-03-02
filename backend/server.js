@@ -30,6 +30,8 @@ const maintain = require('./maintainmodule');
 const pms = require('./postmodule');
 const uac = require('./useraccountsystem');
 
+// ////////////////////////////////////////////////////////////// CONSTANTS
+
 const app = express();
 const listeningPort = 8080;
 
@@ -49,7 +51,6 @@ if (argv.nodb) {
   logging.warningMessage("Only responding to requests with template");
 }
 
-// Run the cold-start prodedure and then exit the program
 if (argv.coldstart) {
   logging.coldStartMessage("Starting the cold-start procedure");
   maintain.coldStart();
@@ -129,11 +130,17 @@ app.post('/forum/like', async (req, res) => {
     req.query.status !== undefined && 
     req.query.type === 'post') {
       if(uac.checkUserExists(req)) {
-        await pms.likePost();
+        await pms.likePost(req, res);
       }
   }
 
-  if (req.query.postid)
+  if (req.query.postid !== undefined &&
+    req.query.status !== undefined && 
+    req.query.type === 'comment') {
+      if (uac.checkUserExists(req)) {
+        await pms.dislikePost(req, res);
+      }
+  }
 
 
   res.end();
