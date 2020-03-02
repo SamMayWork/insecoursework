@@ -43,8 +43,8 @@ async function getPost(req, res) {
  * @param {response} res The Response to the user
  */
 async function getComment(req, res) {
-  const comment = await dbabs.getComment();
-  const replies = await dbabs.getReplies();
+  const comment = await dbabs.getComment(req.query.commentid);
+  const replies = await dbabs.getReplies(req.query.commentid);
 
   if (comment === undefined) { 
     req.status(404);
