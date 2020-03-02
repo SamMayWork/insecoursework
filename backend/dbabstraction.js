@@ -50,6 +50,14 @@ async function executeQuery (query, parameters) {
   }
 }
 
+/**
+ * Executes a raw query on the DB without any auth checks or safety
+ * @param {string} query Query to execute 
+ */
+function executeRawQuerySync (query) {
+  newPool.query(query);
+}
+
 // ////////////////////////////////////////////////////////////// ID GENERATOR
 
 /**
@@ -350,3 +358,5 @@ module.exports.checkUserExists = checkUserExists;
 
 module.exports.reportPost = reportPost;
 module.exports.reportComment = reportComment;
+
+module.exports.executeRawQuerySync = executeRawQuerySync;
