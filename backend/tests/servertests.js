@@ -100,6 +100,22 @@ describe('dbabstraction Tests', function () {
       assert.equal(result, undefined);
     })
   });
+
+  describe('createPost', function() {
+    it('Should return the expected content for the row 7c367dd6', async function (){
+      let result = await dbabs.createPost('7c367dd6');
+      assert.deepEqual(result, {
+        post_id : '7ccec367dd6',
+        keyword_id : '864cce10',
+        post_title : 'shop south shells fifth',
+        post_content :  'upper unknown house meet mail brick practice hour duck chicken problem give tide poor heavy discussion cool write married expression return can mathematics series garden engine track heavy bottom birds social car evidence beginning labor compass truth quite mountain particular creature balloon hand another refer found having spell',
+        post_likes : 82,
+        user_id : '100bad41',
+        created_date : new Date('2020-02-17T00:00:00.000Z'),
+        edited_date : new Date('2020-05-15T00:00:00.000Z')
+      });
+    });
+  });
 });
 
 describe("Maintenance Module", function () {
