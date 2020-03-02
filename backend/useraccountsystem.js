@@ -44,7 +44,7 @@ async function checkUserExists(req) {
 
 /**
  * Gets the ID of the user from a request
- * @param {request} req 
+ * @param {request} req
  */
 async function getUsersID(req) {
   try {
@@ -57,4 +57,6 @@ async function getUsersID(req) {
 // ////////////////////////////////////////////////////////////// EXPORTS
 
 module.exports.createUser = createUser;
+
 module.exports.checkUserExists = checkUserExists;
+module.exports.getUsersID = getUsersID;
