@@ -5,13 +5,14 @@ function $(id) {
 }
 
 class Component {
-	constructor(title, options) {
+	constructor(title, props) {
 		this.title = title;
-		this.options = options;
+		this.props = props;
 		this.root = null;
 		this.components = {};
 		this.parent = null;
 		this.state = {};
+		this.elements = [];
 	}
 	add() {
 		for (let i=0; i<arguments.length; i++) {
@@ -33,10 +34,10 @@ class Component {
 		for (let title in this.components) {
 			let component = this.components[title];
 			if (component.title == target) {
-				console.log(component.title, component);
+				// console.log(component.title, component);
 				component.show();
 			} else {
-				console.log("[HIDE]", component.title, component);
+				// console.log("[HIDE]", component.title, component);
 				component.hide();
 			}
 		}
@@ -44,8 +45,8 @@ class Component {
 }
 
 class App extends Component {
-	constructor(title, options) {
-		super(title, options);
+	constructor(title, props) {
+		super(title, props);
 		return this;
 	}
 	render(parent) {
@@ -55,8 +56,8 @@ class App extends Component {
 }
 
 class Screen extends Component {
-	constructor(title, options) {
-		super(title, options);
+	constructor(title, props) {
+		super(title, props);
 	}
 	render(parent) {
 		// Root
@@ -80,9 +81,10 @@ class Screen extends Component {
 	}
 }
 
+/*
 class Navbar extends Component {
-	constructor(title, options) {
-		super(title, options);
+	constructor(title, props) {
+		super(title, props);
 	}
 	render(parent) {
 		// Root
@@ -103,10 +105,9 @@ class Navbar extends Component {
 	}
 }
 
-/*
 class Navbar extends Component {
 	constructor(title, display_title) {
-		super(title, options);
+		super(title, props);
 		this.display_title = display_title;
 		let elem = Component.createElem("div");
 		elem.id = "navbar-" + title;
@@ -158,8 +159,8 @@ class Navbar extends Component {
 }
 
 class NavbarGroup extends Component {
-	constructor(title, options) {
-		super(title, options);
+	constructor(title, props) {
+		super(title, props);
 	}
 	render(parent) {
 		// Root
@@ -175,8 +176,8 @@ class NavbarGroup extends Component {
 }
 
 class NavbarButton extends Component {
-	constructor(title, options) {
-		super(title, options);
+	constructor(title, props) {
+		super(title, props);
 	}
 	render(parent) {
 		// Root
@@ -186,21 +187,21 @@ class NavbarButton extends Component {
 		this.root = root;
 		
 		// Resolve icon
-		if (!this.options.hasOwnProperty("icon"))
-			this.options.icon = "";
+		if (!this.props.hasOwnProperty("icon"))
+			this.props.icon = "";
 		
 		// Root Contents
 		root.innerHTML = `
 			<div id="${this.title}-button" class="navbar-icon"
-			style="background-image: url('${this.options.icon}')"></div>
+			style="background-image: url('${this.props.icon}')"></div>
 		`;
 		parent.appendChild(root);
 	}
 }
 
 class NavbarButtonMenu extends NavbarButton {
-	constructor(title, options) {
-		super(title, options);
+	constructor(title, props) {
+		super(title, props);
 	}
 	render(parent) {
 		super.render(parent);
@@ -209,8 +210,8 @@ class NavbarButtonMenu extends NavbarButton {
 }
 
 class NavbarDropdown extends Component {
-	constructor(title, options) {
-		super(title, options);
+	constructor(title, props) {
+		super(title, props);
 	}
 	render(parent) {
 		let root = Component.createElem("div");
@@ -222,8 +223,8 @@ class NavbarDropdown extends Component {
 }
 
 class NavbarSave extends Navbar {
-	constructor(title, options) {
-		super(title, options);
+	constructor(title, props) {
+		super(title, props);
 	}
 	close() {
 		this.parent.close();
@@ -253,14 +254,14 @@ class NavbarSave extends Navbar {
 }
 
 class List extends Component {
-	constructor(title, options) {
-		super(title, options);
+	constructor(title, props) {
+		super(title, props);
 	}
 }
 
 class ListGroup extends Component {
-	constructor(title, options) {
-		super(title, options);
+	constructor(title, props) {
+		super(title, props);
 	}
 	render(parent) {
 		// Root
@@ -276,8 +277,8 @@ class ListGroup extends Component {
 }
 
 class ListOption extends Component {
-	constructor(title, options) {
-		super(title, options);
+	constructor(title, props) {
+		super(title, props);
 	}
 	render(parent) {
 		// Root
@@ -287,13 +288,13 @@ class ListOption extends Component {
 		this.root = root;
 		
 		// Resolve icon
-		if (!this.options.hasOwnProperty("icon"))
-			this.options.icon = "";
+		if (!this.props.hasOwnProperty("icon"))
+			this.props.icon = "";
 		
 		// Root Contents
 		root.innerHTML = `
 			<div id="${this.title}-icon" class="icon"
-			style="background-image: url('${this.options.icon}')"></div>
+			style="background-image: url('${this.props.icon}')"></div>
 			<div id="${this.title}-data" class="list-option-input">
 			</div>
 		`;
@@ -306,7 +307,7 @@ class ListOptionToggle extends ListOption {
 		super.render(parent);
 		$(this.title + "-data").innerHTML = `
 			<div id="${this.title}-data-title" class="list-option-input-group">
-				${this.options.title}
+				${this.props.title}
 			</div>
 			<div id="${this.title}-data-toggle" class="list-option-input-group">
 				<label style="margin-left: -36px" class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-2">
@@ -319,18 +320,18 @@ class ListOptionToggle extends ListOption {
 }
 
 class ListOptionText extends ListOption {
-	constructor(title, options) {
-		super(title, options);
+	constructor(title, props) {
+		super(title, props);
 	}
 	render(parent) {
 		super.render(parent);
 		$(this.title + "-data").innerHTML = `
 			<div id="${this.title}-data-text" class="list-option-input-group">
-				${this.options.data}
+				${this.props.data}
 			</div>
 		`;
-		if (this.options.hasOwnProperty("topMost")) {
-			if (this.options.topMost == true) {
+		if (this.props.hasOwnProperty("topMost")) {
+			if (this.props.topMost == true) {
 				$(this.title + "-data-text").classList.add("list-option-input-text");
 			}
 		}
@@ -338,15 +339,15 @@ class ListOptionText extends ListOption {
 }
 
 class ListOptionDatetime extends ListOption {
-	constructor(title, options) {
-		super(title, options);
+	constructor(title, props) {
+		super(title, props);
 	}
 	render(parent) {
 		super.render(parent);
-		let date = this.options.data.toLocaleDateString("en-GB", {
+		let date = this.props.data.toLocaleDateString("en-GB", {
 			weekday: "short", month: "short", day: "numeric", year: "numeric"
 		});
-		let time = this.options.data.toLocaleTimeString([], {
+		let time = this.props.data.toLocaleTimeString([], {
 			hour: "2-digit",
 			minute: "2-digit"
 		});
@@ -363,8 +364,8 @@ class ListOptionDatetime extends ListOption {
 */
 
 class Card extends Component {
-	constructor(title, options) {
-		super(title, options);
+	constructor(title, props) {
+		super(title, props);
 	}
 	render(parent) {
 		let root = Component.createElem("div");
@@ -372,14 +373,14 @@ class Card extends Component {
 		root.innerHTML = `
 		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
 			<div class="mdl-card__title">
-				<h2 class="mdl-card__title-text">${this.options.name}</h2>
+				<h2 class="mdl-card__title-text">${this.props.name}</h2>
 			</div>
 			<div class="mdl-card__supporting-text">
-				${this.options.postContent}
+				${this.props.postContent}
 			</div>
 			<div class="mdl-card__actions mdl-card--border">
 				<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-				${this.options.button}
+				${this.props.button}
 				</a>
 			</div>
 			<div class="mdl-card__menu">
@@ -394,8 +395,8 @@ class Card extends Component {
 }
 
 class Button extends Component {
-	constructor(title, options) {
-		super(title, options);
+	constructor(title, props) {
+		super(title, props);
 	}
 	render(parent) {
 		let root = Component.createElem("div");
@@ -403,7 +404,7 @@ class Button extends Component {
 		root.innerHTML = `
 		<div class="mdl-card__actions mdl-card--border">
 			<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-				${this.options.text}
+				${this.props.text}
 			</a>
 		</div>
 		`;
@@ -413,8 +414,8 @@ class Button extends Component {
 }
 
 class PostCard extends Component {
-	constructor(title, options) {
-		super(title, options);
+	constructor(title, props) {
+		super(title, props);
 	}
 	render(parent) {
 		let root = Component.createElem("div");
@@ -422,10 +423,10 @@ class PostCard extends Component {
 		root.innerHTML = `
 		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
 			<div class="mdl-card__title">
-				<h2 class="mdl-card__title-text">${this.options.name}</h2>
+				<h2 class="mdl-card__title-text">${this.props.name}</h2>
 			</div>
 			<div class="mdl-card__supporting-text">
-				${this.options.postContent}
+				${this.props.postContent}
 			</div>
 			<div class="mdl-card__actions mdl-card--border">
 				<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
@@ -444,8 +445,8 @@ class PostCard extends Component {
 }
 
 class CommentCard extends Component {
-	constructor(title, options) {
-		super(title, options);
+	constructor(title, props) {
+		super(title, props);
 	}
 	render(parent) {
 		let root = Component.createElem("div");
@@ -453,14 +454,14 @@ class CommentCard extends Component {
 		root.innerHTML = `
 		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
 			<div class="mdl-card__title">
-				<h2 class="mdl-card__title-text">${this.options.name}</h2>
+				<h2 class="mdl-card__title-text">${this.props.name}</h2>
 			</div>
 			<div class="mdl-card__supporting-text">
 			Hello Room
 			</div>
 			<div class="mdl-card__actions mdl-card--border">
 				<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-					${this.options.postContent}
+					${this.props.postContent}
 				</a>
 			</div>
 			<div class="mdl-card__menu">
@@ -486,3 +487,107 @@ function functionName() {
 	navigator.share(shareData)
 }
 */
+
+class Panel extends Component {
+	constructor(title, props) {
+		super(title, props);
+	}
+	render(parent) {
+		let root = document.createElement("div");
+		root.classList.add("panel");
+		this.elements.push(root);
+		parent.appendChild(root);
+		super.render(root);
+	}
+}
+
+class Navbar extends Component {
+	constructor(title, props) {
+		super(title, props);
+	}
+	render(parent) {
+		let root = document.createElement("div");
+		root.classList.add("navbar");
+		root.innerHTML = ``;
+		this.elements.push(root);
+		parent.appendChild(root);
+	}
+	addNav(title, url, active=false) {
+		let root = this.elements[0];
+		let link = document.createElement("div");
+		link.innerHTML = `
+			<a href="${url}" class="navbar-link-anchor">
+				${title}
+			</a>
+		`;
+		link.classList.add("navbar-link");
+		if (active) {
+			link.querySelector(".navbar-link-anchor").classList.add("navbar-link-active");
+			link.innerHTML += `
+				<div class="navbar-link-line"></div>
+			`;
+		}
+		root.appendChild(link);
+	}
+}
+
+class Post extends Component {
+	constructor(title, props) {
+		super(title, props);
+		if (this.props.like) {
+			this.state.likeSrc = "assets/imgs/like.svg";
+		} else {
+			this.state.likeSrc = "assets/imgs/nolike.svg";
+		}
+	}
+	render(parent) {
+		let root = document.createElement("div");
+		root.classList.add("post");
+		this.state.like = this.props.like;
+		root.innerHTML = `
+			<div class="post_summary">
+				<div class="post_title">
+					${this.props.title}
+				</div>
+				<div class="post_author">
+					${this.props.author}
+				</div>
+				<div class="post_replies">
+					${this.props.replies} Replies >
+				</div>
+			</div>
+			<div class="post_stats">
+				<div class="post_like">
+					<img class="post_like_image" src="${this.state.likeSrc}"/>
+				</div>
+				<div class="post_date">
+					${this.props.date.toLocaleDateString([], {
+						day: "2-digit",
+						month: "short",
+						year: "numeric"
+					})}
+				</div>
+			</div>
+		`;
+		console.log(parent);
+		this.elements.push(root);
+		parent.appendChild(root);
+		root.querySelector(".post_like_image").addEventListener("click", () => {
+			this.toggleLike();
+		})
+	}
+	toggleLike() {
+		let like = this.state.like;
+		if (like) {
+			this.state.like = false;
+			this.state.likeSrc = "assets/imgs/nolike.svg";
+			this.elements[0].querySelector(".post_like_image").src = this.state.likeSrc;
+			console.log(this.state.like);
+		} else {
+			this.state.like = true;
+			this.state.likeSrc = "assets/imgs/like.svg";
+			this.elements[0].querySelector(".post_like_image").src = this.state.likeSrc;
+			console.log(this.state.like)
+		}
+	}
+}

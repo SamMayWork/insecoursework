@@ -42,6 +42,18 @@ Gets a collection of threads from the backend
 ``` /get?commentid=[param] ```
 Gets a specific comment and all of its children
 
+## Liking a post
+
+*PUT* Rate a post
+``` /forum/like?type=post&postid=[param]&status=[param] ```
+Takes a post and a status and applies either a like or dislike to the post
+if status=true then it likes the content and vice versa
+
+*PUT* Rate a comment
+``` /forum/like?type=post&commentid=[param]&status=[param] ```
+Takes a comment and a status and applies either a like or dislike to the comment
+if status=true then it likes the content and vice versa
+
 ## UAC (User Account Control)
 
 *POST* Register a User into the system

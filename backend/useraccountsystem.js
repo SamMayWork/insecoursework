@@ -1,40 +1,62 @@
 // Created on 12/02/2020
 //
-// This module represents the user account system for the application, it handles
-// the authorisation for user activities, it can also create and delete users/
+// This is User Account System for the forum backend.
+// Its main purpose is to create/delete user account but it also provides authentication
+// services
+
+// ////////////////////////////////////////////////////////////// REQUIRES
 
 const dbabs = require('./dbabstraction');
+const logging = require('./logging');
 
 // ////////////////////////////////////////////////////////////// CREATING USERS
 
 /**
- * Creates a user inside of the database
- * @param {request} req The Request from the user
- * @param {response} res The Response to the user
+ * Stores a users' information inside of the database
+ * @param {request} req
+ * @param {response} res
  */
 async function createUser(req, res) {
-
+  try {
+    const email = req.user.emails[0].value;
+    const currentDate = new Date();
+    dbabs.createUser(email, currentDate);
+  } catch (exception) {
+    res.status(500);
+    res.end();
+  }
 }
 
-// ////////////////////////////////////////////////////////////// GENERAL QUERIES
+// ////////////////////////////////////////////////////////////// AUTHORISATION
 
 /**
- * Checks to see if the signed-in user is authorised inside of the Database
- * (i.e. if their UP number exists within our database)
- * 
- * THIS ONLY CHECKS IF WE'VE GOT A RECORD OF THEIR EMAIL ADDRESS, IT IS NOT PROPER AUTH
- * @param {request} req The Request from the user
+ * Checks users email exsists inside of our database
+ * @param {request} req
  */
 async function checkUserExists(req) {
-  let exists;
-  if (req.user.emails[0].value != undefined) {
-    exists = await dbabs.checkEmail();
+  try {
+    return await (dbabs.checkUserExists(req.user.emails[0].value)).exists;
+  } catch (exception) {
+    logging.warningMessage(exception);
+    return false;
   }
+}
 
-  return { "exists" : exists };
+/**
+ * Gets the ID of the user from a request
+ * @param {request} req
+ */
+async function getUsersID(req) {
+  try {
+    return await (dbabs.checkUserExists(req.user.emails[0].value)).id;
+  } catch (exception) {
+    return undefined;
+  }
 }
 
 // ////////////////////////////////////////////////////////////// EXPORTS
 
-module.exports.checkUserExists = checkUserExists;
 module.exports.createUser = createUser;
+
+module.exports.checkUserExists = checkUserExists;
+module.exports.getUsersID = getUsersID;

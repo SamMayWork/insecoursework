@@ -29,6 +29,9 @@ const logging = require('./logging');
 const maintain = require('./maintainmodule');
 const pms = require('./postmodule');
 const uac = require('./useraccountsystem');
+const reporting = require('./reportingsystem');
+
+// ////////////////////////////////////////////////////////////// CONSTANTS
 
 const app = express();
 const listeningPort = 8080;
@@ -49,7 +52,6 @@ if (argv.nodb) {
   logging.warningMessage("Only responding to requests with template");
 }
 
-// Run the cold-start prodedure and then exit the program
 if (argv.coldstart) {
   logging.coldStartMessage("Starting the cold-start procedure");
   maintain.coldStart();
@@ -70,52 +72,73 @@ if (argv.softreset) {
 // /get?postid=[param] - Gets a specific post off of the server, along with all of the comments
 // /get?boardid=[param] - Gets a collection of posts from a specific board
 // /get?commentid=[param] - Gets a comment and all of its children
+// This is excluded from the guard middleware so there is no need for auth checking
 app.get('/get', async (req, res) => {
   handleNoDB(req, res);
   handleGetLogging(req);
 
   if (req.query.postid) {
-    await pms.retrievePost();
+    await pms.getPost(req, res);
   }
 
   if (req.query.boardid) {
-
+    await pms.getBoard(req, res);
   }
 
   if (req.query.commentid) {
-
+    await pms.getComment(res, res);
   }
 });
 
-// Handler for the HTTP Posts coming to create posts/comments on the server, end points for thois are
-// /forum/create?board=[param] - Create a thread using the provided information in the POST body, or
-//                               if the post already exists, updates the post with the edited content
-// /forum/create?post=[param] - Create a comment using the provided information in the POST body, or
-//                               if the comment already exists, updates the comment with the edited content
+// Handler for the HTTP Posts coming to create posts/comments on the server, end points for this are
+// /forum/create?type=post - Create a post
+// /forum/create?type=comment - Create a comment
 app.post('/forum/create', (req, res) => {
   handleNoDB(req, res);
   handlePostLogging(req);
 
-  res.end();
+  if (!uac.checkUserExists(req)){
+    forbidden(res);
+  }
+
+  if (req.query.type === "post") {
+    pms.createPost(req, res);
+  }
+
+  if (req.query.type === "comment") {
+    pms.createComment(req, res);
+  }
 });
 
 // Handler for HTTP Posts incoming to "like" or "dislike" posts
 // /forum/like?like=[param]&post=[param] - If like==true then it likes the post with the given ID
 // /forum/like?like=[param]&comment=[param] - If like==true then it likes the comment with the given ID
 // if like==false then it will dislike the associated post
-app.post('/forum/like', (req, res) => {
+app.post('/forum/like', async (req, res) => {
   handleNoDB(req, res);
   handlePostLogging(req);
 
-  if (req.query.like !== undefined && req.query.post !== undefined) {
-    // handleLike();
+  if (!uac.checkUserExists(req)) {
+    forbidden(res);
   }
 
-  if (req.query.like !== undefined && req.query.comment !== undefined) {
-    // handleLike();
+  if (req.query.postid === undefined || req.query.status === undefined) {
+    res.status(404);
+    res.end("Invalid parameters");
   }
 
-  res.end();
+  // Handle for liking/disliking a post
+  if (req.query.postid !== undefined &&
+    req.query.status !== undefined && 
+    req.query.type === 'post') {
+      await pms.likePost(req, res);
+  }
+
+  if (req.query.postid !== undefined &&
+    req.query.status !== undefined && 
+    req.query.type === 'comment') {
+      await pms.dislikePost(req, res);
+  }
 });
 
 // Handler for HTTP posts to the report system of the application
@@ -125,25 +148,21 @@ app.post('forum/report', (req, res) => {
   handleNoDB(req, res);
   handlePostLogging(req);
 
+  if (!uac.checkUserExists(req)) {
+    forbidden(res);
+    return;
+  }
+
   if (req.query.post !== undefined) {
-    // handlePostReport();
+    reporting.reportPost(req, res);
   }
 
   if (req.query.comment !== undefined) {
-    // handleCommentReport();
+    reporting.reportComment(req, res);
   }
 
   res.end();
 });
-
-// ////////////////////////////////////////////////////////////// USER ACCOUNT SYSTEM
-
-app.get('/forum/uac', async (req, res) => {
-  if (req.query.existsid !== undefined) {
-    await uac.checkUserExists(req, res);
-  }
-});
-
 
 // ////////////////////////////////////////////////////////////// CATCH-ALLS
 
@@ -159,6 +178,11 @@ app.post('*', (req, res) => {
 });
 
 // ////////////////////////////////////////////////////////////// ODDS AND ENDS
+
+function forbidden (res) {
+  res.status(403);
+  res.end("No valid sign-in");
+}
 
 /**
  * Handles logging for the servers HTTP Post's

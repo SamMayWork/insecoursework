@@ -17,6 +17,7 @@ const { Pool } = require('pg');
 
 let newPool;
 
+// If we're building using Travis then use different login credentials
 if (process.env.CI !== 'true') {
   newPool = new Pool ({
     host : "localhost",
@@ -47,6 +48,14 @@ async function executeQuery (query, parameters) {
   } catch (exception) {
     console.warn(exception);
   }
+}
+
+/**
+ * Executes a raw query on the DB without any auth checks or safety
+ * @param {string} query Query to execute 
+ */
+function executeRawQuerySync (query) {
+  newPool.query(query);
 }
 
 // ////////////////////////////////////////////////////////////// ID GENERATOR
@@ -145,7 +154,6 @@ async function getReplies(commentid) {
 
 // ////////////////////////////////////////////////////////////// CREATING-CONTENT
 
-
 /**
  * Creates a board on the forum
  * @param {string} board_name Name of the board to create
@@ -163,13 +171,11 @@ async function createBoard(board_name, board_year) {
  * @param {String} authorid Authot id 
  * @param {String} boardid Bord id
  */
-
 async function createPost(title, content, authorid, boardid) {
   const query = 'INSERT INTO Posts VALUES($1, $2, $3, $4, $5, $6);';
   const results = await executeQuery(query, [generateId(8), title, content, 0, authorid, boardid]);
   return results;
 }
-
 
 /**
  * Create a comment on a post
@@ -266,7 +272,7 @@ async function reportComment(user_id, comment_id) {
 //     } else {
 //       query = `update Posts set post_likes = post_likes - 1 where post_id = $1;`;
 //     }
-//     await sqlConnection.query(query, [postid]);
+//     await executeQuery(query, [postid]);
 //   }
 //   catch (error) {
 //     logging.errorMessage(error);
@@ -289,7 +295,7 @@ async function reportComment(user_id, comment_id) {
 //     }
 //     return true;
 //   }
-//   const results = await sqlConnection.query(query, [commentid]);
+//   const results = await executeQuery(query, [commentid]);
 //   catch (error) {
 //     logging.errorMessage(error);
 //     return false;
@@ -299,15 +305,25 @@ async function reportComment(user_id, comment_id) {
 // ////////////////////////////////////////////////////////////// USER ACCOUNT QUERIES
 
 /**
- * Checks to see if a user exists inside of the database
- * @param {string} userid The ID of the user to check
+ * Checks to see if we have a record of an email address in the DB, returns
+ * the ID of the user if a record is found
+ * @param {string} email Email address to search
  */
-async function checkUserExists(userid) {
-  const query = 'SELECT * FROM users WHERE user_id = $1;';
-  const response = await sqlConnection.query(query, [userid]);
-  return response.rows.length !== 0;
-}
+async function checkUserExists (email) {
+  const query = "SELECT * FROM users WHERE user_email = $1;"
+  const results = await executeQuery(query, [email]);
 
+  if (results !== undefined) {
+    return {
+      id : results.rows[0].user_id,
+      exists : true
+    };
+  } else {
+    return {
+      exsists : false
+    };
+  }
+}
 
 // ////////////////////////////////////////////////////////////// DELETING CONTENT
 
@@ -316,52 +332,31 @@ async function checkUserExists(userid) {
  */
 async function deleteRecordBoard() {
   const query = 'DELETE FROM board;';
-  await sqlConnection.query(query);
+  await executeQuery(query);
 }
 
-// ////////////////////////////////////////////////////////////// RAW ACCESS
+// ////////////////////////////////////////////////////////////// EXPORTS
 
-/**
- * Runs a general query against the databse and returns the result to the caller
- *
- * This method is unsafe and does not check for SQL Injection, so only use if you
- * know what you're doing...
- * @param {string} query Query to be executed on the database
- * @param {callback} callback Callback to be executed once the command has been run
- */
-function generalQuery(query, callback) {
-  sqlConnection.query(query);
-}
-
-module.exports.deleteRecordBoard = deleteRecordBoard;
-module.exports.createBoard = createBoard;
 module.exports.getPost = getPost;
 module.exports.getComments = getComments;
-module.exports.checkUserExists = checkUserExists;
-module.exports.createPost = createPost;
-module.exports.createComment = createComment;
-module.exports.createReplyComment = createComment;
-async function getUserIDFromEmail (email) {
-  const query = "SELECT user_id FROM users where user_email = $1;";
-  const results = await executeQuery(query, email);
-  return results.rows[0].user_id;
-}
-
-module.exports.deleteRecordBoard = deleteRecordBoard;
-module.exports.createBoard = createBoard;
-module.exports.getPost = getPost;
-module.exports.getComments = getComments;
-module.exports.checkUserExists = checkUserExists;
-module.exports.createPost = createPost;
-module.exports.createComment = createComment;
-module.exports.createReplyComment = createComment;
-module.exports.getUserIDFromEmail = getUserIDFromEmail;
 module.exports.getComment = getComment;
 module.exports.getReplies = getReplies;
-module.exports.reportPost = reportPost;
-module.exports.reportComment = reportComment;
+module.exports.getAllBoards = getAllBoards;
+module.exports.getBoard = getBoard;
 
 module.exports.generateId = generateId;
 
-module.exports.getAllBoards = getAllBoards;
-module.exports.getBoard = getBoard;
+module.exports.createBoard = createBoard;
+module.exports.createPost = createPost;
+module.exports.createComment = createComment;
+module.exports.createReplyComment = createComment;
+module.exports.createUser;
+
+module.exports.deleteRecordBoard = deleteRecordBoard;
+
+module.exports.checkUserExists = checkUserExists;
+
+module.exports.reportPost = reportPost;
+module.exports.reportComment = reportComment;
+
+module.exports.executeRawQuerySync = executeRawQuerySync

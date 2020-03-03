@@ -14,6 +14,7 @@
 
 
 const dbabs = require('./dbabstraction');
+const logging = require('./logging');
 
 // ////////////////////////////////////////////////////////////// ESLINT DISABLES
 
@@ -28,9 +29,9 @@ const dbabs = require('./dbabstraction');
  */
 
 async function getPost(req, res) {
-  const threadid = req.query.thread;
-  const postResult = await dbabs.getPost(threadid);
-  const commentsResult = await dbabs.getComments(threadid);
+  const postid = req.query.postid;
+  const postResult = await dbabs.getPost(postid);
+  const commentsResult = await dbabs.getComments(postid);
   res.json(generateRetrievePostContent(postResult, commentsResult));
   res.status(200);
   res.end();
@@ -42,8 +43,8 @@ async function getPost(req, res) {
  * @param {response} res The Response to the user
  */
 async function getComment(req, res) {
-  const comment = await dbabs.getComment();
-  const replies = await dbabs.getReplies();
+  const comment = await dbabs.getComment(req.query.commentid);
+  const replies = await dbabs.getReplies(req.query.commentid);
 
   if (comment === undefined) { 
     req.status(404);
@@ -56,6 +57,16 @@ async function getComment(req, res) {
   res.end();
 }
 
+/**
+ * Gets all of the content from a board
+ * @param {request} req 
+ * @param {response} res 
+ */
+async function getBoard (req, res)  {
+  res.status(500);
+  res.end();
+}
+
 // ////////////////////////////////////////////////////////////// POSTING CONTENT
 
 /**
@@ -64,18 +75,54 @@ async function getComment(req, res) {
  * @param {response} res The response to the user
  */
 async function createPost(req, res) {
-  const userid = await dbabs.getUserIDFromEmail(req.user.emails[0]);
+   const userid = await dbabs.getUserIDFromEmail(req.user.emails[0]);
   
   if (userid !== undefined) {
     // The user is authorised if the email is within our database
     const title = filterContent(req.body.title);
-    const content = filterContent(req.body.title);
+    const content = filterContent(req.body.content);
     
     for (let i = 0; i < req.body.keywords.length; i++) {
       req.body.keywords[i] = filterContent(req.body.keywords[i]); 
     }
 
     dbabs.createPost(title, content, keywords);
+    res.status(200);
+    res.end();
+  }
+}
+
+/**
+ * Creates a comment
+ * @param {request} req 
+ * @param {response} res 
+ * @param {string} userid UserID for the database 
+ */
+async function createComment (req, res, userid) {
+  try {
+    let results;
+    if (req.body.reply === true) {
+      results = await dbabs.createReplyComment(
+        req.body.content,
+        userid,
+        req.body.postid,
+        req.body.replyid
+      );
+    } else {
+      results = await dbabs.createComment(
+        req.body.content,
+        userid,
+        req.body.postid
+      );
+    }
+    if (results) {
+      res.status(200);
+      res.end();
+    }
+  } catch (exception) {
+    logging.warningMessage(exception);
+    res.status(500);
+    res.end("The server was unable to fufil this request");
   }
 }
 
@@ -109,11 +156,11 @@ function filterContent (content) {
 function generateRetrievePostContent(post, comments) {
   const info = {
     post_information: {
-      id: post.id,
-      title: post.title,
-      content: post.content,
-      likes: post.likes,
-      author: post.authorid,
+      id: post.post_id,
+      title: post.post_title,
+      content: post.post_content,
+      likes: post.post_likes,
+      author: post.post_authorid,
     },
 
     comments_information: [
@@ -151,3 +198,7 @@ function generateCommentReplies (comment, replies) {
 
 module.exports.getPost = getPost;
 module.exports.getComment = getComment;
+module.exports.getBoard = getBoard;
+
+module.exports.createComment = createComment;
+module.exports.createPost = createPost;
