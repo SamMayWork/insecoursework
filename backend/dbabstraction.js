@@ -276,6 +276,7 @@ async function incrisin_Post_Views(post_id) {
   const result = await executeQuery (query, post_id);
   return result;
 }
+
 /**
  * Incrising the views os a comment
  * @param {String} comment_id 
