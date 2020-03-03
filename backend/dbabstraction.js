@@ -85,15 +85,6 @@ function generateId(length) {
 // ////////////////////////////////////////////////////////////// GETTING-CONTENT
 
 /**
- * Gets all of the boards 
- */
-async function getAllBoards () {
-  const query = "SELECT * FROM Board;";
-  const results = await executeQuery(query);
-  return results.rows;
-}
-
-/**
  * Gets a post and all of its content (including comments), this method hides the
  * raw database output in a JSON object with aliases for the column names to simplify use
  * @param {string} postid The ID of the post to get
@@ -120,8 +111,17 @@ async function getComments(postid) {
  * @param {string} boardid 
  */
 async function getBoard (boardid) {
-  const query = 'SELECT * FROM posts WHERE board_id = $1;';
+  const query = 'SELECT * FROM board WHERE board_id = $1;';
   const results = await executeQuery(query, [boardid]);
+  return results.rows[0];
+}
+
+/**
+ * Gets all of the boards 
+ */
+async function getAllBoards () {
+  const query = "SELECT * FROM Board;";
+  const results = await executeQuery(query);
   return results.rows;
 }
 
