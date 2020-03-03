@@ -55,7 +55,8 @@ async function executeQuery (query, parameters) {
  * @param {string} query Query to execute 
  */
 function executeRawQuerySync (query) {
-  newPool.query(query);
+  let result = newPool.query(query);
+  return result;
 }
 
 // ////////////////////////////////////////////////////////////// ID GENERATOR
