@@ -96,7 +96,7 @@ async function getAllBoards () {
  * @param {string} postid The ID of the post to get
  */
 async function getPost(postid) {
-  const query = 'SELECT * FROM posts WHERE post_id = $1';
+  const query = 'SELECT * FROM posts WHERE post_id = $1;';
   const results = await executeQuery(query, [postid]);
   return results.rows[0];
 }
@@ -107,7 +107,7 @@ async function getPost(postid) {
  * @param {string} postid The ID of the posts to get the comments for
  */
 async function getComments(postid) {
-  const query = 'SELECT * FROM comments WHERE post_id = $1';
+  const query = 'SELECT * FROM comments WHERE post_id = $1;';
   const results = await executeQuery(query, [postid]);
   return results;
 }
