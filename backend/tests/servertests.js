@@ -80,7 +80,7 @@ describe('dbabstraction Tests', function () {
   describe('getPost', function(){
     it('Should return the post content for the given postID', async function(){
       let results = await dbabs.getPost('3e645059');
-      assert.deepEqual(results.rows[0], {
+      assert.deepEqual(results,  {
         post_id : '3e645059',
         keyword_id : 'faf7c6b9',
         post_title : 'safety clock closer doubt',
