@@ -74,6 +74,19 @@ CREATE TABLE IF NOT EXISTS Comment_Views (
   views INT NOT NULL
   );
 
+
+insert into Post_Views (post_id, views) values ('11f3b99f', 0);
+insert into Post_Views (post_id, views) values ('ad7e89d1', 1);
+insert into Post_Views (post_id, views) values ('c10c91e8', 2);
+insert into Post_Views (post_id, views) values ('3e645059', 3);
+insert into Post_Views (post_id, views) values ('9ac2521e', 4);
+
+insert into Comment_Views (comment_id, views) values ('qd7e89d1', 1);
+insert into Comment_Views (comment_id, views) values ('q1f3b99f', 0);
+insert into Comment_Views (comment_id, views) values ('q10c91e8', 2);
+insert into Comment_Views (comment_id, views) values ('qe645059', 3);
+insert into Comment_Views (comment_id, views) values ('qac2521e', 4);
+
 insert into Users (user_id, user_email, user_dateofregistration) values ('a2367eab', 'sbaldock0@hostgator.com',         '2020-02-07');
 insert into Users (user_id, user_email, user_dateofregistration) values ('75b6d7e5', 'jgallelli1@weibo.com',            '2020-02-19');
 insert into Users (user_id, user_email, user_dateofregistration) values ('100bad41', 'rdellow2@storify.com',            '2020-02-04');
