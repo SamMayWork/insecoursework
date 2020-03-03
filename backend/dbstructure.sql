@@ -75,19 +75,6 @@ CREATE TABLE IF NOT EXISTS Comment_Views (
   views INT NOT NULL
   );
 
-
--- insert into Post_Views (post_id, views) values ('11f3b99f', 0);
--- insert into Post_Views (post_id, views) values ('ad7e89d1', 1);
--- insert into Post_Views (post_id, views) values ('c10c91e8', 2);
--- insert into Post_Views (post_id, views) values ('3e645059', 3);
--- insert into Post_Views (post_id, views) values ('9ac2521e', 4);
-
--- insert into Comment_Views (comment_id, views) values ('qd7e89d1', 1);
--- insert into Comment_Views (comment_id, views) values ('q1f3b99f', 0);
--- insert into Comment_Views (comment_id, views) values ('q10c91e8', 2);
--- insert into Comment_Views (comment_id, views) values ('qe645059', 3);
--- insert into Comment_Views (comment_id, views) values ('qac2521e', 4);
-
 insert into Users (user_id, user_email, user_dateofregistration) values ('a2367eab', 'sbaldock0@hostgator.com',         '2020-02-07');
 insert into Users (user_id, user_email, user_dateofregistration) values ('75b6d7e5', 'jgallelli1@weibo.com',            '2020-02-19');
 insert into Users (user_id, user_email, user_dateofregistration) values ('100bad41', 'rdellow2@storify.com',            '2020-02-04');
@@ -248,3 +235,15 @@ insert into Notifications (user_id, notif_global, notif_new_comment, notif_activ
 insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('82c9aefd', 'false', 'false', 'false', 'true');
 insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('a91b934a', 'false', 'true', 'false', 'false');
 insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('800447a8', 'false', 'true', 'false', 'true');
+
+insert into Post_Views (post_id, views) values ('11f3b99f', 0);
+insert into Post_Views (post_id, views) values ('ad7e89d1', 1);
+insert into Post_Views (post_id, views) values ('c10c91e8', 2);
+insert into Post_Views (post_id, views) values ('3e645059', 3);
+insert into Post_Views (post_id, views) values ('9ac2521e', 4);
+
+insert into Comment_Views (comment_id, views) values ('1fd4e936', 1);
+insert into Comment_Views (comment_id, views) values ('0d0fd1b5', 0);
+insert into Comment_Views (comment_id, views) values ('9bff5267', 2);
+insert into Comment_Views (comment_id, views) values ('3f3d9705', 3);
+insert into Comment_Views (comment_id, views) values ('1acba44f', 4);
