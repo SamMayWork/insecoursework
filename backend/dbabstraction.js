@@ -359,4 +359,4 @@ module.exports.checkUserExists = checkUserExists;
 module.exports.reportPost = reportPost;
 module.exports.reportComment = reportComment;
 
-module.exports.executeRawQuerySync = executeRawQuerySync;
+module.exports.executeRawQuerySync = executeRawQuerySync

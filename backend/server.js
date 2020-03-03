@@ -97,19 +97,16 @@ app.post('/forum/create', (req, res) => {
   handleNoDB(req, res);
   handlePostLogging(req);
 
-  // Check the type of the request -> Check for authorisation -> Authorised -> Generate the content
-  //                                                          -> Unauthorised -> forbidden
+  if (!uac.checkUserExists(req)){
+    forbidden(res);
+  }
 
   if (req.query.type === "post") {
     pms.createPost(req, res);
   }
 
   if (req.query.type === "comment") {
-    if (uac.checkUserExists(req)) {
-      pms.createComment(req, res);
-    } else {
-      forbidden();
-    }
+    pms.createComment(req, res);
   }
 });
 
@@ -121,6 +118,10 @@ app.post('/forum/like', async (req, res) => {
   handleNoDB(req, res);
   handlePostLogging(req);
 
+  if (!uac.checkUserExists(req)) {
+    forbidden(res);
+  }
+
   if (req.query.postid === undefined || req.query.status === undefined) {
     res.status(404);
     res.end("Invalid parameters");
@@ -130,21 +131,14 @@ app.post('/forum/like', async (req, res) => {
   if (req.query.postid !== undefined &&
     req.query.status !== undefined && 
     req.query.type === 'post') {
-      if(uac.checkUserExists(req)) {
-        await pms.likePost(req, res);
-      }
+      await pms.likePost(req, res);
   }
 
   if (req.query.postid !== undefined &&
     req.query.status !== undefined && 
     req.query.type === 'comment') {
-      if (uac.checkUserExists(req)) {
-        await pms.dislikePost(req, res);
-      }
+      await pms.dislikePost(req, res);
   }
-
-
-  res.end();
 });
 
 // Handler for HTTP posts to the report system of the application
@@ -155,6 +149,7 @@ app.post('forum/report', (req, res) => {
   handlePostLogging(req);
 
   if (!uac.checkUserExists(req)) {
+    forbidden(res);
     return;
   }
 
@@ -183,23 +178,6 @@ app.post('*', (req, res) => {
 });
 
 // ////////////////////////////////////////////////////////////// ODDS AND ENDS
-
-/**
- * Checks to see if the signed-in user is logged inside of the database, this does
- * not mean that they are allowed to make any change they want!
- * @param {request} req Request from client
- * @param {response} res Response to the user
- */
-async function handleAuth (req, res) {
-  const results = await uac.checkAuth(req);
-  if (results === false) {
-    res.status(403);
-    res.end();
-    return false;
-  } else {
-    return true;
-  }
-}
 
 function forbidden (res) {
   res.status(403);

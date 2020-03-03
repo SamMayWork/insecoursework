@@ -41,6 +41,8 @@ describe('dbabstraction Tests', function () {
     });
   });
 
+  
+
   describe('getAllBoards', function () {
     it('Should return a result that is not undefined', async function () {
       let results = await dbabs.getAllBoards();
@@ -72,6 +74,22 @@ describe('dbabstraction Tests', function () {
     it('Should return undefined for any length value that is <= 0', function () {
       let result = dbabs.generateId(-1);
       assert.equal(result, undefined);
+    });
+  });
+
+  describe('getPost', function(){
+    it('Should return the post content for the given postID', async function(){
+      let results = await dbabs.getPost('3e645059');
+      assert.deepEqual(results,  {
+        post_id : '3e645059',
+        keyword_id : 'faf7c6b9',
+        post_title : 'safety clock closer doubt',
+        post_content : 'buffalo row statement pan fellow adjective hurry thread short sure news screen create nearer numeral power her twelve nuts apart control flat street brave love blue trail valley though carried somehow hurried speak fall ruler possibly happened nothing is log shake plastic silence send attack yourself hair careful',
+        post_likes: 95,
+        user_id : 'ca77860f',
+        created_date : '12/2/2115',
+        edited_date : '9/24/2077'
+      });
     });
   });
 

@@ -64,6 +64,16 @@ CREATE TABLE IF NOT EXISTS Notifications (
   notif_delete Boolean NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS Post_Views (
+  post_id varchar (8) NOT NULL REFERENCES Posts(post_id),
+  views INT NOT NULL
+  );
+
+CREATE TABLE IF NOT EXISTS Comment_Views (
+  comment_id varchar (8) NOT NULL REFERENCES Comments(comment_id),
+  views INT NOT NULL
+  );
+
 insert into Users (user_id, user_email, user_dateofregistration) values ('a2367eab', 'sbaldock0@hostgator.com',         '2020-02-07');
 insert into Users (user_id, user_email, user_dateofregistration) values ('75b6d7e5', 'jgallelli1@weibo.com',            '2020-02-19');
 insert into Users (user_id, user_email, user_dateofregistration) values ('100bad41', 'rdellow2@storify.com',            '2020-02-04');
