@@ -120,16 +120,13 @@ describe('dbabstraction Tests', function () {
   });
 
   describe('createPost', function() {
-    it('Should return the expected content for the row 8w715ss9', async function (){
-      dbabs.executeRawQuerySync("insert into Keywords (keyword_id, keyword_1, keyword_2, keyword_3, keyword_4, keyword_5) VALUES ('864cce11', 'test', 'database', 'createPost', 'somethingsomething', 'darkside');");
-      dbabs.executeRawQuerySync("insert into Posts (post_id, keyword_id, post_title, post_content, post_likes, user_id, created_date, edited_date) VALUES ('8w715ss9','864cce11', 'Testing createPost is fun','Ever wonder how a database is created? Filled? Have you ever wondered how its tested when its been made? Me too.',10,'100bad41','2020-02-17','2020-02-15');");
-      let result = await dbabs.getPost('8w715ss9');
+    it('Should return the expected content for the row ', async function (){
+      dbabs.createPost('This is the title for createpost test', 'Heres more content to try to test this createPost function!!!', '100bad41', '7c3263e6');
+      let result = dbabs.executeRawQuerySync('select * from posts where post_title = 'This is the title for createpost test';')
       assert.deepEqual(result, {
-        post_id : '8w715ss9',
-        keyword_id : '864cce11',
-        post_title : 'Testing createPost is fun',
-        post_content :  'Ever wonder how a database is created? Filled? Have you ever wondered how its tested when its been made? Me too.',
-        post_likes : 10,
+        post_title : 'This is the title for createpost test',
+        post_content :  'Heres more content to try to test this createPost function!!!',
+        post_likes : 0,
         user_id : '100bad41',
         created_date : new Date('2020-02-17T00:00:00.000Z'),
         edited_date : new Date('2020-05-15T00:00:00.000Z')
