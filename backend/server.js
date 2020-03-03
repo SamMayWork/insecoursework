@@ -86,7 +86,11 @@ app.get('/get', async (req, res) => {
   }
 
   if (req.query.commentid) {
-    await pms.getComment(res, res);
+    await pms.getComment(req, res);
+  }
+
+  if (req.query.all) {
+    await pms.getAll(req, res);
   }
 });
 

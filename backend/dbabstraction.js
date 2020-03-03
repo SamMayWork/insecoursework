@@ -51,8 +51,10 @@ async function executeQuery (query, parameters) {
 }
 
 /**
- * Executes a raw query on the DB without any auth checks or safety
- * @param {string} query Query to execute 
+ * Executes a raw query on the database, this is not safe and performs no checks
+ * 
+ * FOR TESTING ONLY!
+ * @param {string} query 
  */
 function executeRawQuerySync (query) {
   let result = newPool.query(query);
@@ -88,7 +90,7 @@ function generateId(length) {
 async function getAllBoards () {
   const query = "SELECT * FROM Board;";
   const results = await executeQuery(query);
-  return results;
+  return results.rows;
 }
 
 /**
@@ -118,9 +120,9 @@ async function getComments(postid) {
  * @param {string} boardid 
  */
 async function getBoard (boardid) {
-  const query = 'SELECT * FROM board WHERE board_id = $1;';
+  const query = 'SELECT * FROM posts WHERE board_id = $1;';
   const results = await executeQuery(query, [boardid]);
-  return results;
+  return results.rows;
 }
 
 /**
@@ -131,26 +133,6 @@ async function getComment(commentid) {
   const query = "SELECT * FROM comments WHERE comment_id = $1;";
   const results = await executeQuery(query, [commentid]);
   return results.rows[0];
-}
-
-/**
- * Gets all of the replies for a given comment, this function is recursive
- * @param {string} commentid The ID of the comment of which to get the replies for
- */
-async function getReplies(commentid) {
-  const query = 'SELECT * FROM comments WHERE reply_id = $1';
-  let results;
-
-  recurQuery(commentid);
-
-  async function recurQuery (id) {
-    results += await executeQuery(query, [id]);
-    for (let row in results.rows[0]) {
-      recurQuery(row.reply_id);
-    }
-  }
- 
-  return results;
 }
 
 // ////////////////////////////////////////////////////////////// CREATING-CONTENT
@@ -370,7 +352,6 @@ async function deleteRecordBoard() {
 module.exports.getPost = getPost;
 module.exports.getComments = getComments;
 module.exports.getComment = getComment;
-module.exports.getReplies = getReplies;
 module.exports.getAllBoards = getAllBoards;
 module.exports.getBoard = getBoard;
 
