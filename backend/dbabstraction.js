@@ -96,7 +96,7 @@ async function getAllBoards () {
  * @param {string} postid The ID of the post to get
  */
 async function getPost(postid) {
-  const query = 'SELECT * FROM posts WHERE post_id = $1';
+  const query = 'SELECT * FROM posts WHERE post_id = $1;';
   const results = await executeQuery(query, [postid]);
   return results.rows[0];
 }
@@ -107,7 +107,7 @@ async function getPost(postid) {
  * @param {string} postid The ID of the posts to get the comments for
  */
 async function getComments(postid) {
-  const query = 'SELECT * FROM comments WHERE post_id = $1';
+  const query = 'SELECT * FROM comments WHERE post_id = $1;';
   const results = await executeQuery(query, [postid]);
   return results;
 }
@@ -168,8 +168,8 @@ async function createBoard(board_name, board_year) {
  * Creates a post
  * @param {String} title Title of the post
  * @param {String} content Content of the post
- * @param {String} authorid Authot id 
- * @param {String} boardid Bord id
+ * @param {String} authorid Author id 
+ * @param {String} boardid Board id
  */
 async function createPost(title, content, authorid, boardid) {
   const query = 'INSERT INTO Posts VALUES($1, $2, $3, $4, $5, $6);';

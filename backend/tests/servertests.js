@@ -105,7 +105,13 @@ describe('dbabstraction Tests', function () {
   });
 
   describe('incrising_Post_Views', function() {
-    it('Should ')
+    it('Should incrise the view by 1', async function() {
+      let result = await dbabs.incrisin_Post_Views('11f3b99f');
+      assert.deepEqual(result, {
+        post_id : '11f3b99f',
+        views : 1
+      })
+    })
   })
 
   // describe('createPost', function() {
