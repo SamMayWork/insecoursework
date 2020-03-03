@@ -120,16 +120,14 @@ describe('dbabstraction Tests', function () {
   });
 
   describe('createPost', function() {
-    it('Should return the expected content for the row ', async function (){
+    it('Should return the expected content for the title "This is the title for createpost test"', async function (){
       dbabs.createPost('This is the title for createpost test', 'Heres more content to try to test this createPost function!!!', '100bad41', '7c3263e6');
-      let result = dbabs.executeRawQuerySync('select * from posts where post_title = 'This is the title for createpost test';')
+      let result = await dbabs.executeRawQuerySync("select post_title, post_content, post_likes, user_id from posts where post_title = 'This is the title for createpost test';")
       assert.deepEqual(result, {
         post_title : 'This is the title for createpost test',
         post_content :  'Heres more content to try to test this createPost function!!!',
         post_likes : 0,
-        user_id : '100bad41',
-        created_date : new Date('2020-02-17T00:00:00.000Z'),
-        edited_date : new Date('2020-05-15T00:00:00.000Z')
+        user_id : '100bad41'
       });
     });
   });
