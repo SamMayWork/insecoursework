@@ -32,6 +32,13 @@ async function getPost(req, res) {
   const postid = req.query.postid;
   const postResult = await dbabs.getPost(postid);
   const commentsResult = await dbabs.getComments(postid);
+
+  if (postResult === undefined || commentsResult === undefined) {
+    res.status(404);
+    res.end();
+    return;
+  }
+
   res.json(generateRetrievePostContent(postResult, commentsResult));
   res.status(200);
   res.end();
@@ -44,15 +51,14 @@ async function getPost(req, res) {
  */
 async function getComment(req, res) {
   const comment = await dbabs.getComment(req.query.commentid);
-  const replies = await dbabs.getReplies(req.query.commentid);
 
   if (comment === undefined) { 
     req.status(404);
     req.end();
+    return;
   }
 
-  const packagedContent = generateCommentReplies(comment, replies);
-  res.json(packagedContent);
+  res.json(comment);
   res.status(200);
   res.end();
 }
@@ -63,7 +69,34 @@ async function getComment(req, res) {
  * @param {response} res 
  */
 async function getBoard (req, res)  {
-  res.status(500);
+  const allPosts = await dbabs.getBoard(req.query.boardid);
+
+  if (allPosts === undefined) {
+    res.status(404);
+    res.end();
+    return;
+  }
+
+  res.json (await allPosts);
+  res.status(200);
+  res.end();
+}
+
+/**
+ * Gets all of the Boards on the database
+ * @param {request} req 
+ * @param {response} res 
+ */
+async function getAll (req, res) {
+  const allBoards = await dbabs.getAllBoards();
+
+  if (allBoards === undefined) {
+    res.status(404);
+    res.end();
+  }
+
+  res.json(await allBoards);
+  res.status(200);
   res.end();
 }
 
@@ -182,23 +215,12 @@ function generateRetrievePostContent(post, comments) {
   return info;
 }
 
-/**
- * Packages a comment and its replies into a single JSON object
- * @param {JSON} comment The searched comment
- * @param {JSON} replies A Collection of its replies 
- */
-function generateCommentReplies (comment, replies) {
-  if (replies !== undefined) {
-    return comment + replies;
-  }
-  return comment;
-}
-
 // ////////////////////////////////////////////////////////////// EXPORTS
 
 module.exports.getPost = getPost;
 module.exports.getComment = getComment;
 module.exports.getBoard = getBoard;
+module.exports.getAll = getAll;
 
 module.exports.createComment = createComment;
 module.exports.createPost = createPost;

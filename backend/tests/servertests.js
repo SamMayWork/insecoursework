@@ -28,40 +28,38 @@ describe('dbabstraction Tests', function () {
   describe('getBoard', function () {
     it('Should return all of the content for the given board', async function () {
       let results = await dbabs.getBoard('d7227788');
-      assert.deepEqual(results.rows[0], {
+      assert.deepEqual(results, {
         board_id : 'd7227788',
         board_module : 'Introduction to India',
         board_year : '2020/2021'
       });
     });
 
-    it('Should return only one row', async function () {
+    it('Should not return undefined', async function () {
       let results = await dbabs.getBoard('d7227788');
-      assert.equal(results.rows.length, 1);
+      assert.notEqual(results, undefined);
     });
   });
-
-  
 
   describe('getAllBoards', function () {
     it('Should return a result that is not undefined', async function () {
       let results = await dbabs.getAllBoards();
-      assert.notEqual(results.rows, undefined);
+      assert.notEqual(results, undefined);
     });
 
     it('Should return the module bf35c787 within the first row of the response', async function () {
       let results = await dbabs.getAllBoards();
-      assert.equal(results.rows[0].board_id, 'bf35c787');
+      assert.equal(results[0].board_id, 'bf35c787');
     });
 
     it('Should return all of the contents of the row correctly', async function () {
       let results = await dbabs.getAllBoards();
-      assert.deepEqual([results.rows[0].board_id, results.rows[0].board_module, results.rows[0].board_year], ['bf35c787', 'Introduction to Hong Kong SAR China', '2020/2021']);
+      assert.deepEqual([results[0].board_id, results[0].board_module, results[0].board_year], ['bf35c787', 'Introduction to Hong Kong SAR China', '2020/2021']);
     });
 
     it('Should return all of the rows in the database', async function () {
       let results = await dbabs.getAllBoards();
-      assert.equal(results.rows.length, 20);
+      assert.equal(results.length, 20);
     });
   });
 
@@ -89,6 +87,7 @@ describe('dbabstraction Tests', function () {
       assert.deepEqual(result, {
         post_id : '11f3b99f',
         keyword_id : '986fcdbe',
+        board_id : 'bf35c787',
         post_title : 'stems till wore stretch',
         post_content : 'exclaimed scene ice game also closer became law damage hold mail hour care give definition spread bent step walk modern mad whole beautiful your tank sense cold picture listen hunt phrase construction grade direction shaking fastened summer chair purpose birds herd safety discover toward folks nature talk truck',
         post_likes : 10,
@@ -104,15 +103,15 @@ describe('dbabstraction Tests', function () {
     })
   });
 
-  describe('incrising_Post_Views', function() {
-    it('Should incrise the view by 1', async function() {
-      let result = await dbabs.incrisin_Post_Views('11f3b99f');
-      assert.deepEqual(result, {
-        post_id : '11f3b99f',
-        views : 1
-      })
-    })
-  })
+  // describe('incrising_Post_Views', function() {
+  //   it('Should incrise the view by 1', async function() {
+  //     let result = await dbabs.incrisin_Post_Views('11f3b99f');
+  //     assert.deepEqual(result, {
+  //       post_id : '11f3b99f',
+  //       views : 1
+  //     })
+  //   })
+  // })
 
   // describe('createPost', function() {
   //   it('Should return the expected content for the row 7c367dd6', async function (){
@@ -131,9 +130,26 @@ describe('dbabstraction Tests', function () {
   //     });
   //   });
   // });
+
+
+  describe ('createPost', function () {
+    it ('Should enter the details for the row 7c367dd6 into the Database correctly', async function () {
+      dbabs.executeRawQuerySync("insert into Keywords (keyword_id, keyword_1, keyword_2, keyword_3) VALUES ('864cce11', 'test', 'database', 'createPost');");
+      dbabs.createPost('ISNERTesting createPost is fun', 'Ever wonder how a database is created? Filled? Have you ever wondered how its tested when its been made? Me too.', '100bad41', 'bf35c787');
+      let result = await dbabs.executeRawQuerySync('SELECT * FROM posts WHERE post_title="Testing createPost is fun";');
+      assert.deepEqual(result, {
+        post_id : '8w715ss9',
+        keyword_id : '864cce11',
+        post_title : 'Testing createPost is fun',
+        post_content :  'Ever wonder how a database is created? Filled? Have you ever wondered how its tested when its been made? Me too.',
+        post_likes : 10,
+        user_id : '100bad41',
+        created_date : new Date('2020-02-17T00:00:00.000Z'),
+        edited_date : new Date('2020-05-15T00:00:00.000Z')
+      });
+    });
+  });
 });
-
-
 
 describe("Maintenance Module", function () {
   describe("Cold Start Procedure", function () {
