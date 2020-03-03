@@ -165,3 +165,9 @@
   width: 2rem;
   border-top: 2px solid rgb(0, 0, 196);
 }
+
+.comments {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}

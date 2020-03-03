@@ -12,7 +12,7 @@ class NavbarLink extends Component {
           <a href="#" className="navbar_link_anchor navbar_link_active" target="_blank">
             {this.props.children}
           </a>
-          <div className="navbar_link_line"></div>z
+          <div className="navbar_link_line"></div>
         </div>
       );   
     } else {

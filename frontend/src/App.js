@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
-import Post from "./components/Post";
-import Posts from "./components/Posts";
+import Comment from "./components/Comment";
+import Comments from "./components/Comments";
 import Navbar from "./components/Navbar";
 import NavbarLink from "./components/NavbarLink";
 
@@ -15,13 +15,13 @@ class App extends Component {
     }
   }
   render() {
-    const {error, isLoaded, posts } = this.state;
+    const {error, isLoaded, comments } = this.state;
     if (error) {
       return <div>Error: {error.message}</div>
     } else if (!isLoaded) {
       return <div>Loading...</div>
     } else {
-      console.log(posts);
+      console.log(comments);
       return (
         <div className = "App">
           <Navbar>
@@ -30,17 +30,17 @@ class App extends Component {
             <NavbarLink>Frequent</NavbarLink>
             <NavbarLink>Recent</NavbarLink>
           </Navbar>
-          <Posts>
-            {posts.map((post, i) => (
-              <Post
+          <Comments>
+            {comments.map((comment, i) => (
+              <Comment
                 key = {i}
-                title = {post.title}
-                author = {post.author}
-                replies = {post.replies}
-                date = {post.date}
+                title = {comment.title}
+                author = {comment.author}
+                replies = {comment.replies}
+                date = {comment.date}
               />
             ))}
-          </Posts>
+          </Comments>
         </div>
       );
     }
@@ -50,20 +50,20 @@ class App extends Component {
       .then(res => res.json())
       .then(
         (result) => {
-          let posts = [];
-          result.data.children.forEach((post) => {
-            let postData = post.data;
-            let postObj = {
-              title: postData.title,
-              author: postData.author,
-              replies: postData.num_comments,
-              date: postData.created * 1000
+          let comments = [];
+          result.data.children.forEach((comment) => {
+            let commentData = comment.data;
+            let commentObj = {
+              title: commentData.title,
+              author: commentData.author,
+              replies: commentData.num_comments,
+              date: commentData.created * 1000
             };
-            posts.push(postObj);
+            comments.push(commentObj);
           })
           this.setState({
             isLoaded: true,
-            posts: posts
+            comments: comments
           });
           console.log(result);
         },
