@@ -238,22 +238,51 @@ async function editPost(newTitle, newContent, user_id, post_id) {
  * @param {String} comment_id id of the comment
  */
 async function editComment(comment_content, user_id, post_id, comment_id) {
-  const query = 'UPDATE Comments SET omment_content = $1 WHERE user_id = $2 AND post_id = $3 AND comment_id = $4;';
+  const query = 'UPDATE Comments SET comment_content = $1 WHERE user_id = $2 AND post_id = $3 AND comment_id = $4;';
   const results = await executeQuery(query, [comment_content, user_id, post_id, comment_id]);
   return results;
 }
 
 // ////////////////////////////////////////////////////////////// REPORTING-CONTENT
-
+/**
+ * Reporting a post 
+ * @param {String} user_id user_id of the useres that report
+ * @param {String} post_id Post_id that is being reported
+ */
 async function reportPost(user_id, post_id) {
   const query = 'INSERT INTO Reports_Posts VALUES($1, $2);';
   const result = await executeQuery (query, [user_id, post_id]);
   return result;
 }
 
+/**
+ * Reporting a comment
+ * @param {String} user_id User_id that reported
+ * @param {String} comment_id comment_id that is being reported
+ */
 async function reportComment(user_id, comment_id) {
   const query = 'INSERT INTO Reports_Comments VALUES($1, $2);';
   const result = await executeQuery (query, [user_id, comment_id]);
+  return result;
+}
+
+// ////////////////////////////////////////////////////////////// incrisin likes
+/**
+ * Incrising the views of a post
+ * @param {String} post_id The post id 
+ */
+async function incrisin_Post_Views(post_id) {
+  const query = 'UPDATE Post_Views SET views = views + 1 WHERE post_id = $1';
+  const result = await executeQuery (query, post_id);
+  return result;
+}
+/**
+ * Incrising the views os a comment
+ * @param {String} comment_id 
+ */
+async function incrisin_Comment_Views(comment_id) {
+  const query = 'UPDATE Comment_Views SET views = views + 1 WHERE comment_id = $1';
+  const result = await executeQuery (query, comment_id);
   return result;
 }
 
@@ -358,5 +387,8 @@ module.exports.checkUserExists = checkUserExists;
 
 module.exports.reportPost = reportPost;
 module.exports.reportComment = reportComment;
+
+module.exports.incrisin_Post_Views = incrisin_Post_Views;
+module.exports.incrisin_Comment_Views = incrisin_Comment_Views;
 
 module.exports.executeRawQuerySync = executeRawQuerySync
