@@ -6,8 +6,11 @@
  * which is seen on all pages
  */
 
-import React, {Component} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
+
+import Login from '../LoginPage';
+import Button from '../../components/Button';
 
 import {
   BrowserRouter as Router,
@@ -17,13 +20,15 @@ import {
 
 export default function App() {
   return (
-    <Switch>
-      <Route exact path="/" component={Login}/>
-      {/*<Route path="/home" component={Account}/>*/}
-      {/*<Route path="/thread" component={postEdit}/>*/}
-      {/*<Route path="/postEdit" component={postEdit}/>*/}
-      {/*<Route path="/commentEdit" component={commentEdit}/>*/}
-      {/*<Route path="/account" component={Account}/>*/}
-    </Switch>
+    <Router>
+      <Switch>
+        <Route exact path="/" component={Login}/>
+        {/*<Route path="/home" component={Account}/>*/}
+        {/*<Route path="/thread" component={postEdit}/>*/}
+        {/*<Route path="/postEdit" component={postEdit}/>*/}
+        {/*<Route path="/commentEdit" component={commentEdit}/>*/}
+        {/*<Route path="/account" component={Account}/>*/}
+      </Switch>
+    </Router>
   );
 }
