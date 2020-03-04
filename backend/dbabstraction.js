@@ -14,7 +14,7 @@ const { Pool } = require('pg');
 /* eslint-disable no-use-before-define */
 
 // ////////////////////////////////////////////////////////////// QUERY EXECUTOR
-
+//#region Establishing Connection
 let newPool;
 
 // If we're building using Travis then use different login credentials
@@ -61,8 +61,9 @@ function executeRawQuerySync (query) {
   return result;
 }
 
+//#endregion
 // ////////////////////////////////////////////////////////////// ID GENERATOR
-
+//#region ID Generator
 /**
  * Generates a psuedo-random ID of a given length
  * @param {number} length The length of the ID to return
@@ -82,8 +83,9 @@ function generateId(length) {
   return generatedId.join('');
 }
 
+//#endregion
 // ////////////////////////////////////////////////////////////// GETTING-CONTENT
-
+//#region Getting Content
 /**
  * Gets a post and all of its content (including comments), this method hides the
  * raw database output in a JSON object with aliases for the column names to simplify use
@@ -134,9 +136,9 @@ async function getComment(commentid) {
   const results = await executeQuery(query, [commentid]);
   return results.rows[0];
 }
-
+//#endregion
 // ////////////////////////////////////////////////////////////// CREATING-CONTENT
-
+//#region Creating Content
 /**
  * Creates a board on the forum
  * @param {string} board_name Name of the board to create
@@ -147,17 +149,41 @@ async function createBoard(board_name, board_year) {
   const results = await executeQuery(query, [generateId(8), board_name, board_year]);
   return results;
 }
+
+/**
+ * Creates a list of keywords for a post to be associated with
+ * @param {list[string]} keywords 
+ * @returns The ID of the created keyword row
+ */
+async function createKeywords (keywords) {
+  const query = 'INSERT INTO Keywords (keyword_id, keyword_1, keyword_2, keyword_3, keyword_4, keyword_5) VALUES ($1, $2, $3, $4, $5, $6);';
+  const id = generateId(8);
+  keywords.unshift(id);
+  let results = await executeQuery(query, keywords);
+  if (results) {
+    return id;
+  }
+}
+
 /**
  * Creates a post
- * @param {String} title Title of the post
- * @param {String} content Content of the post
- * @param {String} authorid Author id 
- * @param {String} boardid Board id
+ * @param {string} title 
+ * @param {string} content 
+ * @param {list[string]} keywords 
+ * @param {string} authorid 
+ * @param {string} boardid
+ * @returns A JSON object with the ID of the created post, and the ID of the Keywords 
  */
-async function createPost(title, content, authorid, boardid) {
-  const query = 'INSERT INTO Posts VALUES($1, $2, $3, $4, $5, $6);';
-  const results = await executeQuery(query, [generateId(8), title, content, 0, authorid, boardid]);
-  return results;
+async function createPost(title, content, keywords, authorid, boardid) {
+  const keywordsId = await createKeywords(keywords);
+  const postQuery = 'INSERT INTO Posts (post_id, keyword_id, board_id, post_title, post_content, post_likes, user_id, created_date) VALUES ($1,$2,$3,$4,$5,$6,$7,$8);';
+  const id = generateId(8);
+  await executeQuery(postQuery, [id, keywordsId, boardid, title, content, 0, authorid, new Date()]);
+  
+  return {
+    keyword_id : keywordsId,
+    post_id : id
+  };
 }
 
 /**
@@ -187,17 +213,9 @@ async function createReplyComment(comment_content, user_id, post_id, reply_id) {
   return results;
 }
 
-/**
- * adds user to the database
- * @param {string} user_email the users email
- * @param {Date} user_dateofregistration the date of registration
- */
-async function createUser(user_email, user_dateofregistration) {
-  const query = 'INSERT INTO User VALUES($1, $2, $3);';
-  const results = await executeQuery(query, [generateId(8), user_email, user_dateofregistration]);
-  return results;
-}
-
+//#endregion
+// ////////////////////////////////////////////////////////////// EDITING-CONTENT
+//#region Editing
 
 /**
  * Edits the given post 
@@ -226,7 +244,10 @@ async function editComment(comment_content, user_id, post_id, comment_id) {
   return results;
 }
 
+//#endregion
 // ////////////////////////////////////////////////////////////// REPORTING-CONTENT
+//#region Reporting
+
 /**
  * Reporting a post 
  * @param {String} user_id user_id of the useres that report
@@ -249,7 +270,10 @@ async function reportComment(user_id, comment_id) {
   return result;
 }
 
-// ////////////////////////////////////////////////////////////// incrisin likes
+//#endregion
+// ////////////////////////////////////////////////////////////// INCREASING-LIKES
+//#region Increasing Post Views
+
 /**
  * Incrising the views of a post
  * @param {String} post_id The post id 
@@ -269,7 +293,9 @@ async function incrisin_Comment_Views(comment_id) {
   return result;
 }
 
+//#endregion
 // ////////////////////////////////////////////////////////////// LIKING/DISLIKING COMMENTS?POSTS
+//#region Rating Posts
 
 /**
  * Function for liking/disliking a post
@@ -314,7 +340,9 @@ async function incrisin_Comment_Views(comment_id) {
 //   }
 // }
 
+//#endregion
 // ////////////////////////////////////////////////////////////// USER ACCOUNT QUERIES
+//#region UAC Queries
 
 /**
  * Checks to see if we have a record of an email address in the DB, returns
@@ -337,7 +365,20 @@ async function checkUserExists (email) {
   }
 }
 
+/**
+ * adds user to the database
+ * @param {string} user_email the users email
+ * @param {Date} user_dateofregistration the date of registration
+ */
+async function createUser(user_email, user_dateofregistration) {
+  const query = 'INSERT INTO User VALUES($1, $2, $3);';
+  const results = await executeQuery(query, [generateId(8), user_email, user_dateofregistration]);
+  return results;
+}
+
+//#endregion
 // ////////////////////////////////////////////////////////////// DELETING CONTENT
+//#region Deletion
 
 /**
  * Deletes all of the content from the table board
@@ -347,8 +388,9 @@ async function deleteRecordBoard() {
   await executeQuery(query);
 }
 
+//#endregion
 // ////////////////////////////////////////////////////////////// EXPORTS
-
+//#region Exports
 module.exports.getPost = getPost;
 module.exports.getComments = getComments;
 module.exports.getComment = getComment;
@@ -361,7 +403,6 @@ module.exports.createBoard = createBoard;
 module.exports.createPost = createPost;
 module.exports.createComment = createComment;
 module.exports.createReplyComment = createComment;
-module.exports.createUser;
 
 module.exports.deleteRecordBoard = deleteRecordBoard;
 
@@ -374,3 +415,4 @@ module.exports.incrisin_Post_Views = incrisin_Post_Views;
 module.exports.incrisin_Comment_Views = incrisin_Comment_Views;
 
 module.exports.executeRawQuerySync = executeRawQuerySync
+//#endregion
