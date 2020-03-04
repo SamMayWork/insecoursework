@@ -10,7 +10,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import Login from '../LoginPage';
-import Button from '../../components/Button';
+import Dashboard from '../DashboardPage';
 
 import {
   BrowserRouter as Router,
@@ -23,11 +23,7 @@ export default function App() {
     <Router>
       <Switch>
         <Route exact path="/" component={Login}/>
-        {/*<Route path="/home" component={Account}/>*/}
-        {/*<Route path="/thread" component={postEdit}/>*/}
-        {/*<Route path="/postEdit" component={postEdit}/>*/}
-        {/*<Route path="/commentEdit" component={commentEdit}/>*/}
-        {/*<Route path="/account" component={Account}/>*/}
+        <Route path="/dashboard" component={Dashboard}/>
       </Switch>
     </Router>
   );
