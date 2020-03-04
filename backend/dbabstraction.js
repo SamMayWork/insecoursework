@@ -156,10 +156,13 @@ async function createBoard(board_name, board_year) {
  * @returns The ID of the created keyword row
  */
 async function createKeywords (keywords) {
-  const query = 'INSERT INTO Keywords (keyword_id, keyword_1, keyword_2, keyword_3, keyword_4, keyword_5) VALUES ($1, $2, $3, $4, $5);';
+  const query = 'INSERT INTO Keywords (keyword_id, keyword_1, keyword_2, keyword_3, keyword_4, keyword_5) VALUES ($1, $2, $3, $4, $5, $6);';
   const id = generateId(8);
-  executeQuery(query, keywords);
-  return id;
+  keywords.unshift(id);
+  let results = await executeQuery(query, keywords);
+  if (results) {
+    return id;
+  }
 }
 
 /**
