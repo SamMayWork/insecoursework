@@ -42,8 +42,8 @@ app.use(express.static('../frontend/'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// app.use(GoogleAuth(process.env.OUR GOOGLE ID));
-// app.use('/forum', guardMiddleware());
+app.use(googleAuth("683860842375-b79n49bfnbrk807gisi4prireps451tp.apps.googleusercontent.com"));
+app.use('/auth', googleAuth.guardMiddleware());
 
 // ////////////////////////////////////////////////////////////// COMMAND LINE ARGUMENTS
 
@@ -167,6 +167,16 @@ app.post('forum/report', (req, res) => {
 
   res.end();
 });
+
+// ////////////////////////////////////////////////////////////// AUTHENTICATION-TESTING
+
+app.get('/auth/test', (req, res) => {
+  logging.warningMessage(`Authorised and connected user: ${req.ip} ${req.user.emails[0].value}`);
+  res.status(200);
+  res.end();
+});
+
+
 
 // ////////////////////////////////////////////////////////////// CATCH-ALLS
 
