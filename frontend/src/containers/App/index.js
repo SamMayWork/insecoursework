@@ -7,7 +7,6 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import Login from '../LoginPage';
 import Dashboard from '../DashboardPage';
@@ -18,13 +17,17 @@ import {
   Route
 } from 'react-router-dom';
 
+import './index.css';
+
 export default function App() {
   return (
-    <Router>
-      <Switch>
-        <Route exact path="/" component={Login}/>
-        <Route path="/dashboard" component={Dashboard}/>
-      </Switch>
-    </Router>
+    <div className = "app">
+      <Router>
+        <Switch>
+          <Route exact path="/" component={Login}/>
+          <Route path="/dashboard" component={Dashboard}/>
+        </Switch>
+      </Router>
+    </div>
   );
 }

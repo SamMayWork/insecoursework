@@ -1,6 +1,6 @@
 import React, {Component} from "react";
-import likeImg from "./like.svg";
-import noLikeImg from "./nolike.svg";
+import likeImg from "../../images/like.svg";
+import noLikeImg from "../../images/nolike.svg";
 
 class LikeButton extends Component {
   state = {
@@ -19,13 +19,13 @@ class LikeButton extends Component {
     if (this.state.like) {
       return (
         <div className="post_like" onClick={this.toggleLike}>
-          <img className="post_like_image" src={likeImg}/>
+          <img alt="like buton" className="post_like_image" src={likeImg}/>
         </div>
       );
     } else {
       return (
         <div className="post_like" onClick={this.toggleLike}>
-          <img className="post_nolike_image" src={noLikeImg}/>
+          <img alt="like button" className="post_nolike_image" src={noLikeImg}/>
         </div>
       );
     }
