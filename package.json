@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Repo for the INSE Coursework; you should all be added to the repo, so make all the changes all you need and do all the work you need to and then make a pull request, and I'll merge them in for you :)",
   "main": "backend/server.js",
+  "proxy": "http://localhost:8080",
   "scripts": {
     "start": "node backend/server.js --logging",
     "test": "psql -f backend/dbstructure.sql; mocha backend/tests/servertests.js"

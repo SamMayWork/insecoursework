@@ -31,19 +31,22 @@ const pms = require('./postmodule');
 const uac = require('./useraccountsystem');
 const reporting = require('./reportingsystem');
 
+const path = require("path");
+
 // ////////////////////////////////////////////////////////////// CONSTANTS
 
 const app = express();
 const listeningPort = 8080;
 
-app.use(express.static('../frontend/'));
+app.use(express.static('frontend/build/'));
 
 // Sets parameters for recieving information
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// app.use(GoogleAuth(process.env.OUR GOOGLE ID));
-// app.use('/forum', guardMiddleware());
+app.use(googleAuth("817279853236-toe6rfq5ebg7rife6fvd82hh0eclpt3t.apps.googleusercontent.com"));
+// app.use(googleAuth("683860842375-b79n49bfnbrk807gisi4prireps451tp.apps.googleusercontent.com"));
+app.use('/auth', googleAuth.guardMiddleware());
 
 // ////////////////////////////////////////////////////////////// COMMAND LINE ARGUMENTS
 
@@ -67,6 +70,10 @@ if (argv.softreset) {
 }
 
 // ////////////////////////////////////////////////////////////// API END POINT HANDLERS
+
+app.get('/auth/dashboard', async(req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+});
 
 // Handler for HTTP GET's for content from the server, endpoints are
 // /get?postid=[param] - Gets a specific post off of the server, along with all of the comments
@@ -167,6 +174,16 @@ app.post('forum/report', (req, res) => {
 
   res.end();
 });
+
+// ////////////////////////////////////////////////////////////// AUTHENTICATION-TESTING
+
+app.get('/auth/test', (req, res) => {
+  logging.warningMessage(`Authorised and connected user: ${req.ip} ${req.user.emails[0].value}`);
+  res.status(200);
+  res.end();
+});
+
+
 
 // ////////////////////////////////////////////////////////////// CATCH-ALLS
 
