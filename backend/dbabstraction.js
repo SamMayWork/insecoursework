@@ -158,7 +158,7 @@ async function searchTags(searchtag) {
   const query = 'SELECT keyword_id FROM keywords WHERE keyword_1 LIKE $1 OR keyword_2 LIKE $1 OR keyword_3 LIKE $1 OR keyword_4 LIKE $1 OR keyword_5 LIKE $1;';
   const matchingRows = await executeQuery(query, [searchtag]);
   const rows = [];
-  for (const row of matchingRows) {
+  for (const row of matchingRows.rows) {
     const postQuery = 'SELECT * FROM posts WHERE keyword_id = $1;';
     const results = await executeQuery(postQuery, [row.keyword_id]);
     for (const resultsRow of results.rows) {
