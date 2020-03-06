@@ -185,7 +185,7 @@ async function searchPosts (req, res) {
  * @param {response} res 
  */
 async function searchTags (req, res) {
-  const searchString = req.query.searchtag;
+  const searchString = req.query.searchtags;
   if (searchString !== undefined) {
     const results = await dbabs.searchTags(searchString);
     res.json(results);

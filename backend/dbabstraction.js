@@ -161,9 +161,9 @@ async function searchTags (searchtag) {
   for (let row in matchingRows) {
     let postQuery = 'SELECT * FROM posts WHERE keyword_id = $1;';
     let results = await executeQuery(postQuery, [row.keyword_id]);
-    results.forEach(r => {
-      rows.push(r);
-    });
+    for (let resultsRow of results.rows) {
+      rows.push(resultsRow);
+    }
   }
 
   return rows;
