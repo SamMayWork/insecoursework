@@ -107,7 +107,7 @@ app.get('/get/search', async (req, res) => {
   }
 
   if (req.query.type === 'post' && req.query.searchtags !== undefined) {
-    await pms.searchTag(req, res);
+    await pms.searchTags(req, res);
     return;
   }
 
@@ -120,7 +120,7 @@ app.get('/get/search', async (req, res) => {
 // Handler for the HTTP Posts coming to create posts/comments on the server, end points for this are
 // /forum/create?type=post - Create a post
 // /forum/create?type=comment - Create a comment
-app.post('/forum/create', (req, res) => {
+app.post('/forum/create', async (req, res) => {
   handleNoDB(req, res);
   handlePostLogging(req);
 
@@ -129,11 +129,11 @@ app.post('/forum/create', (req, res) => {
   }
 
   if (req.query.type === "post") {
-    pms.createPost(req, res);
+    await pms.createPost(req, res);
   }
 
   if (req.query.type === "comment") {
-    pms.createComment(req, res);
+    await pms.createComment(req, res);
   }
 });
 

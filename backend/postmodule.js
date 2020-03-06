@@ -169,7 +169,7 @@ async function createComment (req, res, userid) {
 async function searchPosts (req, res) {
   const searchString = req.query.searchterm;
   if (searchString !== undefined) {
-    const results = await dbabs.searchPost(searchString);
+    const results = await dbabs.searchPosts(searchString);
     res.json(results);
     res.status(200);
     res.end();
@@ -184,9 +184,9 @@ async function searchPosts (req, res) {
  * @param {request} req 
  * @param {response} res 
  */
-async function searchTag (req, res) {
+async function searchTags (req, res) {
   const searchString = req.query.searchtag;
-  if (searchtag !== undefined) {
+  if (searchString !== undefined) {
     const results = await dbabs.searchTags(searchString);
     res.json(results);
     res.status(200);
@@ -259,6 +259,9 @@ module.exports.getPost = getPost;
 module.exports.getComment = getComment;
 module.exports.getBoard = getBoard;
 module.exports.getAll = getAll;
+
+module.exports.searchPosts = searchPosts;
+module.exports.searchTags = searchTags;
 
 module.exports.createComment = createComment;
 module.exports.createPost = createPost;
