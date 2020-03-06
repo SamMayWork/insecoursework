@@ -29,7 +29,7 @@ const logging = require('./logging');
  */
 
 async function getPost(req, res) {
-  const postid = req.query.postid;
+  const { postid } = req.query;
   const postResult = await dbabs.getPost(postid);
   const commentsResult = await dbabs.getComments(postid);
 
@@ -46,13 +46,13 @@ async function getPost(req, res) {
 
 /**
  * Gets a comment and all of its replies
- * @param {request} req The Request from the user 
+ * @param {request} req The Request from the user
  * @param {response} res The Response to the user
  */
 async function getComment(req, res) {
   const comment = await dbabs.getComment(req.query.commentid);
 
-  if (comment === undefined) { 
+  if (comment === undefined) {
     req.status(404);
     req.end();
     return;
@@ -65,10 +65,10 @@ async function getComment(req, res) {
 
 /**
  * Gets all of the content from a board
- * @param {request} req 
- * @param {response} res 
+ * @param {request} req
+ * @param {response} res
  */
-async function getBoard (req, res)  {
+async function getBoard(req, res) {
   const allPosts = await dbabs.getBoard(req.query.boardid);
 
   if (allPosts === undefined) {
@@ -77,17 +77,17 @@ async function getBoard (req, res)  {
     return;
   }
 
-  res.json (await allPosts);
+  res.json(await allPosts);
   res.status(200);
   res.end();
 }
 
 /**
  * Gets all of the Boards on the database
- * @param {request} req 
- * @param {response} res 
+ * @param {request} req
+ * @param {response} res
  */
-async function getAll (req, res) {
+async function getAll(req, res) {
   const allBoards = await dbabs.getAllBoards();
 
   if (allBoards === undefined) {
@@ -108,15 +108,15 @@ async function getAll (req, res) {
  * @param {response} res The response to the user
  */
 async function createPost(req, res) {
-   const userid = await dbabs.getUserIDFromEmail(req.user.emails[0]);
-  
+  const userid = await dbabs.getUserIDFromEmail(req.user.emails[0]);
+
   if (userid !== undefined) {
     // The user is authorised if the email is within our database
     const title = filterContent(req.body.title);
     const content = filterContent(req.body.content);
-    
+
     for (let i = 0; i < req.body.keywords.length; i++) {
-      req.body.keywords[i] = filterContent(req.body.keywords[i]); 
+      req.body.keywords[i] = filterContent(req.body.keywords[i]);
     }
 
     dbabs.createPost(title, content, keywords);
@@ -127,11 +127,11 @@ async function createPost(req, res) {
 
 /**
  * Creates a comment
- * @param {request} req 
- * @param {response} res 
- * @param {string} userid UserID for the database 
+ * @param {request} req
+ * @param {response} res
+ * @param {string} userid UserID for the database
  */
-async function createComment (req, res, userid) {
+async function createComment(req, res, userid) {
   try {
     let results;
     if (req.body.reply === true) {
@@ -139,13 +139,13 @@ async function createComment (req, res, userid) {
         req.body.content,
         userid,
         req.body.postid,
-        req.body.replyid
+        req.body.replyid,
       );
     } else {
       results = await dbabs.createComment(
         req.body.content,
         userid,
-        req.body.postid
+        req.body.postid,
       );
     }
     if (results) {
@@ -155,7 +155,7 @@ async function createComment (req, res, userid) {
   } catch (exception) {
     logging.warningMessage(exception);
     res.status(500);
-    res.end("The server was unable to fufil this request");
+    res.end('The server was unable to fufil this request');
   }
 }
 
@@ -163,10 +163,10 @@ async function createComment (req, res, userid) {
 
 /**
  * Searches all of the post for a title that matches the string
- * @param {request} req 
- * @param {response} res 
+ * @param {request} req
+ * @param {response} res
  */
-async function searchPosts (req, res) {
+async function searchPosts(req, res) {
   const searchString = req.query.searchterm;
   if (searchString !== undefined) {
     const results = await dbabs.searchPosts(searchString);
@@ -181,10 +181,10 @@ async function searchPosts (req, res) {
 
 /**
  * Gets all of the posts that meet contain the tag
- * @param {request} req 
- * @param {response} res 
+ * @param {request} req
+ * @param {response} res
  */
-async function searchTags (req, res) {
+async function searchTags(req, res) {
   const searchString = req.query.searchtags;
   if (searchString !== undefined) {
     const results = await dbabs.searchTags(searchString);
@@ -200,18 +200,18 @@ async function searchTags (req, res) {
 // ////////////////////////////////////////////////////////////// FILTERS
 
 const offensivelanguage = {
-  words : [
-    { dirty : "hate", clean : "a subject of great displeasure within my personal and subjective opinion" },
-    { dirty : "stupid", clean : "ill-prepared for rational discourse"}
-  ]
-}
+  words: [
+    { dirty: 'hate', clean: 'a subject of great displeasure within my personal and subjective opinion' },
+    { dirty: 'stupid', clean: 'ill-prepared for rational discourse' },
+  ],
+};
 
 /**
  * Filters a given string for swear/offensive words
- * @param {string} content Content to be filtered 
+ * @param {string} content Content to be filtered
  */
-function filterContent (content) {
-  let filteredContent = content;
+function filterContent(content) {
+  const filteredContent = content;
   // Your code goes here!
   return filteredContent;
 }

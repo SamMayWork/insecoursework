@@ -14,34 +14,34 @@ const { Pool } = require('pg');
 /* eslint-disable no-use-before-define */
 
 // ////////////////////////////////////////////////////////////// QUERY EXECUTOR
-//#region Establishing Connection
+// #region Establishing Connection
 let newPool;
 
 // If we're building using Travis then use different login credentials
 if (process.env.CI !== 'true') {
-  newPool = new Pool ({
-    host : "localhost",
-    user : "test",
-    password : "test",
-    database : "forumbackend",
-    port : 5432
+  newPool = new Pool({
+    host: 'localhost',
+    user: 'test',
+    password: 'test',
+    database: 'forumbackend',
+    port: 5432,
   });
 } else {
-  newPool = new Pool ({
-    host : "localhost",
-    user : "postgres",
-    password : null,
-    database : "forumbackend",
-    port : 5432
+  newPool = new Pool({
+    host: 'localhost',
+    user: 'postgres',
+    password: null,
+    database: 'forumbackend',
+    port: 5432,
   });
 }
 
 /**
  * Executes a query on the Database using a pool
- * @param {string} query 
- * @param {list[string]} parameters 
+ * @param {string} query
+ * @param {list[string]} parameters
  */
-async function executeQuery (query, parameters) {
+async function executeQuery(query, parameters) {
   try {
     const results = await newPool.query(query, parameters);
     return results;
@@ -52,18 +52,18 @@ async function executeQuery (query, parameters) {
 
 /**
  * Executes a raw query on the database, this is not safe and performs no checks
- * 
+ *
  * FOR TESTING ONLY!
- * @param {string} query 
+ * @param {string} query
  */
-function executeRawQuerySync (query) {
-  let result = newPool.query(query);
+function executeRawQuerySync(query) {
+  const result = newPool.query(query);
   return result;
 }
 
-//#endregion
+// #endregion
 // ////////////////////////////////////////////////////////////// ID GENERATOR
-//#region ID Generator
+// #region ID Generator
 /**
  * Generates a psuedo-random ID of a given length
  * @param {number} length The length of the ID to return
@@ -83,9 +83,9 @@ function generateId(length) {
   return generatedId.join('');
 }
 
-//#endregion
+// #endregion
 // ////////////////////////////////////////////////////////////// GETTING-CONTENT
-//#region Getting Content
+// #region Getting Content
 /**
  * Gets a post and all of its content (including comments), this method hides the
  * raw database output in a JSON object with aliases for the column names to simplify use
@@ -110,41 +110,41 @@ async function getComments(postid) {
 
 /**
  * Gets a specific board
- * @param {string} boardid 
+ * @param {string} boardid
  */
-async function getBoard (boardid) {
+async function getBoard(boardid) {
   const query = 'SELECT * FROM board WHERE board_id = $1;';
   const results = await executeQuery(query, [boardid]);
   return results.rows[0];
 }
 
 /**
- * Gets all of the boards 
+ * Gets all of the boards
  */
-async function getAllBoards () {
-  const query = "SELECT * FROM Board;";
+async function getAllBoards() {
+  const query = 'SELECT * FROM Board;';
   const results = await executeQuery(query);
   return results.rows;
 }
 
 /**
  * Gets the content of a specific comment
- * @param {string} commentid ID of the comment to get 
+ * @param {string} commentid ID of the comment to get
  */
 async function getComment(commentid) {
-  const query = "SELECT * FROM comments WHERE comment_id = $1;";
+  const query = 'SELECT * FROM comments WHERE comment_id = $1;';
   const results = await executeQuery(query, [commentid]);
   return results.rows[0];
 }
-//#endregion
-// ////////////////////////////////////////////////////////////// SEARCHING 
-//#region Searching Content
+// #endregion
+// ////////////////////////////////////////////////////////////// SEARCHING
+// #region Searching Content
 
 /**
  * Returns all posts that match a title with the search string
- * @param {string} searchstring 
+ * @param {string} searchstring
  */
-async function searchPosts (searchstring) {
+async function searchPosts(searchstring) {
   const query = 'SELECT * FROM posts WHERE post_title LIKE $1;';
   const results = await executeQuery(query, [searchstring]);
   return results;
@@ -152,26 +152,26 @@ async function searchPosts (searchstring) {
 
 /**
  * Returns all of the posts that contain the tag
- * @param {*} searchtag 
+ * @param {*} searchtag
  */
-async function searchTags (searchtag) {
+async function searchTags(searchtag) {
   const query = 'SELECT keyword_id FROM keywords WHERE keyword_1 LIKE $1 OR keyword_2 LIKE $1 OR keyword_3 LIKE $1 OR keyword_4 LIKE $1 OR keyword_5 LIKE $1;';
-  let matchingRows = await executeQuery(query, [searchtag]);
+  const matchingRows = await executeQuery(query, [searchtag]);
   const rows = [];
-  for (let row in matchingRows) {
-    let postQuery = 'SELECT * FROM posts WHERE keyword_id = $1;';
-    let results = await executeQuery(postQuery, [row.keyword_id]);
-    for (let resultsRow of results.rows) {
+  for (const row of matchingRows) {
+    const postQuery = 'SELECT * FROM posts WHERE keyword_id = $1;';
+    const results = await executeQuery(postQuery, [row.keyword_id]);
+    for (const resultsRow of results.rows) {
       rows.push(resultsRow);
     }
   }
 
   return rows;
-} 
+}
 
-//#endregion
+// #endregion
 // ////////////////////////////////////////////////////////////// CREATING-CONTENT
-//#region Creating Content
+// #region Creating Content
 /**
  * Creates a board on the forum
  * @param {string} board_name Name of the board to create
@@ -185,14 +185,14 @@ async function createBoard(board_name, board_year) {
 
 /**
  * Creates a list of keywords for a post to be associated with
- * @param {list[string]} keywords 
+ * @param {list[string]} keywords
  * @returns The ID of the created keyword row
  */
-async function createKeywords (keywords) {
+async function createKeywords(keywords) {
   const query = 'INSERT INTO Keywords (keyword_id, keyword_1, keyword_2, keyword_3, keyword_4, keyword_5) VALUES ($1, $2, $3, $4, $5, $6);';
   const id = generateId(8);
   keywords.unshift(id);
-  let results = await executeQuery(query, keywords);
+  const results = await executeQuery(query, keywords);
   if (results) {
     return id;
   }
@@ -200,28 +200,28 @@ async function createKeywords (keywords) {
 
 /**
  * Creates a post
- * @param {string} title 
- * @param {string} content 
- * @param {list[string]} keywords 
- * @param {string} authorid 
+ * @param {string} title
+ * @param {string} content
+ * @param {list[string]} keywords
+ * @param {string} authorid
  * @param {string} boardid
- * @returns A JSON object with the ID of the created post, and the ID of the Keywords 
+ * @returns A JSON object with the ID of the created post, and the ID of the Keywords
  */
 async function createPost(title, content, keywords, authorid, boardid) {
   const keywordsId = await createKeywords(keywords);
   const postQuery = 'INSERT INTO Posts (post_id, keyword_id, board_id, post_title, post_content, post_likes, user_id, created_date) VALUES ($1,$2,$3,$4,$5,$6,$7,$8);';
   const id = generateId(8);
   await executeQuery(postQuery, [id, keywordsId, boardid, title, content, 0, authorid, new Date()]);
-  
+
   return {
-    keyword_id : keywordsId,
-    post_id : id
+    keyword_id: keywordsId,
+    post_id: id,
   };
 }
 
 /**
  * Create a comment on a post
- * @param {String} comment_content content of the comment 
+ * @param {String} comment_content content of the comment
  * @param {String} user_id user id of the author of the comment
  * @param {String} post_id post id with the comment
  */
@@ -233,7 +233,7 @@ async function createComment(comment_content, user_id, post_id) {
 }
 
 /**
- * Create a reply to a existing comment 
+ * Create a reply to a existing comment
  * @param {String} comment_content Create a comment
  * @param {String} user_id user id of the author of the comment
  * @param {String} post_id post id with the comment
@@ -246,13 +246,13 @@ async function createReplyComment(comment_content, user_id, post_id, reply_id) {
   return results;
 }
 
-//#endregion
+// #endregion
 // ////////////////////////////////////////////////////////////// EDITING-CONTENT
-//#region Editing
+// #region Editing
 
 /**
- * Edits the given post 
- * @param {string} newTitle the new title 
+ * Edits the given post
+ * @param {string} newTitle the new title
  * @param {string} newContent the new content
  * @param {string} user_id the use ID of the user that is editing the post
  * @param {string} post_id the post ID
@@ -265,7 +265,7 @@ async function editPost(newTitle, newContent, user_id, post_id) {
 }
 
 /**
- * Editing the given comment 
+ * Editing the given comment
  * @param {String} comment_content new comment content
  * @param {String} user_id user id of the author of the existing comment
  * @param {String} post_id id of the post with the comment
@@ -277,18 +277,18 @@ async function editComment(comment_content, user_id, post_id, comment_id) {
   return results;
 }
 
-//#endregion
+// #endregion
 // ////////////////////////////////////////////////////////////// REPORTING-CONTENT
-//#region Reporting
+// #region Reporting
 
 /**
- * Reporting a post 
+ * Reporting a post
  * @param {String} user_id user_id of the useres that report
  * @param {String} post_id Post_id that is being reported
  */
 async function reportPost(user_id, post_id) {
   const query = 'INSERT INTO Reports_Posts VALUES($1, $2);';
-  const result = await executeQuery (query, [user_id, post_id]);
+  const result = await executeQuery(query, [user_id, post_id]);
   return result;
 }
 
@@ -299,36 +299,36 @@ async function reportPost(user_id, post_id) {
  */
 async function reportComment(user_id, comment_id) {
   const query = 'INSERT INTO Reports_Comments VALUES($1, $2);';
-  const result = await executeQuery (query, [user_id, comment_id]);
+  const result = await executeQuery(query, [user_id, comment_id]);
   return result;
 }
 
-//#endregion
+// #endregion
 // ////////////////////////////////////////////////////////////// INCREASING-LIKES
-//#region Increasing Post Views
+// #region Increasing Post Views
 
 /**
  * Incrising the views of a post
- * @param {String} post_id The post id 
+ * @param {String} post_id The post id
  */
 async function incrisin_Post_Views(post_id) {
   const query = 'UPDATE Post_Views SET views = views + 1 WHERE post_id = $1';
-  const result = await executeQuery (query, post_id);
+  const result = await executeQuery(query, post_id);
   return result;
 }
 /**
  * Incrising the views os a comment
- * @param {String} comment_id 
+ * @param {String} comment_id
  */
 async function incrisin_Comment_Views(comment_id) {
   const query = 'UPDATE Comment_Views SET views = views + 1 WHERE comment_id = $1';
-  const result = await executeQuery (query, comment_id);
+  const result = await executeQuery(query, comment_id);
   return result;
 }
 
-//#endregion
+// #endregion
 // ////////////////////////////////////////////////////////////// LIKING/DISLIKING COMMENTS?POSTS
-//#region Rating Posts
+// #region Rating Posts
 
 /**
  * Function for liking/disliking a post
@@ -373,29 +373,28 @@ async function incrisin_Comment_Views(comment_id) {
 //   }
 // }
 
-//#endregion
+// #endregion
 // ////////////////////////////////////////////////////////////// USER ACCOUNT QUERIES
-//#region UAC Queries
+// #region UAC Queries
 
 /**
  * Checks to see if we have a record of an email address in the DB, returns
  * the ID of the user if a record is found
  * @param {string} email Email address to search
  */
-async function checkUserExists (email) {
-  const query = "SELECT * FROM users WHERE user_email = $1;"
+async function checkUserExists(email) {
+  const query = 'SELECT * FROM users WHERE user_email = $1;';
   const results = await executeQuery(query, [email]);
 
   if (results !== undefined) {
     return {
-      id : results.rows[0].user_id,
-      exists : true
-    };
-  } else {
-    return {
-      exsists : false
+      id: results.rows[0].user_id,
+      exists: true,
     };
   }
+  return {
+    exsists: false,
+  };
 }
 
 /**
@@ -409,9 +408,9 @@ async function createUser(user_email, user_dateofregistration) {
   return results;
 }
 
-//#endregion
+// #endregion
 // ////////////////////////////////////////////////////////////// DELETING CONTENT
-//#region Deletion
+// #region Deletion
 
 /**
  * Deletes all of the content from the table board
@@ -421,9 +420,9 @@ async function deleteRecordBoard() {
   await executeQuery(query);
 }
 
-//#endregion
+// #endregion
 // ////////////////////////////////////////////////////////////// EXPORTS
-//#region Exports
+// #region Exports
 module.exports.getPost = getPost;
 module.exports.getComments = getComments;
 module.exports.getComment = getComment;
@@ -450,5 +449,5 @@ module.exports.reportComment = reportComment;
 module.exports.incrisin_Post_Views = incrisin_Post_Views;
 module.exports.incrisin_Comment_Views = incrisin_Comment_Views;
 
-module.exports.executeRawQuerySync = executeRawQuerySync
-//#endregion
+module.exports.executeRawQuerySync = executeRawQuerySync;
+// #endregion
