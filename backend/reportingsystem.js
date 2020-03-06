@@ -10,10 +10,10 @@ const dbabs = require('./dbabstraction');
 
 /**
  * Reports a given post
- * @param {request} req 
- * @param {response} res 
+ * @param {request} req
+ * @param {response} res
  */
-async function reportPost (req, res) {
+async function reportPost(req, res) {
   // 1 - Check the user is authorised to report the content
   // 2 - Check to see if the user has already reported the content before
   //  2.a - If the content has never been reported before by anyone, start the report procedure
@@ -23,10 +23,10 @@ async function reportPost (req, res) {
 
 /**
  * Reports a given comment
- * @param {request} req 
- * @param {response} res 
+ * @param {request} req
+ * @param {response} res
  */
-async function reportComment (req, res) {
+async function reportComment(req, res) {
   // 1 - Check the user is authorised to report the content
   // 2 - Check to see if the user has already reported the content before
   //  2.a - If the content has never been reported before by anyone, start the report procedure
@@ -35,9 +35,9 @@ async function reportComment (req, res) {
 }
 
 // While we're deciding what we're doing with this module return status 500 and exit
-function tempBlock (res) {
+function tempBlock(res) {
   res.status(500);
-  res.end(); 
+  res.end();
 }
 
 // ////////////////////////////////////////////////////////////// EXPORTS

@@ -23,7 +23,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { argv } = require('yargs');
-const googleAuth = require('simple-google-openid');
+const GoogleAuth = require('simple-google-openid');
 
 const logging = require('./logging');
 const maintain = require('./maintainmodule');
@@ -48,22 +48,21 @@ app.use('/forum', googleAuth.guardMiddleware());
 // ////////////////////////////////////////////////////////////// COMMAND LINE ARGUMENTS
 
 if (argv.nodb) {
-  logging.warningMessage("Starting the server without the attached DB...");
-  logging.warningMessage("Only responding to requests with template");
+  logging.warningMessage('Starting the server without the attached DB...');
+  logging.warningMessage('Only responding to requests with template');
 }
 
 if (argv.coldstart) {
-  logging.coldStartMessage("Starting the cold-start procedure");
+  logging.coldStartMessage('Starting the cold-start procedure');
   maintain.coldStart();
-  logging.coldStartMessage("Cold-Start procedure has been finished, continuing to start the server!");
+  logging.coldStartMessage('Cold-Start procedure has been finished, continuing to start the server!');
 }
 
 if (argv.softreset) {
-  logging.warningMessage("Soft Reset mode has been enabled, clearing the server now.");
+  logging.warningMessage('Soft Reset mode has been enabled, clearing the server now.');
   maintain.softreset();
-  logging.warningMessage("Content of the Database has been cleared and the structure has been preserved");
-  logging.warningMessage("Restart the server without the --softreset, but with the --coldstart operation to begin normal operation");
-  return;
+  logging.warningMessage('Content of the Database has been cleared and the structure has been preserved');
+  logging.warningMessage('Restart the server without the --softreset, but with the --coldstart operation to begin normal operation');
 }
 
 // ////////////////////////////////////////////////////////////// API END POINT HANDLERS
@@ -94,23 +93,47 @@ app.get('/get', async (req, res) => {
   }
 });
 
+
+// ////////////////////////////////////////////////////////////// SEARCHING
+
+// Handler for searching for content, endpoints are
+// /get/search?type=post&searchterm=[param] - Search term is a string title
+// /get/search?type=post&searchtags=[param] - Search term is a tag
+app.get('/get/search', async (req, res) => {
+  handleGetLogging(req);
+  if (req.query.type === 'post' && req.query.searchterm !== undefined) {
+    await pms.searchPosts(req, res);
+    return;
+  }
+
+  if (req.query.type === 'post' && req.query.searchtags !== undefined) {
+    await pms.searchTags(req, res);
+    return;
+  }
+
+  res.status(404);
+  res.end();
+});
+
+// ////////////////////////////////////////////////////////////// CREATING CONTENT
+
 // Handler for the HTTP Posts coming to create posts/comments on the server, end points for this are
 // /forum/create?type=post - Create a post
 // /forum/create?type=comment - Create a comment
-app.post('/forum/create', (req, res) => {
+app.post('/forum/create', async (req, res) => {
   handleNoDB(req, res);
   handlePostLogging(req);
 
-  if (!uac.checkUserExists(req)){
+  if (!uac.checkUserExists(req)) {
     forbidden(res);
   }
 
-  if (req.query.type === "post") {
-    pms.createPost(req, res);
+  if (req.query.type === 'post') {
+    await pms.createPost(req, res);
   }
 
-  if (req.query.type === "comment") {
-    pms.createComment(req, res);
+  if (req.query.type === 'comment') {
+    await pms.createComment(req, res);
   }
 });
 
@@ -128,20 +151,20 @@ app.post('/forum/like', async (req, res) => {
 
   if (req.query.postid === undefined || req.query.status === undefined) {
     res.status(404);
-    res.end("Invalid parameters");
+    res.end('Invalid parameters');
   }
 
   // Handle for liking/disliking a post
-  if (req.query.postid !== undefined &&
-    req.query.status !== undefined && 
-    req.query.type === 'post') {
-      await pms.likePost(req, res);
+  if (req.query.postid !== undefined
+    && req.query.status !== undefined
+    && req.query.type === 'post') {
+    await pms.likePost(req, res);
   }
 
-  if (req.query.postid !== undefined &&
-    req.query.status !== undefined && 
-    req.query.type === 'comment') {
-      await pms.dislikePost(req, res);
+  if (req.query.postid !== undefined
+    && req.query.status !== undefined
+    && req.query.type === 'comment') {
+    await pms.dislikePost(req, res);
   }
 });
 
@@ -168,16 +191,6 @@ app.post('forum/report', (req, res) => {
   res.end();
 });
 
-// ////////////////////////////////////////////////////////////// AUTHENTICATION-TESTING
-
-app.get('/auth/test', (req, res) => {
-  logging.warningMessage(`Authorised and connected user: ${req.ip} ${req.user.emails[0].value}`);
-  res.status(200);
-  res.end();
-});
-
-
-
 // ////////////////////////////////////////////////////////////// CATCH-ALLS
 
 // Catch-all for 404's
@@ -193,9 +206,9 @@ app.post('*', (req, res) => {
 
 // ////////////////////////////////////////////////////////////// ODDS AND ENDS
 
-function forbidden (res) {
+function forbidden(res) {
   res.status(403);
-  res.end("No valid sign-in");
+  res.end('No valid sign-in');
 }
 
 /**
@@ -203,7 +216,7 @@ function forbidden (res) {
  * @param {request} req The incoming request
  * @param {string} message Optional message to append (404's)
  */
-function handlePostLogging (req, message='') {
+function handlePostLogging(req, message = '') {
   if (argv.logging) {
     logging.logHttpPostMessage(req, message);
   }
@@ -214,7 +227,7 @@ function handlePostLogging (req, message='') {
  * @param {request} req The incoming request
  * @param {string} message Optional message to append (404's)
  */
-function handleGetLogging (req, message='') {
+function handleGetLogging(req, message = '') {
   if (argv.logging) {
     logging.logHttpGetMessage(req, message);
   }
@@ -225,10 +238,10 @@ function handleGetLogging (req, message='') {
  * @param {request} req Request from the client
  * @param {response} res Repsonse to the client
  */
-function handleNoDB (req, res) {
+function handleNoDB(req, res) {
   if (argv.nodb) {
     res.status(200);
-    res.end(`Acknowledge ${req.ip}, server is running without attached DB`);  
+    res.end(`Acknowledge ${req.ip}, server is running without attached DB`);
   }
 }
 
