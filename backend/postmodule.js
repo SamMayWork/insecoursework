@@ -159,6 +159,44 @@ async function createComment (req, res, userid) {
   }
 }
 
+// ////////////////////////////////////////////////////////////// SEARCHiNG
+
+/**
+ * Searches all of the post for a title that matches the string
+ * @param {request} req 
+ * @param {response} res 
+ */
+async function searchPosts (req, res) {
+  const searchString = req.query.searchterm;
+  if (searchString !== undefined) {
+    const results = await dbabs.searchPost(searchString);
+    res.json(results);
+    res.status(200);
+    res.end();
+  } else {
+    res.status(404);
+    res.end();
+  }
+}
+
+/**
+ * Gets all of the posts that meet contain the tag
+ * @param {request} req 
+ * @param {response} res 
+ */
+async function searchTag (req, res) {
+  const searchString = req.query.searchtag;
+  if (searchtag !== undefined) {
+    const results = await dbabs.searchTags(searchString);
+    res.json(results);
+    res.status(200);
+    res.end();
+  } else {
+    res.status(404);
+    res.end();
+  }
+}
+
 // ////////////////////////////////////////////////////////////// FILTERS
 
 const offensivelanguage = {
