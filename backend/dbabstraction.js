@@ -137,6 +137,39 @@ async function getComment(commentid) {
   return results.rows[0];
 }
 //#endregion
+// ////////////////////////////////////////////////////////////// SEARCHING 
+//#region Searching Content
+
+/**
+ * Returns all posts that match a title with the search string
+ * @param {string} searchstring 
+ */
+async function searchPosts (searchstring) {
+  const query = 'SELECT * FROM posts WHERE post_title LIKE $1;';
+  const results = await executeQuery(query, [searchstring]);
+  return results;
+}
+
+/**
+ * Returns all of the posts that contain the tag
+ * @param {*} searchtag 
+ */
+async function searchTags (searchtag) {
+  const query = 'SELECT keyword_id FROM keywords WHERE keyword_1 LIKE $1 OR keyword_2 LIKE $1 OR keyword_3 LIKE $1 OR keyword_4 LIKE $1 OR keyword_5 LIKE $1;';
+  let matchingRows = await executeQuery(query, [searchtag]);
+  const rows = [];
+  for (let row in matchingRows) {
+    let postQuery = 'SELECT * FROM posts WHERE keyword_id = $1;';
+    let results = await executeQuery(postQuery, [row.keyword_id]);
+    results.forEach(r => {
+      rows.push(r);
+    });
+  }
+
+  return rows;
+} 
+
+//#endregion
 // ////////////////////////////////////////////////////////////// CREATING-CONTENT
 //#region Creating Content
 /**
@@ -396,6 +429,9 @@ module.exports.getComments = getComments;
 module.exports.getComment = getComment;
 module.exports.getAllBoards = getAllBoards;
 module.exports.getBoard = getBoard;
+
+module.exports.searchPosts = searchPosts;
+module.exports.searchTags = searchTags;
 
 module.exports.generateId = generateId;
 
