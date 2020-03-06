@@ -94,6 +94,29 @@ app.get('/get', async (req, res) => {
   }
 });
 
+
+// ////////////////////////////////////////////////////////////// SEARCHING
+
+// Handler for searching for content, endpoints are
+// /get/search?type=post&searchterm=[param] - Search term is a string title
+// /get/search?type=post&searchtags=[param] - Search term is a tag
+app.get('/get/search', async (req, res) => {
+  if (req.query.type === 'post' && req.query.searchterm !== undefined) {
+    await pms.searchPosts(req, res);
+    return;
+  }
+
+  if (req.query.type === 'post' && req.query.searchtags !== undefined) {
+    await pms.searchTag(req, res);
+    return;
+  }
+
+  res.status(404);
+  res.end();
+});
+
+// ////////////////////////////////////////////////////////////// CREATING CONTENT
+
 // Handler for the HTTP Posts coming to create posts/comments on the server, end points for this are
 // /forum/create?type=post - Create a post
 // /forum/create?type=comment - Create a comment
@@ -167,16 +190,6 @@ app.post('forum/report', (req, res) => {
 
   res.end();
 });
-
-// ////////////////////////////////////////////////////////////// AUTHENTICATION-TESTING
-
-app.get('/auth/test', (req, res) => {
-  logging.warningMessage(`Authorised and connected user: ${req.ip} ${req.user.emails[0].value}`);
-  res.status(200);
-  res.end();
-});
-
-
 
 // ////////////////////////////////////////////////////////////// CATCH-ALLS
 
