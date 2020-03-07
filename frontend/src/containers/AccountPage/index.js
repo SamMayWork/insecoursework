@@ -19,6 +19,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  ListItemIcon
 } from '@material-ui/core';
 import styled from 'styled-components';
 
@@ -82,6 +83,29 @@ const AccountDetails = props => {
 };
 */
 
+const PrivacyZone = props => {
+  return (
+    <div className="accountPageZone">
+      <CardHeader
+        title="Privacy"
+      />
+      <div>
+        <List>
+          <ListItem>
+            <ListItemIcon>
+              <Checkbox/>
+            </ListItemIcon>
+            <ListItemText
+              primary="Real Name"
+              secondary="Use your real name on your posts, if not will only use your UP number"
+            />
+          </ListItem>
+        </List>
+      </div>
+    </div>
+  );
+};
+
 const NotificationZone = props => {
   return (
     <div className="accountPageZone">
@@ -91,6 +115,9 @@ const NotificationZone = props => {
       <div>
         <List>
           <ListItem>
+            <ListItemIcon>
+              <Checkbox/>
+            </ListItemIcon>
             <ListItemText
               primary="Active"
               secondary="We will send notification emails to the listed address when someone responds to your post"
@@ -103,6 +130,9 @@ const NotificationZone = props => {
 }
 
 const StyledButton = styled(Button)`
+  & {
+    font-weight: 600;
+  }
   &:hover {
     background: red;
     color: white;
@@ -139,6 +169,7 @@ export function AccountPage() {
   return (
     <div className = "accountPage">
       <NotificationZone/>
+      <PrivacyZone/>
       <DangerZone/>
     </div>
   );
