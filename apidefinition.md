@@ -11,11 +11,11 @@ Creates a post using the information inside of the POST body
 Creates a comment using the information inside of the POST body
 
 *POST* Edit a post
-``` /forum/edit?type=post ```
+``` /forum/edit?type=post&postid=[param] ```
 Information & Authorisation inside of the POST body
 
 *POST* Edit a comment
-``` /forum/edit?type=comment ```
+``` /forum/edit?type=comment&commentid=[param] ```
 Information & Authorisation inside of the POST body
 
 ## Deletion

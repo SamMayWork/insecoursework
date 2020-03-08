@@ -137,6 +137,37 @@ app.post('/forum/create', async (req, res) => {
   }
 });
 
+// ////////////////////////////////////////////////////////////// EDITING CONTENT
+
+// Handler for edit requests, endpoints are:
+// /forum/edit?type=post&postid=[param] - Edit a given post
+// /forum/edit?type=comment&commentid=[param] - Edit a given comment
+app.post ('/forum/edit', async (req, res) => {
+  handleNoDB(req, res);
+  handlePostLogging(req);
+
+  // Check Supplied Details -> Authentication -> Authorisation -> Access
+
+  if (req.query.type === 'post' && req.query.postid !== undefined) {
+    if (await uac.getUsersID(req) === await uac.getPostAuthor(req.query.postid)) {
+      await pms.editPost(req, res);
+      return;
+    }
+  }
+
+  if (req.query.type === 'comment' && req.query.commentid !== undefined) {
+    if (await uac.getUsersID(req) === await uac.getCommentAuthor(req.query.commentid)) {
+      await pms.editComment(req, res);
+      return;
+    }
+  }
+
+  res.status(404);
+  res.end();
+});
+
+// ////////////////////////////////////////////////////////////// RATING CONTENT
+
 // Handler for HTTP Posts incoming to "like" or "dislike" posts
 // /forum/like?like=[param]&post=[param] - If like==true then it likes the post with the given ID
 // /forum/like?like=[param]&comment=[param] - If like==true then it likes the comment with the given ID
