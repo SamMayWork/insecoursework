@@ -36,14 +36,14 @@ const reporting = require('./reportingsystem');
 const app = express();
 const listeningPort = 8080;
 
-app.use(express.static('frontend'));
+app.use(express.static('frontend/build/'));
 
 // Sets parameters for recieving information
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// app.use(googleAuth("683860842375-b79n49bfnbrk807gisi4prireps451tp.apps.googleusercontent.com"));
-// app.use('/auth', GoogleAuth.guardMiddleware());
+app.use(googleAuth("817279853236-toe6rfq5ebg7rife6fvd82hh0eclpt3t.apps.googleusercontent.com"));
+app.use('/forum', googleAuth.guardMiddleware());
 
 // ////////////////////////////////////////////////////////////// COMMAND LINE ARGUMENTS
 
