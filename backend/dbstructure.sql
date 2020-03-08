@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS Comments (
   user_id varchar(8) NOT NULL REFERENCES Users(user_id),
   post_id varchar(8) NOT NULL REFERENCES Posts(post_id),
   reply_id varchar(8) REFERENCES Comments(comment_id)
-);
+); 
 
 CREATE TABLE IF NOT EXISTS Reports_Posts (
   user_id varchar (8) NOT NULL REFERENCES Users(user_id),
@@ -73,6 +73,13 @@ CREATE TABLE IF NOT EXISTS Comment_Views (
   comment_id varchar (8) NOT NULL REFERENCES Comments(comment_id),
   views INT NOT NULL
   );
+
+
+INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id, reply_id) VALUES ('qd7e89d1', 'Improved own provided blessing may peculiar domestic. Sight house has sex never. No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.' , 0 , 'a2367eab', '11f3b99f', '');
+INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id, reply_id) VALUES ('q1f3b99f', 'Sight house has sex never. No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.' , 0 , '75b6d7e5', 'ad7e89d1', '');
+INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id, reply_id) VALUES ('q10c91e8', 'No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.' , 0 , '100bad41', 'c10c91e8', '');
+INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id, reply_id) VALUES ('qe645059', 'Hold do at tore in park feet near my case.' , 0 , '1901eddf', '3e645059', '');
+INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id, reply_id) VALUES ('qac2521e', 'feet near my case.' , 0 , 'f217baa2', '9ac2521e', '');
 
 
 insert into Post_Views (post_id, views) values ('11f3b99f', 0);

@@ -25,6 +25,7 @@ describe('logging tests', function () {
 
 describe('dbabstraction Tests', function () {
   
+  ////////////////////////////////////////////////////////////// get board
   describe('getBoard', function () {
     it('Should return all of the content for the given board', async function () {
       let results = await dbabs.getBoard('d7227788');
@@ -41,7 +42,7 @@ describe('dbabstraction Tests', function () {
     });
   });
 
-  
+ ////////////////////////////////////////////////////////////// GET ALL BOARDS 
 
   describe('getAllBoards', function () {
     it('Should return a result that is not undefined', async function () {
@@ -65,6 +66,8 @@ describe('dbabstraction Tests', function () {
     });
   });
 
+////////////////////////////////////////////////////////////// GENERATE ID
+
   describe('generateId', function () {
     it('Should return a random string that is the provided amount of characters in length', function () {
       let result = dbabs.generateId(8);
@@ -77,6 +80,7 @@ describe('dbabstraction Tests', function () {
     });
   });
 
+////////////////////////////////////////////////////////////// GET POST
 
   describe('getPost', function () {
     it('Should not return undefined for row for ID 11f3b99f', async function () {
@@ -103,6 +107,61 @@ describe('dbabstraction Tests', function () {
       assert.equal(result, undefined);
     })
   });
+
+  ////////////////////////////////////////////////////////////// GET COMMENTS
+
+  describe('getComments', function () {
+    it('Should not return undefined for row for ID 11f3b99f', async function () {
+      let result = await dbabs.getComments('11f3b99f');
+      assert.notEqual(result, undefined);
+    });
+
+    it('Should return the expected content for the row 11f3b99f', async function () {
+      let result = await dbabs.getComments('11f3b99f');
+      assert.deepEqual(result, {
+        comment_id : 'qd7e89d1',
+        comment_content : 'Improved own provided blessing may peculiar domestic. Sight house has sex never. No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.' ,
+        comment_likes : 0 ,
+        user_id : 'a2367eab',
+        post_id : '11f3b99f',
+        reply_id : ''
+      });
+    });
+
+    it('Should return undefined if the post does not exist', async function () {
+      let result = await dbabs.getComments('DOESNOTE');
+      assert.equal(result, undefined);
+    })
+  });
+  
+  ////////////////////////////////////////////////////////////// GET COMMENT
+
+  describe('getComment', function () {
+    it('Should not return undefined for row for ID qd7e89d1', async function () {
+      let result = await dbabs.getComment('qd7e89d1');
+      assert.notEqual(result, undefined);
+    });
+
+    it('Should return the expected content for the row qd7e89d1', async function () {
+      let result = await dbabs.getComment('qd7e89d1');
+      assert.deepEqual(result, {
+        comment_id : 'qd7e89d1',
+        comment_content : 'Improved own provided blessing may peculiar domestic. Sight house has sex never. No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.' ,
+        comment_likes : 0 ,
+        user_id : 'a2367eab',
+        post_id : '11f3b99f',
+        reply_id : ''
+      });
+    });
+
+    it('Should return undefined if the post does not exist', async function () {
+      let result = await dbabs.getComment('DOESNOTE');
+      assert.equal(result, undefined);
+    })
+  });
+  
+  ////////////////////////////////////////////////////////////// INCRISING POST VIEWS
+  
 
   describe('incrising_Post_Views', function() {
     it('Should incrise the view by 1', async function() {
