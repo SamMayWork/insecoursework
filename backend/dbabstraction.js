@@ -251,30 +251,26 @@ async function createReplyComment(comment_content, user_id, post_id, reply_id) {
 // #region Editing
 
 /**
- * Edits the given post
- * @param {string} newTitle the new title
- * @param {string} newContent the new content
- * @param {string} user_id the use ID of the user that is editing the post
- * @param {string} post_id the post ID
+ * Edits a post using the provided content
+ * @param {Object} editingcontent Object containing all of the editing content
  */
-
-async function editPost(newTitle, newContent, user_id, post_id) {
-  const query = 'UPDATE Posts SET post_title = $1, post_content = $2 WHERE user_id = $3 AND post_id = $4;';
-  const results = await executeQuery(query, [newTitle, newContent, user_id, post_id]);
-  return results;
+async function editPost(editingcontent, postid) { 
+  let query = 'SELECT * FROM posts WHERE post_id = $1;';
+  const originalPost = await executeQuery(query, [postid]).rows[0];
+  query = 'UPDATE keywords SET keyword_1=$1, keyword_2=$2, keyword_3=$3, keyword_4=$4, keyword5_$5 WHERE keyword_id=$6;';
+  await executeQuery(query, [editingcontent.keyword_1, editingcontent.keyword_2, editingcontent.keyword_3, editingcontent.keyword_4, editingcontent.keyword_5, originalPost.keyword_id]);
+  query = 'UPDATE posts SET post_title=$1, post_content=$2, edited_date=$3 WHERE post_id=$4;';
+  await executeQuery(query, [editingcontent.title, editingcontent.content, new Date(), postid]);
 }
 
 /**
- * Editing the given comment
- * @param {String} comment_content new comment content
- * @param {String} user_id user id of the author of the existing comment
- * @param {String} post_id id of the post with the comment
- * @param {String} comment_id id of the comment
+ * Edits the content of the comment
+ * @param {string} commentContent 
+ * @param {string} commentid
  */
-async function editComment(comment_content, user_id, post_id, comment_id) {
-  const query = 'UPDATE Comments SET comment_content = $1 WHERE user_id = $2 AND post_id = $3 AND comment_id = $4;';
-  const results = await executeQuery(query, [comment_content, user_id, post_id, comment_id]);
-  return results;
+async function editComment(commentContent, commentid) {
+  const query = 'UPDATE Comments SET comment_content = $1 edited_date = $2 WHERE comment_id = $3;';
+  dbabs.executeQuery(query, [commentContent, new Date(),commentid]);
 }
 
 // #endregion
@@ -408,6 +404,26 @@ async function createUser(user_email, user_dateofregistration) {
   return results;
 }
 
+/**
+ * Gets the User ID of a given post
+ * @param {string} postid 
+ */
+async function getPostAuthor(postid) {
+  const query = 'SELECT user_id FROM posts where post_id=$1;';
+  const results = await executeQuery(query, [postid]);
+  return results;
+}
+
+/**
+ * Gets the User ID of a given comment
+ * @param {string} commentid 
+ */
+async function getCommentAuthor(commentid) {
+  const query = 'SELECT user_id FROM comments where comment_id=$1;';
+  const results = await executeQuery(query, [commentid]);
+  return results;
+}
+
 // #endregion
 // ////////////////////////////////////////////////////////////// DELETING CONTENT
 // #region Deletion
@@ -439,9 +455,14 @@ module.exports.createPost = createPost;
 module.exports.createComment = createComment;
 module.exports.createReplyComment = createComment;
 
+module.exports.editPost = editPost;
+module.exports.editComment = editComment;
+
 module.exports.deleteRecordBoard = deleteRecordBoard;
 
 module.exports.checkUserExists = checkUserExists;
+module.exports.getPostAuthor = getPostAuthor;
+module.exports.getCommentAuthor = getCommentAuthor;
 
 module.exports.reportPost = reportPost;
 module.exports.reportComment = reportComment;
