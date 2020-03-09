@@ -36,15 +36,15 @@ const reporting = require('./reportingsystem');
 const app = express();
 const listeningPort = 8080;
 
-app.use(express.static('frontend'));
+app.use(express.static('frontend/build/'));
 
 // Sets parameters for recieving information
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// app.use(googleAuth("683860842375-b79n49bfnbrk807gisi4prireps451tp.apps.googleusercontent.com"));
-// app.use('/auth', GoogleAuth.guardMiddleware());
-// #endregion
+app.use(googleAuth("817279853236-toe6rfq5ebg7rife6fvd82hh0eclpt3t.apps.googleusercontent.com"));
+app.use('/forum', googleAuth.guardMiddleware());
+//#endregion
 // ////////////////////////////////////////////////////////////// COMMAND LINE ARGUMENTS
 // #region Command line arguments
 if (argv.nodb) {
@@ -176,7 +176,7 @@ app.post('/forum/edit', async (req, res) => {
 });
 // #endregion
 // ////////////////////////////////////////////////////////////// RATING CONTENT
-// #region Raint Content
+// #region Rating Content
 // Handler for HTTP Posts incoming to "like" or "dislike" posts
 // /forum/like?like=[param]&post=[param] - If like==true then it likes the post with the given ID
 // /forum/like?like=[param]&comment=[param] - If like==true then it likes the comment with the given ID
