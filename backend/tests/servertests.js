@@ -125,7 +125,7 @@ describe('dbabstraction Tests', function () {
         comment_likes : 0 ,
         user_id : '75b6d7e5',
         post_id : 'ad7e89d1' ,
-        reply_id : undefined       
+        reply_id : null      
       });
     });
 
