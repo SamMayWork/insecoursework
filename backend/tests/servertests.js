@@ -29,7 +29,7 @@ describe('dbabstraction Tests', function () {
   describe('getBoard', function () {
     it('Should return all of the content for the given board', async function () {
       let results = await dbabs.getBoard('d7227788');
-      assert.deepEqual(results.rows[0], {
+      assert.deepEqual(results, {
         board_id : 'd7227788',
         board_module : 'Introduction to India',
         board_year : '2020/2021'
@@ -47,7 +47,7 @@ describe('dbabstraction Tests', function () {
   describe('getAllBoards', function () {
     it('Should return a result that is not undefined', async function () {
       let results = await dbabs.getAllBoards();
-      assert.notEqual(results.rows, undefined);
+      assert.notEqual(results, undefined);
     });
 
     it('Should return the module bf35c787 within the first row of the response', async () => {
@@ -119,7 +119,7 @@ describe('dbabstraction Tests', function () {
 
     it('Should return the expected content for the row ad7e89d1', async function () {
       let result = await dbabs.getComments('ad7e89d1');
-      assert.deepEqual(result, {
+      assert.deepEqual(result[0], {
         comment_id : 'q1f3b99f',
         comment_content : 'Sight house has sex never. No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.' ,
         comment_likes : 0 ,
@@ -129,9 +129,9 @@ describe('dbabstraction Tests', function () {
       });
     });
 
-    it('Should return undefined if the post does not exist', async function () {
+    it('Should return an empty array if the post does not exist', async function () {
       let result = await dbabs.getComments('DOESNOTE');
-      assert.equal(result, undefined);
+      assert.deepEqual(result, []);
     })
   });
   
@@ -164,12 +164,12 @@ describe('dbabstraction Tests', function () {
   ////////////////////////////////////////////////////////////// INCRISING POST VIEWS
   
 
-  describe('incrising_Post_Views', function() {
-    it('Should incrise the view by 1', async function() {
-      let result = await dbabs.incrisin_Post_Views('11f3b99f');
-      let views = e
-    })
-  })
+  // describe('incrising_Post_Views', function() {
+  //   it('Should incrise the view by 1', async function() {
+  //     let result = await dbabs.incrisin_Post_Views('11f3b99f');
+  //     let views = e
+  //   })
+  // })
 
   // describe('createPost', function() {
   //   it('Should return the expected content for the row 7c367dd6', async function (){
