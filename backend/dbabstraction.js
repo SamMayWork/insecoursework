@@ -179,9 +179,13 @@ async function searchTags(searchtag) {
  */
 async function createBoard(board_name, board_year) {
   const query = 'INSERT INTO Board (board_id, board_module, board_year) VALUES ($1, $2, $3);';
-  const results = await executeQuery(query, [generateId(8), board_name, board_year]);
-  return results;
-}
+  const id = generateId(8);
+  await executeQuery(query, [id, board_name, board_year]);
+    return{ 
+    board_name,
+    board_id: id,
+    };
+};
 
 /**
  * Creates a list of keywords for a post to be associated with

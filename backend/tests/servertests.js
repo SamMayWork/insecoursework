@@ -141,6 +141,23 @@ describe('dbabstraction Tests', () => {
       assert.equal(result.comment_content, 'this is test content for testing the createComment function');
     });
   });
+
+  describe('createBoard', () => {
+    let boardid;
+    it('Should return the expected id and module name', async () => {
+      const result = await dbabs.createBoard('Introduction to the creation of boards', '2021/2022');
+      assert.ok(result.board_name !== undefined && result.board_id !== undefined);
+      boardid = result.board_id;
+    });
+
+    it('Should return all board information created in first test', async () => {
+      const result = await dbabs.getBoard(boardid);
+      assert.deepEqual(result, {
+        board_id: boardid,
+        board_module: 'Introduction to the creation of boards',
+        board_year: '2021/2022'});
+    });
+  });
 });
 
 describe('Maintenance Module', () => {
