@@ -254,7 +254,7 @@ async function createReplyComment(comment_content, user_id, post_id, reply_id) {
  * Edits a post using the provided content
  * @param {Object} editingcontent Object containing all of the editing content
  */
-async function editPost(editingcontent, postid) { 
+async function editPost(editingcontent, postid) {
   let query = 'SELECT * FROM posts WHERE post_id = $1;';
   const originalPost = await executeQuery(query, [postid]).rows[0];
   query = 'UPDATE keywords SET keyword_1=$1, keyword_2=$2, keyword_3=$3, keyword_4=$4, keyword5_$5 WHERE keyword_id=$6;';
@@ -265,12 +265,12 @@ async function editPost(editingcontent, postid) {
 
 /**
  * Edits the content of the comment
- * @param {string} commentContent 
+ * @param {string} commentContent
  * @param {string} commentid
  */
 async function editComment(commentContent, commentid) {
   const query = 'UPDATE Comments SET comment_content = $1 edited_date = $2 WHERE comment_id = $3;';
-  dbabs.executeQuery(query, [commentContent, new Date(),commentid]);
+  dbabs.executeQuery(query, [commentContent, new Date(), commentid]);
 }
 
 // #endregion
@@ -406,7 +406,7 @@ async function createUser(user_email, user_dateofregistration) {
 
 /**
  * Gets the User ID of a given post
- * @param {string} postid 
+ * @param {string} postid
  */
 async function getPostAuthor(postid) {
   const query = 'SELECT user_id FROM posts where post_id=$1;';
@@ -416,7 +416,7 @@ async function getPostAuthor(postid) {
 
 /**
  * Gets the User ID of a given comment
- * @param {string} commentid 
+ * @param {string} commentid
  */
 async function getCommentAuthor(commentid) {
   const query = 'SELECT user_id FROM comments where comment_id=$1;';

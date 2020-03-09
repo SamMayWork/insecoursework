@@ -21,7 +21,7 @@ const logging = require('./logging');
 /* eslint-disable no-use-before-define */
 
 // ////////////////////////////////////////////////////////////// GETTING CONTENT
-//#region Getting Content
+// #region Getting Content
 
 /**
  * Function to get a given post and return it to the user
@@ -101,9 +101,9 @@ async function getAll(req, res) {
   res.end();
 }
 
-//#endregion
+// #endregion
 // ////////////////////////////////////////////////////////////// POSTING CONTENT
-//#region Posting Content
+// #region Posting Content
 /**
  * Creates a new Post inside of the database
  * @param {request} req The request from the user
@@ -161,24 +161,24 @@ async function createComment(req, res, userid) {
   }
 }
 
-//#endregion
+// #endregion
 // ////////////////////////////////////////////////////////////// EDITING
-//#region Editing
+// #region Editing
 
 /**
  * Edits a post
- * @param {request} req 
- * @param {response} res 
+ * @param {request} req
+ * @param {response} res
  */
-async function editPost (req, res) {
-  dbabs.editPost ({
-    keyword_1 : req.body.keyword1,
-    keyword_2 : req.body.keyword2,
-    keyword_3 : req.body.keyword3,
-    keyword_4 : req.body.keyword4,
-    keyword_5 : req.body.keyword5,
-    title : req.body.title,
-    content : req.body.content 
+async function editPost(req, res) {
+  dbabs.editPost({
+    keyword_1: req.body.keyword1,
+    keyword_2: req.body.keyword2,
+    keyword_3: req.body.keyword3,
+    keyword_4: req.body.keyword4,
+    keyword_5: req.body.keyword5,
+    title: req.body.title,
+    content: req.body.content,
   }, req.query.postid);
   res.status(200);
   res.end();
@@ -186,18 +186,18 @@ async function editPost (req, res) {
 
 /**
  * Edits a comment
- * @param {request} req 
- * @param {response} res 
+ * @param {request} req
+ * @param {response} res
  */
-async function editComment (req, res) {
+async function editComment(req, res) {
   dbabs.editComment(req.body.content, req.query.commentid);
   res.status(200);
   res.end();
 }
 
-//#endregion
+// #endregion
 // ////////////////////////////////////////////////////////////// SEARCHiNG
-//#region Searching
+// #region Searching
 /**
  * Searches all of the post for a title that matches the string
  * @param {request} req
@@ -233,9 +233,9 @@ async function searchTags(req, res) {
     res.end();
   }
 }
-//#endregion
+// #endregion
 // ////////////////////////////////////////////////////////////// FILTERS
-//#region Filters
+// #region Filters
 const offensivelanguage = {
   words: [
     { dirty: 'hate', clean: 'a subject of great displeasure within my personal and subjective opinion' },
@@ -253,9 +253,9 @@ function filterContent(content) {
   return filteredContent;
 }
 
-//#endregion
+// #endregion
 // ////////////////////////////////////////////////////////////// DATA-PACKERS
-//#region Data-Packers
+// #region Data-Packers
 /**
  * Takes the result of 2 DB queries and formats them into a single JSON object
  * @param {object} post The Post to be formatted
@@ -289,9 +289,9 @@ function generateRetrievePostContent(post, comments) {
 
   return info;
 }
-//#endregion
+// #endregion
 // ////////////////////////////////////////////////////////////// EXPORTS
-//#region Exports
+// #region Exports
 module.exports.getPost = getPost;
 module.exports.getComment = getComment;
 module.exports.getBoard = getBoard;
@@ -305,4 +305,4 @@ module.exports.createPost = createPost;
 
 module.exports.editPost = editPost;
 module.exports.editComment = editComment;
-//#endregion
+// #endregion
