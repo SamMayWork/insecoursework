@@ -126,6 +126,21 @@ describe('dbabstraction Tests', () => {
       assert.equal(result.post_content, 'content');
     });
   });
+
+  describe('createComment', () => {
+    let commentid;
+
+    it('Should return the expected id and content', async () => {
+      const result = await dbabs.createComment('this is test content for testing the createComment function','100bad41', '7c367dd6');
+      assert.ok(result.comment_content !== undefined && result.comment_id !== undefined);
+      commentid = result.comment_id;
+      });
+
+    it('Should return correct information when comment is searched for', async() => {
+      const result = await dbabs.getComment(commentid);
+      assert.equal(result.comment_content, 'this is test content for testing the createComment function');
+    });
+  });
 });
 
 describe('Maintenance Module', () => {

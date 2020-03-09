@@ -227,9 +227,13 @@ async function createPost(title, content, keywords, authorid, boardid) {
  */
 
 async function createComment(comment_content, user_id, post_id) {
-  const query = 'INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id) VALUES($1, $2, $3, $4, $5);';
-  const results = await executeQuery(query, [generateId(8), comment_content, 0, user_id, post_id]);
-  return results;
+  const commentQuery = 'INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id) VALUES($1, $2, $3, $4, $5);';
+  const id = generateId(8);
+  await executeQuery(commentQuery, [id, comment_content, 0, user_id, post_id]);
+  return {
+    comment_id: id,
+    comment_content
+  };
 }
 
 /**
