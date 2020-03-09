@@ -124,8 +124,7 @@ describe('dbabstraction Tests', function () {
         comment_content : 'Sight house has sex never. No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.' ,
         comment_likes : 0 ,
         user_id : '75b6d7e5',
-        post_id : 'ad7e89d1',
-        reply_id : undefined
+        post_id : 'ad7e89d1'        
       });
     });
 
@@ -138,20 +137,20 @@ describe('dbabstraction Tests', function () {
   ////////////////////////////////////////////////////////////// GET COMMENT
 
   describe('getComment', function () {
-    it('Should not return undefined for row for ID qd7e89d1', async function () {
-      let result = await dbabs.getComment('qd7e89d1');
+    it('Should not return undefined for row for ID q1f3b99f', async function () {
+      let result = await dbabs.getComment('q1f3b99f');
       assert.notEqual(result, undefined);
     });
 
-    it('Should return the expected content for the row qd7e89d1', async function () {
-      let result = await dbabs.getComment('qd7e89d1');
+    it('Should return the expected content for the row q1f3b99f', async function () {
+      let result = await dbabs.getComment('q1f3b99f');
       assert.deepEqual(result, {
-        comment_id : 'qd7e89d1',
-        comment_content : 'Improved own provided blessing may peculiar domestic. Sight house has sex never. No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.' ,
+        comment_id : 'q1f3b99f',
+        comment_content : 'Sight house has sex never. No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.' ,
         comment_likes : 0 ,
-        user_id : 'a2367eab',
-        post_id : '11f3b99f',
-        reply_id : ''
+        user_id : '75b6d7e5',
+        post_id : 'ad7e89d1',
+        reply_id : undefined
       });
     });
 
