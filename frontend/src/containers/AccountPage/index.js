@@ -5,83 +5,29 @@
  * This page allows users to change privacy settings and delete their account
  */
 
-import React, {useState} from 'react';
+import React, {Component} from 'react';
 import {
-  Card,
   Checkbox,
-  CardActions,
   CardHeader,
-  CardContent,
-  Divider,
-  Grid,
   Button,
   TextField,
   List,
   ListItem,
   ListItemText,
-  ListItemIcon
+  ListItemIcon,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  DialogActions,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@material-ui/core';
 import styled from 'styled-components';
 
 import './accountPage.css';
-
-/*
-const AccountDetails = props => {
-  const {className, ...rest} = props;
-  const {values, setValues} = useState({
-    displayName: 'John Doe',
-  });
-  return (
-    <div style={styling}>
-      <Card>
-        <CardHeader
-          title="Account Page"
-        />
-      </Card>
-      <Divider/>
-      <Card>
-      <CardHeader
-          subheader="Privacy"
-        />
-        <CardContent>
-          <Grid container spacing={3}>
-            <Grid item md={6} xs={12}>
-              Display Real Name <Checkbox/>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-      <Divider/>
-      <Card>
-        <CardHeader
-          subheader="Notifications"
-        />
-        <CardContent>
-          <Grid container spacing={3}>
-            <Grid item md={6} xs={12}>
-              Receive Notifications <Checkbox/>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-      <Divider/>
-      <Card>
-        <CardHeader
-          subheader="Danger Zone"
-        />
-        <CardActions>
-          <Button
-            color="red"
-            variant="contained"
-          >
-            Delete account
-          </Button>
-        </CardActions>
-      </Card>
-    </div>
-  )
-};
-*/
 
 const PrivacyZone = props => {
   return (
@@ -152,17 +98,111 @@ const DangerZone = props => {
               primary="Delete this account"
               secondary="Once you delete an account, there is no going back. Please be certain."
             />
-            <StyledButton
-              color="secondary"
-              variant="outlined"
-            >
-              Delete account
-            </StyledButton>
+            <DeleteDialog/>
           </ListItem>
         </List>
       </div>
     </div>
   );
+};
+
+// NOTE: NEED TO GET EMAIL ADDRESS
+class DeleteDialog extends Component {
+  state = {
+    open: false,
+    confirmButtonDisabled: true
+  }
+  constructor(props) {
+    super(props);
+  }
+  setOpen(value) {
+    this.setState({
+      open: value
+    })
+  }
+  setConfirmDisabled(value) {
+    this.setState({
+      confirmButtonDisabled: value
+    })
+  }
+  handleClickOpen = () => {
+    this.setOpen(true);
+    this.setConfirmDisabled(true);
+  }
+  handleClose = () => {
+    this.setOpen(false);
+  }
+  handleEmailChange = (e) => {
+    this.setState({
+      textFieldValue: e.target.value
+    }, () => {
+      console.log(this.state.textFieldValue);
+      if (this.state.textFieldValue.trim() == "up904749@myport.ac.uk") {
+        this.setConfirmDisabled(false);
+      } else {
+        this.setConfirmDisabled(true);
+      }
+    });
+  }
+  render() {
+    return (
+      <div>
+        <StyledButton
+          color="secondary"
+          variant="outlined"
+          onClick={this.handleClickOpen}
+        >
+          Delete Account
+        </StyledButton>
+        <Dialog
+          open={this.state.open}
+          onClose={this.handleClose}
+        >
+          <DialogTitle>
+            {"Delete account?"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Please type your email address to confirm.
+            </DialogContentText>
+            <FormControl fullWidth>
+              <InputLabel shrink htmlFor="age-native-label-placeholder">
+                Keep Info
+              </InputLabel>
+              <Select
+                fullWidth
+                inputProps={{
+                  name: 'age',
+                  id: 'age-native-label-placeholder',
+                  defaultValue: 'Keep Info'
+                }}
+              >
+                <MenuItem value="Keep Info">Keep Info</MenuItem>
+                <MenuItem value="Delete Info">Delete Info</MenuItem>
+              </Select>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="email"
+                type="email"
+                label="Email Address"
+                onChange={this.handleEmailChange}
+                fullWidth
+              />
+            </FormControl>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button disabled={this.state.confirmButtonDisabled} onClick={this.handleClose} color="primary">
+              Confirm
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
+  }
 };
 
 export function AccountPage() {

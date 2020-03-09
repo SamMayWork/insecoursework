@@ -42,8 +42,8 @@ app.use(express.static('frontend/build/'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use(googleAuth("817279853236-toe6rfq5ebg7rife6fvd82hh0eclpt3t.apps.googleusercontent.com"));
-app.use('/forum', googleAuth.guardMiddleware());
+app.use(GoogleAuth("817279853236-toe6rfq5ebg7rife6fvd82hh0eclpt3t.apps.googleusercontent.com"));
+app.use('/forum', GoogleAuth.guardMiddleware());
 //#endregion
 // ////////////////////////////////////////////////////////////// COMMAND LINE ARGUMENTS
 // #region Command line arguments
@@ -97,7 +97,13 @@ app.get('/get', async (req, res) => {
  * Handler for / so if someone just types in our IP they will get index.html
  */
 app.get('/', (req, res) => {
-  res.sendFile('frontend/index.html');
+  res.sendFile('/frontend/build/index.html', {root: __dirname});
+  res.status(200);
+  res.end();
+});
+
+app.get('/dashboard', (req, res) => {
+  res.sendFile('/frontend/build/index.html', {root: __dirname});
   res.status(200);
   res.end();
 });
