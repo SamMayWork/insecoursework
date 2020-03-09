@@ -54,9 +54,27 @@ async function getUsersID(req) {
   }
 }
 
+/**
+ * Gets the author ID of a given post
+ * @param {string} postid
+ */
+async function getPostAuthor(postid) {
+  return dbabs.getPostAuthor(postid).user_id;
+}
+
+/**
+ * Gets the author ID of a given comment
+ * @param {string} commentid
+ */
+async function getCommentAuthor(commentid) {
+  return dbabs.getCommentAuthor(commentid).user_id;
+}
+
 // ////////////////////////////////////////////////////////////// EXPORTS
 
 module.exports.createUser = createUser;
 
 module.exports.checkUserExists = checkUserExists;
 module.exports.getUsersID = getUsersID;
+module.exports.getPostAuthor = getPostAuthor;
+module.exports.getCommentAuthor = getCommentAuthor;

@@ -19,55 +19,54 @@
 /* eslint-disable no-use-before-define */
 
 // ////////////////////////////////////////////////////////////// REQUIRES
-
+// #region Requires
 const express = require('express');
 const bodyParser = require('body-parser');
 const { argv } = require('yargs');
-const googleAuth = require('simple-google-openid');
+const GoogleAuth = require('simple-google-openid');
 
 const logging = require('./logging');
 const maintain = require('./maintainmodule');
 const pms = require('./postmodule');
 const uac = require('./useraccountsystem');
 const reporting = require('./reportingsystem');
-
+// #endregion
 // ////////////////////////////////////////////////////////////// CONSTANTS
-
+// #region Constants
 const app = express();
 const listeningPort = 8080;
 
-app.use(express.static('../frontend/'));
+app.use(express.static('frontend/build/'));
 
 // Sets parameters for recieving information
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// app.use(GoogleAuth(process.env.OUR GOOGLE ID));
-// app.use('/forum', guardMiddleware());
-
+app.use(googleAuth("817279853236-toe6rfq5ebg7rife6fvd82hh0eclpt3t.apps.googleusercontent.com"));
+app.use('/forum', googleAuth.guardMiddleware());
+//#endregion
 // ////////////////////////////////////////////////////////////// COMMAND LINE ARGUMENTS
-
+// #region Command line arguments
 if (argv.nodb) {
-  logging.warningMessage("Starting the server without the attached DB...");
-  logging.warningMessage("Only responding to requests with template");
+  logging.warningMessage('Starting the server without the attached DB...');
+  logging.warningMessage('Only responding to requests with template');
 }
 
 if (argv.coldstart) {
-  logging.coldStartMessage("Starting the cold-start procedure");
+  logging.coldStartMessage('Starting the cold-start procedure');
   maintain.coldStart();
-  logging.coldStartMessage("Cold-Start procedure has been finished, continuing to start the server!");
+  logging.coldStartMessage('Cold-Start procedure has been finished, continuing to start the server!');
 }
 
 if (argv.softreset) {
-  logging.warningMessage("Soft Reset mode has been enabled, clearing the server now.");
+  logging.warningMessage('Soft Reset mode has been enabled, clearing the server now.');
   maintain.softreset();
-  logging.warningMessage("Content of the Database has been cleared and the structure has been preserved");
-  logging.warningMessage("Restart the server without the --softreset, but with the --coldstart operation to begin normal operation");
-  return;
+  logging.warningMessage('Content of the Database has been cleared and the structure has been preserved');
+  logging.warningMessage('Restart the server without the --softreset, but with the --coldstart operation to begin normal operation');
 }
-
-// ////////////////////////////////////////////////////////////// API END POINT HANDLERS
-
+// #endregion
+// ////////////////////////////////////////////////////////////// GETTING
+// #region Getting
 // Handler for HTTP GET's for content from the server, endpoints are
 // /get?postid=[param] - Gets a specific post off of the server, along with all of the comments
 // /get?boardid=[param] - Gets a collection of posts from a specific board
@@ -86,30 +85,98 @@ app.get('/get', async (req, res) => {
   }
 
   if (req.query.commentid) {
-    await pms.getComment(res, res);
+    await pms.getComment(req, res);
+  }
+
+  if (req.query.all) {
+    await pms.getAll(req, res);
   }
 });
 
+/**
+ * Handler for / so if someone just types in our IP they will get index.html
+ */
+app.get('/', (req, res) => {
+  res.sendFile('frontend/index.html');
+  res.status(200);
+  res.end();
+});
+
+// #endregion
+// ////////////////////////////////////////////////////////////// SEARCHING
+// #region Searching
+// Handler for searching for content, endpoints are
+// /get/search?type=post&searchterm=[param] - Search term is a string title
+// /get/search?type=post&searchtags=[param] - Search term is a tag
+app.get('/get/search', async (req, res) => {
+  handleGetLogging(req);
+  if (req.query.type === 'post' && req.query.searchterm !== undefined) {
+    await pms.searchPosts(req, res);
+    return;
+  }
+
+  if (req.query.type === 'post' && req.query.searchtags !== undefined) {
+    await pms.searchTags(req, res);
+    return;
+  }
+
+  res.status(404);
+  res.end();
+});
+// #endregion
+// ////////////////////////////////////////////////////////////// CREATING CONTENT
+// #region Creating content
 // Handler for the HTTP Posts coming to create posts/comments on the server, end points for this are
 // /forum/create?type=post - Create a post
 // /forum/create?type=comment - Create a comment
-app.post('/forum/create', (req, res) => {
+app.post('/forum/create', async (req, res) => {
   handleNoDB(req, res);
   handlePostLogging(req);
 
-  if (!uac.checkUserExists(req)){
+  if (!uac.checkUserExists(req)) {
     forbidden(res);
   }
 
-  if (req.query.type === "post") {
-    pms.createPost(req, res);
+  if (req.query.type === 'post') {
+    await pms.createPost(req, res);
   }
 
-  if (req.query.type === "comment") {
-    pms.createComment(req, res);
+  if (req.query.type === 'comment') {
+    await pms.createComment(req, res);
   }
 });
+// #endregion
+// ////////////////////////////////////////////////////////////// EDITING CONTENT
+// #region Editing
+// Handler for edit requests, endpoints are:
+// /forum/edit?type=post&postid=[param] - Edit a given post
+// /forum/edit?type=comment&commentid=[param] - Edit a given comment
+app.post('/forum/edit', async (req, res) => {
+  handleNoDB(req, res);
+  handlePostLogging(req);
 
+  // Check Supplied Details -> Authentication -> Authorisation -> Access
+
+  if (req.query.type === 'post' && req.query.postid !== undefined) {
+    if (await uac.getUsersID(req) === await uac.getPostAuthor(req.query.postid)) {
+      await pms.editPost(req, res);
+      return;
+    }
+  }
+
+  if (req.query.type === 'comment' && req.query.commentid !== undefined) {
+    if (await uac.getUsersID(req) === await uac.getCommentAuthor(req.query.commentid)) {
+      await pms.editComment(req, res);
+      return;
+    }
+  }
+
+  res.status(404);
+  res.end();
+});
+// #endregion
+// ////////////////////////////////////////////////////////////// RATING CONTENT
+// #region Rating Content
 // Handler for HTTP Posts incoming to "like" or "dislike" posts
 // /forum/like?like=[param]&post=[param] - If like==true then it likes the post with the given ID
 // /forum/like?like=[param]&comment=[param] - If like==true then it likes the comment with the given ID
@@ -124,23 +191,25 @@ app.post('/forum/like', async (req, res) => {
 
   if (req.query.postid === undefined || req.query.status === undefined) {
     res.status(404);
-    res.end("Invalid parameters");
+    res.end('Invalid parameters');
   }
 
   // Handle for liking/disliking a post
-  if (req.query.postid !== undefined &&
-    req.query.status !== undefined && 
-    req.query.type === 'post') {
-      await pms.likePost(req, res);
+  if (req.query.postid !== undefined
+    && req.query.status !== undefined
+    && req.query.type === 'post') {
+    await pms.likePost(req, res);
   }
 
-  if (req.query.postid !== undefined &&
-    req.query.status !== undefined && 
-    req.query.type === 'comment') {
-      await pms.dislikePost(req, res);
+  if (req.query.postid !== undefined
+    && req.query.status !== undefined
+    && req.query.type === 'comment') {
+    await pms.dislikePost(req, res);
   }
 });
-
+// #endregion
+// ////////////////////////////////////////////////////////////// REPORTING CONTENT
+// #region Reporting
 // Handler for HTTP posts to the report system of the application
 // /forum/report?post=[param] - Reports a post using the given ID
 // /forum/report?comment=[param] - Reports a comment using the given ID
@@ -163,9 +232,9 @@ app.post('forum/report', (req, res) => {
 
   res.end();
 });
-
+// #endregion
 // ////////////////////////////////////////////////////////////// CATCH-ALLS
-
+// #region 404 Handlers
 // Catch-all for 404's
 app.get('*', (req, res) => {
   handleGetLogging(req, '404');
@@ -176,12 +245,12 @@ app.post('*', (req, res) => {
   handlePostLogging(req, '404');
   res.end('Could not process request');
 });
-
+// #endregion
 // ////////////////////////////////////////////////////////////// ODDS AND ENDS
-
-function forbidden (res) {
+// #region Odds and ends
+function forbidden(res) {
   res.status(403);
-  res.end("No valid sign-in");
+  res.end('No valid sign-in');
 }
 
 /**
@@ -189,7 +258,7 @@ function forbidden (res) {
  * @param {request} req The incoming request
  * @param {string} message Optional message to append (404's)
  */
-function handlePostLogging (req, message='') {
+function handlePostLogging(req, message = '') {
   if (argv.logging) {
     logging.logHttpPostMessage(req, message);
   }
@@ -200,7 +269,7 @@ function handlePostLogging (req, message='') {
  * @param {request} req The incoming request
  * @param {string} message Optional message to append (404's)
  */
-function handleGetLogging (req, message='') {
+function handleGetLogging(req, message = '') {
   if (argv.logging) {
     logging.logHttpGetMessage(req, message);
   }
@@ -211,13 +280,13 @@ function handleGetLogging (req, message='') {
  * @param {request} req Request from the client
  * @param {response} res Repsonse to the client
  */
-function handleNoDB (req, res) {
+function handleNoDB(req, res) {
   if (argv.nodb) {
     res.status(200);
-    res.end(`Acknowledge ${req.ip}, server is running without attached DB`);  
+    res.end(`Acknowledge ${req.ip}, server is running without attached DB`);
   }
 }
-
+// #endregion
 // ////////////////////////////////////////////////////////////// DRIVING SCRIPT
 
 logging.warningMessage(`Server initialised and listening on port ${listeningPort}`);
