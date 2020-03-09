@@ -19,7 +19,7 @@
 /* eslint-disable no-use-before-define */
 
 // ////////////////////////////////////////////////////////////// REQUIRES
-
+// #region Requires
 const express = require('express');
 const bodyParser = require('body-parser');
 const { argv } = require('yargs');
@@ -30,9 +30,9 @@ const maintain = require('./maintainmodule');
 const pms = require('./postmodule');
 const uac = require('./useraccountsystem');
 const reporting = require('./reportingsystem');
-
+// #endregion
 // ////////////////////////////////////////////////////////////// CONSTANTS
-
+// #region Constants
 const app = express();
 const listeningPort = 8080;
 
@@ -44,9 +44,9 @@ app.use(bodyParser.json());
 
 // app.use(googleAuth("683860842375-b79n49bfnbrk807gisi4prireps451tp.apps.googleusercontent.com"));
 // app.use('/auth', GoogleAuth.guardMiddleware());
-
+// #endregion
 // ////////////////////////////////////////////////////////////// COMMAND LINE ARGUMENTS
-
+// #region Command line arguments
 if (argv.nodb) {
   logging.warningMessage('Starting the server without the attached DB...');
   logging.warningMessage('Only responding to requests with template');
@@ -64,9 +64,9 @@ if (argv.softreset) {
   logging.warningMessage('Content of the Database has been cleared and the structure has been preserved');
   logging.warningMessage('Restart the server without the --softreset, but with the --coldstart operation to begin normal operation');
 }
-
-// ////////////////////////////////////////////////////////////// API END POINT HANDLERS
-
+// #endregion
+// ////////////////////////////////////////////////////////////// GETTING
+// #region Getting
 // Handler for HTTP GET's for content from the server, endpoints are
 // /get?postid=[param] - Gets a specific post off of the server, along with all of the comments
 // /get?boardid=[param] - Gets a collection of posts from a specific board
@@ -93,9 +93,18 @@ app.get('/get', async (req, res) => {
   }
 });
 
+/**
+ * Handler for / so if someone just types in our IP they will get index.html
+ */
+app.get('/', (req, res) => {
+  res.sendFile('frontend/index.html');
+  res.status(200);
+  res.end();
+});
 
+// #endregion
 // ////////////////////////////////////////////////////////////// SEARCHING
-
+// #region Searching
 // Handler for searching for content, endpoints are
 // /get/search?type=post&searchterm=[param] - Search term is a string title
 // /get/search?type=post&searchtags=[param] - Search term is a tag
@@ -114,9 +123,9 @@ app.get('/get/search', async (req, res) => {
   res.status(404);
   res.end();
 });
-
+// #endregion
 // ////////////////////////////////////////////////////////////// CREATING CONTENT
-
+// #region Creating content
 // Handler for the HTTP Posts coming to create posts/comments on the server, end points for this are
 // /forum/create?type=post - Create a post
 // /forum/create?type=comment - Create a comment
@@ -136,13 +145,13 @@ app.post('/forum/create', async (req, res) => {
     await pms.createComment(req, res);
   }
 });
-
+// #endregion
 // ////////////////////////////////////////////////////////////// EDITING CONTENT
-
+// #region Editing
 // Handler for edit requests, endpoints are:
 // /forum/edit?type=post&postid=[param] - Edit a given post
 // /forum/edit?type=comment&commentid=[param] - Edit a given comment
-app.post ('/forum/edit', async (req, res) => {
+app.post('/forum/edit', async (req, res) => {
   handleNoDB(req, res);
   handlePostLogging(req);
 
@@ -165,9 +174,9 @@ app.post ('/forum/edit', async (req, res) => {
   res.status(404);
   res.end();
 });
-
+// #endregion
 // ////////////////////////////////////////////////////////////// RATING CONTENT
-
+// #region Raint Content
 // Handler for HTTP Posts incoming to "like" or "dislike" posts
 // /forum/like?like=[param]&post=[param] - If like==true then it likes the post with the given ID
 // /forum/like?like=[param]&comment=[param] - If like==true then it likes the comment with the given ID
@@ -198,7 +207,9 @@ app.post('/forum/like', async (req, res) => {
     await pms.dislikePost(req, res);
   }
 });
-
+// #endregion
+// ////////////////////////////////////////////////////////////// REPORTING CONTENT
+// #region Reporting
 // Handler for HTTP posts to the report system of the application
 // /forum/report?post=[param] - Reports a post using the given ID
 // /forum/report?comment=[param] - Reports a comment using the given ID
@@ -221,9 +232,9 @@ app.post('forum/report', (req, res) => {
 
   res.end();
 });
-
+// #endregion
 // ////////////////////////////////////////////////////////////// CATCH-ALLS
-
+// #region 404 Handlers
 // Catch-all for 404's
 app.get('*', (req, res) => {
   handleGetLogging(req, '404');
@@ -234,9 +245,9 @@ app.post('*', (req, res) => {
   handlePostLogging(req, '404');
   res.end('Could not process request');
 });
-
+// #endregion
 // ////////////////////////////////////////////////////////////// ODDS AND ENDS
-
+// #region Odds and ends
 function forbidden(res) {
   res.status(403);
   res.end('No valid sign-in');
@@ -275,7 +286,7 @@ function handleNoDB(req, res) {
     res.end(`Acknowledge ${req.ip}, server is running without attached DB`);
   }
 }
-
+// #endregion
 // ////////////////////////////////////////////////////////////// DRIVING SCRIPT
 
 logging.warningMessage(`Server initialised and listening on port ${listeningPort}`);

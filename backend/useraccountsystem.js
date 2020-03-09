@@ -56,18 +56,18 @@ async function getUsersID(req) {
 
 /**
  * Gets the author ID of a given post
- * @param {string} postid 
+ * @param {string} postid
  */
 async function getPostAuthor(postid) {
-  return await dbabs.getPostAuthor(postid).user_id;
+  return dbabs.getPostAuthor(postid).user_id;
 }
 
 /**
  * Gets the author ID of a given comment
- * @param {string} commentid 
+ * @param {string} commentid
  */
 async function getCommentAuthor(commentid) {
-  return await dbabs.getCommentAuthor(commentid).user_id;
+  return dbabs.getCommentAuthor(commentid).user_id;
 }
 
 // ////////////////////////////////////////////////////////////// EXPORTS
