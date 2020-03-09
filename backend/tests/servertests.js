@@ -197,6 +197,38 @@ describe('dbabstraction Tests', function () {
       assert.equal(result.post_content, 'content');
     });
   });
+
+  describe('createComment', () => {
+    let commentid;
+
+    it('Should return the expected id and content', async () => {
+      const result = await dbabs.createComment('this is test content for testing the createComment function','100bad41', '7c367dd6');
+      assert.ok(result.comment_content !== undefined && result.comment_id !== undefined);
+      commentid = result.comment_id;
+      });
+
+    it('Should return correct information when comment is searched for', async() => {
+      const result = await dbabs.getComment(commentid);
+      assert.equal(result.comment_content, 'this is test content for testing the createComment function');
+    });
+  });
+
+  describe('createBoard', () => {
+    let boardid;
+    it('Should return the expected id and module name', async () => {
+      const result = await dbabs.createBoard('Introduction to the creation of boards', '2021/2022');
+      assert.ok(result.board_name !== undefined && result.board_id !== undefined);
+      boardid = result.board_id;
+    });
+
+    it('Should return all board information created in first test', async () => {
+      const result = await dbabs.getBoard(boardid);
+      assert.deepEqual(result, {
+        board_id: boardid,
+        board_module: 'Introduction to the creation of boards',
+        board_year: '2021/2022'});
+    });
+  });
 });
 
 describe('Maintenance Module', () => {
