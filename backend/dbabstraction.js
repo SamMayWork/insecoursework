@@ -105,7 +105,7 @@ async function getPost(postid) {
 async function getComments(postid) {
   const query = 'SELECT * FROM Comments WHERE post_id = $1;';
   const results = await executeQuery(query, [postid]);
-  return results;
+  return results.rows;
 }
 
 /**
