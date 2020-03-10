@@ -314,21 +314,21 @@ async function reportComment(user_id, comment_id) {
 
 /**
  * Incrising the views of a post
- * @param {String} post_id The post id
+ * @param {String} postid The post id
  */
-async function incrisin_Post_Views(post_id) {
+async function increasePostViews(postid) {
   const query = 'UPDATE Post_Views SET views = views + 1 WHERE post_id = $1';
-  const result = await executeQuery(query, post_id);
+  const result = await executeQuery(query, postid);
   return result;
 }
 
 /**
  * Incrising the views os a comment
- * @param {String} comment_id
+ * @param {String} commentid
  */
-async function incrisin_Comment_Views(comment_id) {
+async function increaseCommentViews(commentid) {
   const query = 'UPDATE Comment_Views SET views = views + 1 WHERE comment_id = $1';
-  const result = await executeQuery(query, comment_id);
+  const result = await executeQuery(query, commentid);
   return result;
 }
 
@@ -477,8 +477,8 @@ module.exports.getCommentAuthor = getCommentAuthor;
 module.exports.reportPost = reportPost;
 module.exports.reportComment = reportComment;
 
-module.exports.incrisin_Post_Views = incrisin_Post_Views;
-module.exports.incrisin_Comment_Views = incrisin_Comment_Views;
+module.exports.increasePostViews = increasePostViews;
+module.exports.increaseCommentViews = increaseCommentViews;
 
 module.exports.executeRawQuerySync = executeRawQuerySync;
 // #endregion
