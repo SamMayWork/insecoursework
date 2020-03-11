@@ -112,9 +112,6 @@ class DeleteDialog extends Component {
     open: false,
     confirmButtonDisabled: true
   }
-  constructor(props) {
-    super(props);
-  }
   setOpen(value) {
     this.setState({
       open: value
@@ -137,7 +134,7 @@ class DeleteDialog extends Component {
       textFieldValue: e.target.value
     }, () => {
       console.log(this.state.textFieldValue);
-      if (this.state.textFieldValue.trim() == "up904749@myport.ac.uk") {
+      if (this.state.textFieldValue.trim() === "up904749@myport.ac.uk") {
         this.setConfirmDisabled(false);
       } else {
         this.setConfirmDisabled(true);

@@ -9,6 +9,8 @@ import React, {Component} from 'react';
 import List from '../../components/List';
 import Comment from '../../components/Comment';
 
+import Navbar from '../../containers/Navbar';
+
 export default class DashboardPage extends Component {
   constructor(props) {
     super(props);
@@ -28,6 +30,7 @@ export default class DashboardPage extends Component {
       console.log(comments);
       return (
         <div className = "dashboardPage">
+          <Navbar/>
           <List>
             {comments.map((comment, i) => (
               <Comment

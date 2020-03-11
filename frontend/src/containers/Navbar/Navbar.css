@@ -1,0 +1,10 @@
+.menuButton {
+  margin-left: -12px;
+  margin-right: 20px;
+}
+
+.appBar {
+  top: 0;
+  left: 0;
+  position: sticky !important;
+}
