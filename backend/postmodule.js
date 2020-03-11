@@ -103,16 +103,18 @@ async function getAll(req, res) {
 
 // #endregion
 // ////////////////////////////////////////////////////////////// POSTING CONTENT
-// #region Posting Content
+// #region Posting Content //GREENED OUT
 /**
  * Creates a new Post inside of the database
  * @param {request} req The request from the user
  * @param {response} res The response to the user
  */
 async function createPost(req, res) {
+  /*
   const userid = await dbabs.getUserIDFromEmail(req.user.emails[0]);
 
   if (userid !== undefined) {
+    */
     // The user is authorised if the email is within our database
     const title = filterContent(req.body.title);
     const content = filterContent(req.body.content);
@@ -121,19 +123,23 @@ async function createPost(req, res) {
       req.body.keywords[i] = filterContent(req.body.keywords[i]);
     }
 
-    dbabs.createPost(title, content, keywords);
+    console.log(title, content);
+    // dbabs.createPost(title, content, keywords);
     res.status(200);
     res.end();
-  }
+    
+  //}
 }
 
 /**
- * Creates a comment
+ * Creates a comment //GREENED OUT
  * @param {request} req
  * @param {response} res
  * @param {string} userid UserID for the database
  */
 async function createComment(req, res, userid) {
+  console.log(req.body);
+  /*
   try {
     let results;
     if (req.body.reply === true) {
@@ -159,6 +165,8 @@ async function createComment(req, res, userid) {
     res.status(500);
     res.end('The server was unable to fufil this request');
   }
+  */
+ res.status(200).end();
 }
 
 // #endregion

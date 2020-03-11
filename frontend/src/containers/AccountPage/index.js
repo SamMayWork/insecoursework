@@ -126,9 +126,11 @@ class DeleteDialog extends Component {
     this.setOpen(true);
     this.setConfirmDisabled(true);
   }
+
   handleClose = () => {
     this.setOpen(false);
   }
+  
   handleEmailChange = (e) => {
     this.setState({
       textFieldValue: e.target.value

@@ -7,7 +7,7 @@ function Comment(props) {
   return (
     <div className="comment">
       <div className="comment_title">
-        {/*{props.text}*/}
+        {props.text}
       </div>
       <div className = "comment_info">
         <div className="comment_summary">
