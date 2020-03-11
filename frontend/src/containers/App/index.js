@@ -11,6 +11,7 @@ import React from 'react';
 import Login from '../LoginPage';
 import Dashboard from '../DashboardPage';
 import Account from '../AccountPage';
+import Post from '../Post';
 
 import {
   BrowserRouter as Router,
@@ -28,6 +29,7 @@ export default function App() {
           <Route exact path="/" component={Login}/>
           <Route path="/dashboard" component={Dashboard}/>
           <Route path="/account" component={Account}/>
+          <Route path="/post" component={Post}/>
         </Switch>
       </Router>
     </div>
