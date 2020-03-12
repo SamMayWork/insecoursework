@@ -160,6 +160,28 @@ describe('dbabstraction Tests', function () {
       assert.equal(result, undefined);
     })
   });
+
+  ////////////////////////////////////////////////////////////// Check User Exists
+
+  describe('checkUserExists', function () {
+    it('Should not return false for row for Email sbaldock0@hostgator.com', async function () {
+      let result = await dbabs.checkUserExists('sbaldock0@hostgator.com');
+      assert.notEqual(result, false);
+    });
+
+    it('Should return the ID and true for the row Email sbaldock0@hostgator.com', async function () {
+      let result = await dbabs.checkUserExists('qsbaldock0@hostgator.com');
+      assert.deepEqual(result, {
+        id : 'qsbaldock0@hostgator.com',
+        exists: true
+      });
+    });
+
+    it('Should return false if the Email does not exist', async function () {
+      let result = await dbabs.checkUserExists('DOESNOTE');
+      assert.equal(result, false);
+    })
+  });
   
   ////////////////////////////////////////////////////////////// INCRISING POST VIEWS
   
