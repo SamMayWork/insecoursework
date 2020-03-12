@@ -394,8 +394,8 @@ async function checkUserExists(email) {
 
   if (results !== undefined) {
     return {
-      id: results.user_email,
-      exists: true,
+      id: results.rows[0],
+      exists: true
     };
   }
   return {
