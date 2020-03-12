@@ -391,13 +391,8 @@ async function increaseCommentViews(commentid) {
 async function checkUserExists(email) {
   const query = 'SELECT * FROM users WHERE user_email = $1;';
   const results = await executeQuery(query, [email]);
-
-  if (results !== undefined) {
-    return results.rows[0].user_id;    
-  } 
-  else   
-    return false;
-}
+  return results.user_id;}
+  
 
 async function getComment(commentid) {
   const query = 'SELECT * FROM comments WHERE comment_id = $1;';
