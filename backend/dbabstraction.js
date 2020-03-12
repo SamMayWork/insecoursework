@@ -393,14 +393,16 @@ async function checkUserExists(email) {
   const results = await executeQuery(query, [email]);
 
   if (results !== undefined) {
-    return {
-      id: results.rows[0].user_id,
-      exists: true
-    };
-  }
-  return {
-    exsists: false,
-  };
+    return results.rows[0].user_id;    
+  } 
+  else   
+    return false;
+}
+
+async function getComment(commentid) {
+  const query = 'SELECT * FROM comments WHERE comment_id = $1;';
+  const results = await executeQuery(query, [commentid]);
+  return results.rows[0];
 }
 
 /**
