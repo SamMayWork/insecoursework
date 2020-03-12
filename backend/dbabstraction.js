@@ -389,12 +389,12 @@ async function increaseCommentViews(commentid) {
  * @param {string} email Email address to search
  */
 async function checkUserExists(email) {
-  const query = 'SELECT * FROM Users WHERE user_email = $1;';
+  const query = 'SELECT * FROM users WHERE user_email = $1;';
   const results = await executeQuery(query, email);
 
   if (results !== undefined) {
     return {
-      id: results.user_id,
+      id: results.rows[0].user_id,
       exists: true
     };
   }
