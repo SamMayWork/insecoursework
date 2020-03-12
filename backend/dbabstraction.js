@@ -392,7 +392,7 @@ async function checkUserExists(email) {
   const query = 'SELECT user_id FROM users WHERE user_email = $1;';
   const results = await executeQuery(query, [email]);
   console.log(results.rows);
-  return results;}
+  return results.rows;}
   
 
 /**
