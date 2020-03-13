@@ -239,6 +239,19 @@ app.post('forum/report', (req, res) => {
   res.end();
 });
 // #endregion
+// ////////////////////////////////////////////////////////////// UAC ENDPOINTS
+//#region UAC Endpoints
+
+app.post('uac/register', async function () {
+
+});
+
+app.post('forum/uac/', async function () {
+  
+});
+
+
+//#endregion
 // ////////////////////////////////////////////////////////////// CATCH-ALLS
 // #region 404 Handlers
 // Catch-all for 404's

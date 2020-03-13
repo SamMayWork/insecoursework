@@ -30,6 +30,7 @@ const logging = require('./logging');
  */
 
 async function getPost(req, res) {
+  await dbabs.increasePostViews(req.query.postid);
   const { postid } = req.query;
   const postResult = await dbabs.getPost(postid);
   const commentsResult = await dbabs.getComments(postid);
@@ -51,6 +52,7 @@ async function getPost(req, res) {
  * @param {response} res The Response to the user
  */
 async function getComment(req, res) {
+  await dbabs.increaseCommentViews(req.query.commentid);
   const comment = await dbabs.getComment(req.query.commentid);
 
   if (comment === undefined) {
