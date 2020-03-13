@@ -43,7 +43,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(GoogleAuth("817279853236-toe6rfq5ebg7rife6fvd82hh0eclpt3t.apps.googleusercontent.com"));
-//app.use('/forum', GoogleAuth.guardMiddleware());
+app.use('/forum', GoogleAuth.guardMiddleware());
 //#endregion
 // ////////////////////////////////////////////////////////////// COMMAND LINE ARGUMENTS
 // #region Command line arguments
@@ -247,7 +247,7 @@ app.post('uac/register', async function () {
 });
 
 app.post('forum/uac/', async function () {
-  
+
 });
 
 
