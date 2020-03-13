@@ -23,14 +23,16 @@ describe('logging tests', () => {
   });
 });
 
-describe('dbabstraction Tests', () => {
-  describe('getBoard', () => {
-    it('Should return all of the content for the given board', async () => {
-      const results = await dbabs.getBoard('d7227788');
+describe('dbabstraction Tests', function () {
+  
+  ////////////////////////////////////////////////////////////// get board
+  describe('getBoard', function () {
+    it('Should return all of the content for the given board', async function () {
+      let results = await dbabs.getBoard('d7227788');
       assert.deepEqual(results, {
-        board_id: 'd7227788',
-        board_module: 'Introduction to India',
-        board_year: '2020/2021',
+        board_id : 'd7227788',
+        board_module : 'Introduction to India',
+        board_year : '2020/2021'
       });
     });
 
@@ -40,9 +42,11 @@ describe('dbabstraction Tests', () => {
     });
   });
 
-  describe('getAllBoards', () => {
-    it('Should return a result that is not undefined', async () => {
-      const results = await dbabs.getAllBoards();
+ ////////////////////////////////////////////////////////////// GET ALL BOARDS 
+
+  describe('getAllBoards', function () {
+    it('Should return a result that is not undefined', async function () {
+      let results = await dbabs.getAllBoards();
       assert.notEqual(results, undefined);
     });
 
@@ -62,9 +66,11 @@ describe('dbabstraction Tests', () => {
     });
   });
 
-  describe('generateId', () => {
-    it('Should return a random string that is the provided amount of characters in length', () => {
-      const result = dbabs.generateId(8);
+////////////////////////////////////////////////////////////// GENERATE ID
+
+  describe('generateId', function () {
+    it('Should return a random string that is the provided amount of characters in length', function () {
+      let result = dbabs.generateId(8);
       assert.equal(result.length, 8);
     });
 
@@ -74,6 +80,7 @@ describe('dbabstraction Tests', () => {
     });
   });
 
+////////////////////////////////////////////////////////////// GET POST
 
   describe('getPost', () => {
     it('Should not return undefined for row for ID 11f3b99f', async () => {
@@ -102,9 +109,73 @@ describe('dbabstraction Tests', () => {
     });
   });
 
+  ////////////////////////////////////////////////////////////// GET COMMENTS
+
+  describe('getComments', function () {
+    it('Should not return undefined for row for ID ad7e89d1', async function () {
+      let result = await dbabs.getComments('ad7e89d1');
+      assert.notEqual(result, undefined);
+    });
+
+    it('Should return the expected content for the row ad7e89d1', async function () {
+      let result = await dbabs.getComments('ad7e89d1');
+      assert.deepEqual(result[0], {
+        comment_id : 'q1f3b99f',
+        comment_content : 'Sight house has sex never. No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.' ,
+        comment_likes : 0 ,
+        user_id : '75b6d7e5',
+        post_id : 'ad7e89d1' ,
+        reply_id : null      
+      });
+    });
+
+    it('Should return an empty array if the post does not exist', async function () {
+      let result = await dbabs.getComments('DOESNOTE');
+      assert.deepEqual(result, []);
+    })
+  });
+  
+  ////////////////////////////////////////////////////////////// GET COMMENT
+
+  describe('getComment', function () {
+    it('Should not return undefined for row for ID q1f3b99f', async function () {
+      let result = await dbabs.getComment('q1f3b99f');
+      assert.notEqual(result, undefined);
+    });
+
+    it('Should return the expected content for the row q1f3b99f', async function () {
+      let result = await dbabs.getComment('q1f3b99f');
+      assert.deepEqual(result, {
+        comment_id : 'q1f3b99f',
+        comment_content : 'Sight house has sex never. No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.' ,
+        comment_likes : 0 ,
+        user_id : '75b6d7e5',
+        post_id : 'ad7e89d1',
+        reply_id : undefined
+      });
+    });
+
+    it('Should return undefined if the post does not exist', async function () {
+      let result = await dbabs.getComment('DOESNOTE');
+      assert.equal(result, undefined);
+    })
+  });
+  
+  ////////////////////////////////////////////////////////////// INCRISING POST VIEWS
+  
+
   // describe('incrising_Post_Views', function() {
   //   it('Should incrise the view by 1', async function() {
   //     let result = await dbabs.incrisin_Post_Views('11f3b99f');
+  //     let views = e
+  //   })
+  // })
+
+  // describe('createPost', function() {
+  //   it('Should return the expected content for the row 7c367dd6', async function (){
+  //     dbabs.executeRawQuerySync("insert into Keywords (keyword_id, keyword_1, keyword_2, keyword_3) VALUES ('864cce11', 'test', 'database', 'createPost');");
+  //     dbabs.executeRawQuerySync("insert into Posts (post_id, keyword_id, post_title, post_content, post_likes, user_id, created_date, edited_date) VALUES ('8w715ss9','864cce11', 'Testing createPost is fun','Ever wonder how a database is created? Filled? Have you ever wondered how its tested when its been made? Me too.',10,'100bad41','2020-02-17','2020-02-15');");
+  //     let result = await dbabs.getPost('8w715ss9');
   //     assert.deepEqual(result, {
   //       post_id : '11f3b99f',
   //       views : 1

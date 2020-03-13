@@ -47,6 +47,7 @@ async function executeQuery(query, parameters) {
     return results;
   } catch (exception) {
     console.warn(exception);
+    return undefined;
   }
 }
 
@@ -105,7 +106,7 @@ async function getPost(postid) {
 async function getComments(postid) {
   const query = 'SELECT * FROM comments WHERE post_id = $1;';
   const results = await executeQuery(query, [postid]);
-  return results;
+  return results.rows;
 }
 
 /**
@@ -320,6 +321,7 @@ async function incrisin_Post_Views(post_id) {
   const result = await executeQuery(query, post_id);
   return result;
 }
+
 /**
  * Incrising the views os a comment
  * @param {String} comment_id

@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS Comments (
   user_id varchar(8) NOT NULL REFERENCES Users(user_id),
   post_id varchar(8) NOT NULL REFERENCES Posts(post_id),
   reply_id varchar(8) REFERENCES Comments(comment_id)
-);
+); 
 
 CREATE TABLE IF NOT EXISTS Reports_Posts (
   user_id varchar (8) NOT NULL REFERENCES Users(user_id),
@@ -74,6 +74,9 @@ CREATE TABLE IF NOT EXISTS Comment_Views (
   comment_id varchar (8) NOT NULL REFERENCES Comments(comment_id),
   views INT NOT NULL
   );
+
+
+
 
 insert into Users (user_id, user_email, user_dateofregistration) values ('a2367eab', 'sbaldock0@hostgator.com',         '2020-02-07');
 insert into Users (user_id, user_email, user_dateofregistration) values ('75b6d7e5', 'jgallelli1@weibo.com',            '2020-02-19');
@@ -214,6 +217,12 @@ insert into Comments VALUES ('8410582e', 'oxygen about poet pond continent band 
 insert into Comments VALUES ('c1dbe80b', 'equator attack said bank discover dead store rest wood somebody excitement rise bush beat corn per full arrangement milk short raise medicine speech could', 0, '100bad41', '11f3b99f', '8410582e');
 insert into Comments VALUES ('45594aae', 'continued temperature heart morning author driven itself house myself dozen skin failed exist dirt hall handsome block listen nervous library price were pile location', 0, '100bad41', '11f3b99f', 'c1dbe80b');
 insert into Comments VALUES ('d27324aa', 'write rising whose bare sort dance fruit that jet unless list noon sing law series melted movement shoulder involved clothing public speech indicate type', 0, '100bad41', '11f3b99f', '45594aae');
+INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id) VALUES ('qd7e89d1', 'Improved own provided blessing may peculiar domestic. Sight house has sex never. No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.' , 0 , 'a2367eab', '11f3b99f');
+INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id) VALUES ('q1f3b99f', 'Sight house has sex never. No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.' , 0 , '75b6d7e5', 'ad7e89d1');
+INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id) VALUES ('q10c91e8', 'No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.' , 0 , '100bad41', 'c10c91e8');
+INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id) VALUES ('qe645059', 'Hold do at tore in park feet near my case.' , 0 , '1901eddf', '3e645059');
+INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id) VALUES ('qac2521e', 'feet near my case.' , 0 , 'f217baa2', '9ac2521e');
+
 
 insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('a2367eab', 'true', 'true', 'false', 'true');
 insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('75b6d7e5', 'false', 'false', 'false', 'true');
