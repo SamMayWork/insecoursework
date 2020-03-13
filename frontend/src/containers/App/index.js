@@ -13,6 +13,7 @@ import Dashboard from '../DashboardPage';
 import Account from '../AccountPage';
 import Post from '../PostEdit';
 import Comment from '../CommentEdit';
+import PostView from'../PostView';
 
 import {
   BrowserRouter as Router,
@@ -32,6 +33,7 @@ export default function App() {
           <Route path="/account" component={Account}/>
           <Route path="/post" component={Post}/>
           <Route path="/comment" component={Comment}/>
+          <Route path="/postview" component={PostView}/>
         </Switch>
       </Router>
     </div>

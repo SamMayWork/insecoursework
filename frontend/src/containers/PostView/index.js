@@ -12,84 +12,80 @@ import {
   TextField,
   Button
 } from '@material-ui/core';
+import List from '../../components/List';
 import Comment from '../../components/Comment';
+import Navbar from '../../containers/Navbar';
 
 
 import './commentedit.css';
 
 
-export default class CommentEditPage extends Component {
-
-
-//Require function to grab the post ID and the potential reply to ID
-handleSubmit = () => {
-  const body = {
-    content: this.state.bodyContent,
-    postid: 1,
-    userid: 1,
+export default class PostView extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      error: null,
+      isLoaded: false,
+      items: []
+    }
   }
-
-
-fetch("/forum/create?type=comment", {
-  method: 'POST',
-  mode: 'cors',
-  cache: 'no-cache',
-  credentials: 'same-origin',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(body)
-}); 
+  render() {
+    const {error, isLoaded, comments } = this.state;
+    if (error) {
+      return <div>Error: {error.message}</div>
+    } else if (!isLoaded) {
+      return <div>Loading...</div>
+    } else {
+      console.log(comments);
+      return (
+        <div className = "dashboardPage">
+          <Navbar/>
+          <List>
+            {comments.map((comment, i) => (
+              <Comment
+                key = {i}
+                title = {comment.title}
+                author = {comment.author}
+                replies = {comment.replies}
+                date = {comment.date}
+              />
+            ))}
+          </List>
+        </div>
+      );
+    }
+  }
+  componentDidMount() {
+    fetch("https://www.localhost:8080/get?postid=11f3b99f")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          let comments = [];
+          result.data.children.forEach((comment) => {
+            let commentData = comment.data;
+            let commentObj = {
+              title: commentData.title,
+              author: commentData.author,
+              replies: commentData.num_comments,
+              date: commentData.created * 1000
+            };
+            comments.push(commentObj);
+          })
+          this.setState({
+            isLoaded: true,
+            comments: comments
+          });
+          console.log(result);
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      )
+  }
 }
-
-
-  //Send to server
-  //confirmation of post success
-  //redirect user to post page if succesaful
-  //if failure, display error
-
-
-
-
-
-
-
-handleBodyChange = (e) => {
-  this.setState({
-    bodyContent: e.target.value
-  }, () => {
-    console.log('[Body CONTENT]:', this.state.bodyContent);
-  });
-}
-
-
-
-render() {
-  return (
-    <div class="postPage">
-
-  <FormControl fullWidth>
-      <Comment
-        text=""
-        author="author"
-        date={new Date().toLocaleDateString()}
-      />
-      <TextField
-        autoFocus
-        margin="dense"
-        id="postTitle"
-        type="text"
-        onChange={this.handleBodyChange}
-        fullWidth
-      />
-
-      <Button onClick={this.handleSubmit} color="primary">
-        Confirm
-      </Button>
-    </FormControl>
-    </div>
-  );
-}
-}
-
-
