@@ -12,7 +12,8 @@ import {
   Select,
   TextField,
   TextArea,
-  Button
+  Button,
+  Chip
 } from '@material-ui/core';
 
 
@@ -20,15 +21,15 @@ import './post.css';
 
 
 export default class PostEditPage extends Component {
-
-
-
+state = {
+  keywords: []
+}
 handleSubmit = () => {
   const body = {
     title: this.state.titleContent,
     content: this.state.bodyContent,
-    keywords: []
-  }
+    keywords: this.state.keywords
+}
 
 
 fetch("/forum/create?type=post", {
@@ -71,17 +72,29 @@ handleBodyChange = (e) => {
   });
 }
 
-handleKeyChange = (e) => {
-  this.state({
-    //do something at some point
-  });
+handleKeyWordChange = (e) => {
+  if (e.keyCode == 13 || e.keyCode == 32) {
+    let joined = this.state.keywords.concat(e.target.value);
+    if(joined.length <= 5) {
+      this.setState({
+        keywords: joined
+      });
+    } else {
+      return;
+    }
+    e.target.value = '';
+    }
+    
 }
 
 
+handleDeleteKeyword(val) {
+  console.log(val);
+}
 
 render() {
   return (
-    <div class="postPage">
+    <div className="postPage">
     <FormControl fullWidth>
       <TextField
         autoFocus
@@ -98,9 +111,21 @@ render() {
         id="postTitle"
         type="text"
         label="Keywords"
-        onChange={this.handleEmailChange}
+        onKeyDown={this.handleKeyWordChange}
         fullWidth
       />
+      <div>
+        {
+          this.state.keywords.map((keyword, i) => 
+            <Chip
+              key={i}
+              color="primary"
+              label={keyword}
+              onDelete={this.handleDeleteKeyword}
+            />
+          )
+        }
+      </div>
       <TextField className="postBody"
         autoFocus
         margin="dense"

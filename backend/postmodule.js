@@ -125,8 +125,8 @@ async function createPost(req, res) {
       req.body.keywords[i] = filterContent(req.body.keywords[i]);
     }
 
-    console.log(title, content);
-    // dbabs.createPost(title, content, keywords);
+    console.log(title, content, req.body.keywords);
+    dbabs.createPost(title, content, keywords);
     res.status(200);
     res.end();
     
