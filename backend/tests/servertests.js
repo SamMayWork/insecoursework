@@ -8,6 +8,7 @@ const assert = require('assert');
 const dbabs = require('../dbabstraction');
 const logging = require('../logging');
 const mm = require('../maintainmodule');
+const uac = require('../useraccountsystem');
 
 // ////////////////////////////////////////////////////////////// CONNECTION TESTS
 
@@ -183,6 +184,8 @@ describe('dbabstraction Tests', function () {
   //   })
   // })
 
+    ////////////////////////////////////////////////////////////// CREATE POST
+
   describe('createPost', () => {
     let postid;
 
@@ -198,6 +201,8 @@ describe('dbabstraction Tests', function () {
     });
   });
 
+    ////////////////////////////////////////////////////////////// CREATE COMMENT
+
   describe('createComment', () => {
     let commentid;
 
@@ -212,6 +217,8 @@ describe('dbabstraction Tests', function () {
       assert.equal(result.comment_content, 'this is test content for testing the createComment function');
     });
   });
+
+    ////////////////////////////////////////////////////////////// CREATE BOARD
 
   describe('createBoard', () => {
     let boardid;
@@ -229,6 +236,18 @@ describe('dbabstraction Tests', function () {
         board_year: '2021/2022'});
     });
   });
+
+    ////////////////////////////////////////////////////////////// CREATE USER
+
+    describe('enrollUser', () => {
+      it('Should return the users id and the users display name', async () => {
+        const result = await dbabs.enrollUser('awesomeDisplayname', 'awesomeemail@gmail.com');
+        assert.ok(result.user_id !== undefined && result.user_name !== undefined);
+        assert.deepEqual(result, {
+          user_name: 'awesomeDisplayname',
+          user_email: 'awesomeemail@gmail.com'});
+      });
+    });
 });
 
 describe('Maintenance Module', () => {
@@ -238,3 +257,20 @@ describe('Maintenance Module', () => {
     });
   });
 });
+
+describe('uac testing', function () {
+  describe ('checkUserExists', function () {
+    it('Should return true for the email sbaldock0@hostgator.com', async function () {
+      assert.deepEqual(await dbabs.checkUserExists('sbaldock0@hostgator.com'), {
+        id : 'a2367eab',
+        exists : true
+      });
+    });
+
+    it('Should return false for the email fake@notinthedb.com', async function () {
+      assert.deepEqual(await dbabs.checkUserExists('fake@notinthedb.com'), {
+        exists : false
+      });
+    });
+  });
+})

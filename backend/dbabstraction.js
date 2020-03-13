@@ -314,21 +314,21 @@ async function reportComment(user_id, comment_id) {
 
 /**
  * Incrising the views of a post
- * @param {String} post_id The post id
+ * @param {String} postid The post id
  */
-async function incrisin_Post_Views(post_id) {
+async function increasePostViews(postid) {
   const query = 'UPDATE Post_Views SET views = views + 1 WHERE post_id = $1';
-  const result = await executeQuery(query, post_id);
+  const result = await executeQuery(query, postid);
   return result;
 }
 
 /**
  * Incrising the views os a comment
- * @param {String} comment_id
+ * @param {String} commentid
  */
-async function incrisin_Comment_Views(comment_id) {
+async function increaseCommentViews(commentid) {
   const query = 'UPDATE Comment_Views SET views = views + 1 WHERE comment_id = $1';
-  const result = await executeQuery(query, comment_id);
+  const result = await executeQuery(query, commentid);
   return result;
 }
 
@@ -392,27 +392,41 @@ async function checkUserExists(email) {
   const query = 'SELECT * FROM users WHERE user_email = $1;';
   const results = await executeQuery(query, [email]);
 
-  if (results !== undefined) {
+  if (results.rowCount !== 0) {
     return {
       id: results.rows[0].user_id,
       exists: true,
     };
   }
   return {
-    exsists: false,
+    exists: false,
   };
 }
 
 /**
- * adds user to the database
- * @param {string} user_email the users email
- * @param {Date} user_dateofregistration the date of registration
+ * Switches between using the users real name and their UP number
+ * @param {string} userid 
+ * @param {boolean} status 
  */
-async function createUser(user_email, user_dateofregistration) {
-  const query = 'INSERT INTO User VALUES($1, $2, $3);';
-  const results = await executeQuery(query, [generateId(8), user_email, user_dateofregistration]);
-  return results;
+async function changeName(userid, status) {
+  const query = "UPDATE users SET user_userealname = $1 WHERE user_id = $2;";
+  executeQuery(query, [status, userid]);
 }
+
+/**
+ * Creates a user and enrolls them into the DB
+ * @param {object} userInformation 
+ */
+async function enrollUser(displayname, email) {
+  const query = "INSERT INTO users VALUES ($1, $2, $3, $4, $5);";
+  const id = generateId(8);
+  await executeQuery(query, [id, displayName, true, email, new Date()]);
+  return {
+    user_id: id,
+    user_name: displayname,
+    user_email: email,
+    };
+  }
 
 /**
  * Gets the User ID of a given post
@@ -432,6 +446,14 @@ async function getCommentAuthor(commentid) {
   const query = 'SELECT user_id FROM comments where comment_id=$1;';
   const results = await executeQuery(query, [commentid]);
   return results;
+}
+
+/**
+ * Gets the displau name of a user using their ID
+ * @param {string} userid 
+ */
+async function getDisplayNameById (userid) {
+  return executeQuery("SELECT user_displayname FROM users WHERE user_id = $1;", [userid]).rows[0].user_displayname;
 }
 
 // #endregion
@@ -470,15 +492,18 @@ module.exports.editComment = editComment;
 
 module.exports.deleteRecordBoard = deleteRecordBoard;
 
+module.exports.enrollUser = enrollUser;
 module.exports.checkUserExists = checkUserExists;
 module.exports.getPostAuthor = getPostAuthor;
 module.exports.getCommentAuthor = getCommentAuthor;
+module.exports.changeName = changeName;
+module.exports.getDisplayNameById = getDisplayNameById;
 
 module.exports.reportPost = reportPost;
 module.exports.reportComment = reportComment;
 
-module.exports.incrisin_Post_Views = incrisin_Post_Views;
-module.exports.incrisin_Comment_Views = incrisin_Comment_Views;
+module.exports.increasePostViews = increasePostViews;
+module.exports.increaseCommentViews = increaseCommentViews;
 
 module.exports.executeRawQuerySync = executeRawQuerySync;
 // #endregion
