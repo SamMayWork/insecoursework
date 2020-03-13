@@ -322,8 +322,11 @@ async function reportComment(user_id, comment_id) {
  */
 async function increasePostViews(postid) {
   const query = 'UPDATE Post_Views SET views = views + 1 WHERE post_id = $1';
-  const result = await executeQuery(query, postid);
-  return result;
+  const query2 = 'SELECT * FROM Post_Views WHERE post_id = $1';
+  await executeQuery(query, [postid]);
+  const result = await executeQuery(query2, [postid]) 
+  console.log(result.rows);
+  return result.rows[0];
 }
 
 /**
@@ -332,7 +335,8 @@ async function increasePostViews(postid) {
  */
 async function increaseCommentViews(commentid) {
   const query = 'UPDATE Comment_Views SET views = views + 1 WHERE comment_id = $1';
-  const result = await executeQuery(query, commentid);
+  await executeQuery(query, [commentid]);
+  const result = await executeQuery(query2, [commentid])  
   return result;
 }
 
@@ -393,7 +397,7 @@ async function increaseCommentViews(commentid) {
  * @param {string} email Email address to search
  */
 async function checkUserExists(email) {
-  const query = 'SELECT * FROM users WHERE user_email = $1;';
+  const query = 'SELECT user_id FROM Users WHERE user_email = $1;';
   const results = await executeQuery(query, [email]);
 
   if (results.rowCount !== 0) {
