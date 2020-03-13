@@ -249,9 +249,19 @@ const offensivelanguage = {
  * Filters a given string for swear/offensive words
  * @param {string} content Content to be filtered
  */
-function filterContent(content) {
-  const filteredContent = content;
-  // Your code goes here!
+function filterContent (content) {
+  let filteredContent = content;
+  for (var i = 0; i < content.length; i++) {
+    for (var j = 0; j < offensivelanguage.words.length; j++) {
+      let theWord = offensivelanguage.words[j]
+      if (i + theWord.dirty.length <= content.length){
+        if (content.substring(i, i + theWord.dirty.length) == theWord.dirty){
+          console.log(content.substring(i, i + theWord.dirty.length) == theWord.dirty)
+          filteredContent = filteredContent.replace(theWord.dirty, theWord.clean);
+        }
+      }
+    }
+  }
   return filteredContent;
 }
 
