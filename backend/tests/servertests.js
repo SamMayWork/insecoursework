@@ -8,6 +8,7 @@ const assert = require('assert');
 const dbabs = require('../dbabstraction');
 const logging = require('../logging');
 const mm = require('../maintainmodule');
+const uac = require('../useraccountsystem');
 
 // ////////////////////////////////////////////////////////////// CONNECTION TESTS
 
@@ -238,3 +239,20 @@ describe('Maintenance Module', () => {
     });
   });
 });
+
+describe('uac testing', function () {
+  describe ('checkUserExists', function () {
+    it('Should return true for the email sbaldock0@hostgator.com', async function () {
+      assert.deepEqual(await dbabs.checkUserExists('sbaldock0@hostgator.com'), {
+        id : 'a2367eab',
+        exists : true
+      });
+    });
+
+    it('Should return false for the email fake@notinthedb.com', async function () {
+      assert.deepEqual(await dbabs.checkUserExists('fake@notinthedb.com'), {
+        exists : false
+      });
+    });
+  });
+})

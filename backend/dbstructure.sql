@@ -5,7 +5,9 @@ CREATE DATABASE forumbackend;
 
 CREATE TABLE IF NOT EXISTS Users (
   user_id varchar(8) PRIMARY KEY,
+  user_displayname varchar (100) NOT NULL,
   user_email varchar(100) NOT NULL,
+  user_userealname Boolean NOT NULL, 
   user_dateofregistration date NOT NULL
 );
 
@@ -68,36 +70,33 @@ CREATE TABLE IF NOT EXISTS Notifications (
 CREATE TABLE IF NOT EXISTS Post_Views (
   post_id varchar (8) NOT NULL REFERENCES Posts(post_id),
   views INT NOT NULL
-  );
+);
 
 CREATE TABLE IF NOT EXISTS Comment_Views (
   comment_id varchar (8) NOT NULL REFERENCES Comments(comment_id),
   views INT NOT NULL
-  );
+);
 
-
-
-
-insert into Users (user_id, user_email, user_dateofregistration) values ('a2367eab', 'sbaldock0@hostgator.com',         '2020-02-07');
-insert into Users (user_id, user_email, user_dateofregistration) values ('75b6d7e5', 'jgallelli1@weibo.com',            '2020-02-19');
-insert into Users (user_id, user_email, user_dateofregistration) values ('100bad41', 'rdellow2@storify.com',            '2020-02-04');
-insert into Users (user_id, user_email, user_dateofregistration) values ('1901eddf', 'jdaniellot3@ezinearticles.com',   '2020-02-13');
-insert into Users (user_id, user_email, user_dateofregistration) values ('f217baa2', 'sgoford4@mtv.com',                '2020-02-05');
-insert into Users (user_id, user_email, user_dateofregistration) values ('6071154c', 'eallso5@ask.com',                 '2020-02-23');
-insert into Users (user_id, user_email, user_dateofregistration) values ('03a3f1a2', 'stomlin6@wikia.com',              '2020-02-27');
-insert into Users (user_id, user_email, user_dateofregistration) values ('ca77860f', 'jmusker7@nymag.com',              '2020-02-10');
-insert into Users (user_id, user_email, user_dateofregistration) values ('966abbd2', 'tfirbank8@rediff.com',            '2020-02-20');
-insert into Users (user_id, user_email, user_dateofregistration) values ('1d0cf14b', 'bfateley9@dion.ne.jp',            '2020-02-20');
-insert into Users (user_id, user_email, user_dateofregistration) values ('df3a26cf', 'dlaintona@cbslocal.com',          '2020-02-20');
-insert into Users (user_id, user_email, user_dateofregistration) values ('bb872b73', 'rrosenkrantzb@yale.edu',          '2020-02-26');
-insert into Users (user_id, user_email, user_dateofregistration) values ('8aa4a403', 'mzanassic@discuz.net',            '2020-02-09');
-insert into Users (user_id, user_email, user_dateofregistration) values ('9aeb1116', 'umoaksond@msu.edu',               '2020-02-12');
-insert into Users (user_id, user_email, user_dateofregistration) values ('acc45ba4', 'doverale@wordpress.org',          '2020-02-13');
-insert into Users (user_id, user_email, user_dateofregistration) values ('168bca94', 'osibbef@japanpost.jp',            '2020-02-19');
-insert into Users (user_id, user_email, user_dateofregistration) values ('aa0f009d', 'egrattageg@salon.com',            '2020-02-17');
-insert into Users (user_id, user_email, user_dateofregistration) values ('82c9aefd', 'glillywhiteh@cnbc.com',           '2020-02-17');
-insert into Users (user_id, user_email, user_dateofregistration) values ('a91b934a', 'sducketti@51.la',                 '2020-02-04');
-insert into Users (user_id, user_email, user_dateofregistration) values ('800447a8', 'ncotgrovej@dot.gov',              '2020-02-07');
+insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('a2367eab', 'dish', true, 'sbaldock0@hostgator.com',         '2020-02-07');
+insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('75b6d7e5', 'seed', true, 'jgallelli1@weibo.com',            '2020-02-19');
+insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('100bad41', 'come', true, 'rdellow2@storify.com',            '2020-02-04');
+insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('1901eddf', 'brother', true, 'jdaniellot3@ezinearticles.com',   '2020-02-13');
+insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('f217baa2', 'since',  true, 'sgoford4@mtv.com',                '2020-02-05');
+insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('6071154c', 'carried', true, 'eallso5@ask.com',                 '2020-02-23');
+insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('03a3f1a2', 'anywhere',  true, 'stomlin6@wikia.com',              '2020-02-27');
+insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('ca77860f', 'strange',  true, 'jmusker7@nymag.com',              '2020-02-10');
+insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('966abbd2', 'proper',  true, 'tfirbank8@rediff.com',            '2020-02-20');
+insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('1d0cf14b', 'band', true, 'bfateley9@dion.ne.jp',            '2020-02-20');
+insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('df3a26cf', 'out',  true, 'dlaintona@cbslocal.com',          '2020-02-20');
+insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('bb872b73', 'quickly', true, 'rrosenkrantzb@yale.edu',          '2020-02-26');
+insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('8aa4a403', 'needed',  true, 'mzanassic@discuz.net',            '2020-02-09');
+insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('9aeb1116', 'ruler',  true, 'umoaksond@msu.edu',               '2020-02-12');
+insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('acc45ba4', 'think',  true, 'doverale@wordpress.org',          '2020-02-13');
+insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('168bca94', 'largest',  true, 'osibbef@japanpost.jp',            '2020-02-19');
+insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('aa0f009d', 'sort', true, 'egrattageg@salon.com',            '2020-02-17');
+insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('82c9aefd', 'reason', true, 'glillywhiteh@cnbc.com',           '2020-02-17');
+insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('a91b934a', 'quick', true, 'sducketti@51.la',                 '2020-02-04');
+insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('800447a8', 'film',  true, 'ncotgrovej@dot.gov',              '2020-02-07');
 
 insert into Board (board_id, board_module, board_year) values ('bf35c787', 'Introduction to Hong Kong SAR China', '2020/2021');
 insert into Board (board_id, board_module, board_year) values ('cfd5636c', 'Introduction to Sierra Leone', '2020/2021');

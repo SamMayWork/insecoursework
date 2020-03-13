@@ -392,26 +392,36 @@ async function checkUserExists(email) {
   const query = 'SELECT * FROM users WHERE user_email = $1;';
   const results = await executeQuery(query, [email]);
 
-  if (results !== undefined) {
+  if (results.rowCount !== 0) {
     return {
       id: results.rows[0].user_id,
       exists: true,
     };
   }
   return {
-    exsists: false,
+    exists: false,
   };
 }
 
 /**
- * adds user to the database
- * @param {string} user_email the users email
- * @param {Date} user_dateofregistration the date of registration
+ * Switches between using the users real name and their UP number
+ * @param {string} userid 
+ * @param {boolean} status 
  */
-async function createUser(user_email, user_dateofregistration) {
-  const query = 'INSERT INTO User VALUES($1, $2, $3);';
-  const results = await executeQuery(query, [generateId(8), user_email, user_dateofregistration]);
-  return results;
+async function changeName(userid, status) {
+  const query = "UPDATE users SET user_userealname = $1 WHERE user_id = $2;";
+  executeQuery(query, [status, userid]);
+}
+
+/**
+ * Enrolls a user into the DB
+ * @param {object} userInformation 
+ */
+async function enrollUser (userInformation) {
+  const query = "INSERT INTO users VALUES ($1, $2, $3, $4, $5);";
+  const id = generateId(8);
+  await executeQuery(query, [id, userInformation.displayName, true,userInformation.email, new Date()]);
+  return id;
 }
 
 /**
@@ -432,6 +442,14 @@ async function getCommentAuthor(commentid) {
   const query = 'SELECT user_id FROM comments where comment_id=$1;';
   const results = await executeQuery(query, [commentid]);
   return results;
+}
+
+/**
+ * Gets the displau name of a user using their ID
+ * @param {string} userid 
+ */
+async function getDisplayNameById (userid) {
+  return executeQuery("SELECT user_displayname FROM users WHERE user_id = $1;", [userid]).rows[0].user_displayname;
 }
 
 // #endregion
@@ -470,9 +488,12 @@ module.exports.editComment = editComment;
 
 module.exports.deleteRecordBoard = deleteRecordBoard;
 
+module.exports.enrollUser = enrollUser;
 module.exports.checkUserExists = checkUserExists;
 module.exports.getPostAuthor = getPostAuthor;
 module.exports.getCommentAuthor = getCommentAuthor;
+module.exports.changeName = changeName;
+module.exports.getDisplayNameById = getDisplayNameById;
 
 module.exports.reportPost = reportPost;
 module.exports.reportComment = reportComment;
