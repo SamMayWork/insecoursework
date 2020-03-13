@@ -404,6 +404,16 @@ async function checkUserExists(email) {
 }
 
 /**
+ * Switches between using the users real name and their UP number
+ * @param {string} userid 
+ * @param {boolean} status 
+ */
+async function changeName(userid, status) {
+  const query = "UPDATE users SET user_userealname = $1 WHERE user_id = $2;";
+  executeQuery(query, [status, userid]);
+}
+
+/**
  * Enrolls a user into the DB
  * @param {object} userInformation 
  */
@@ -470,10 +480,11 @@ module.exports.editComment = editComment;
 
 module.exports.deleteRecordBoard = deleteRecordBoard;
 
-module.exports.enrollUser;
+module.exports.enrollUser = enrollUser;
 module.exports.checkUserExists = checkUserExists;
 module.exports.getPostAuthor = getPostAuthor;
 module.exports.getCommentAuthor = getCommentAuthor;
+module.exports.changeName = changeName;
 
 module.exports.reportPost = reportPost;
 module.exports.reportComment = reportComment;

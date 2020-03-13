@@ -35,6 +35,28 @@ async function enrollUser (req, res) {
   }
 }
 
+// ////////////////////////////////////////////////////////////// PREFERENCES
+
+/**
+ * Allows a user to change between using their real name and their UP number
+ * @param {request} req 
+ * @param {response} res 
+ */
+async function changeUseOfName (req, res) {
+  try {
+    if(checkUserExists(req) === false) {
+      res.status(403);
+      res.end();
+    }
+
+    dbabs.changeName(getUsersID(req), req.body.status);
+  } catch (exception) {
+    res.status(500);
+    res.end();
+  }
+}
+
+
 // ////////////////////////////////////////////////////////////// AUTHORISATION
 
 /**
