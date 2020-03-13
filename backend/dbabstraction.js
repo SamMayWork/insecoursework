@@ -392,12 +392,8 @@ async function checkUserExists(email) {
   const query = 'SELECT user_id FROM Users WHERE user_email = $1;';
   const results = await executeQuery(query, [email]);
   console.log(results.rows[0]);
-  if (results !== undefined) {
-    return results.rows[0];    
-  } 
-  else {  
-    return false;
-  }}
+  return results.rows[0];
+}
 
 
 
