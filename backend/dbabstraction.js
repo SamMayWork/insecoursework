@@ -418,15 +418,18 @@ async function changeName(userid, status) {
 }
 
 /**
- * Enrolls a user into the DB
+ * Creates a user and enrolls them into the DB
  * @param {object} userInformation 
  */
-async function enrollUser (displayName, email) {
+async function enrollUser(displayname, email) {
   const query = "INSERT INTO users VALUES ($1, $2, $3, $4, $5);";
   const id = generateId(8);
-  await executeQuery(query, [id, displayName, true, email, new Date()]);
-  return id;
-}
+  await executeQuery(query, [id, displayname, true, email, new Date()]);
+  return {
+    user_name: displayname,
+    user_email: email,
+    };
+  }
 
 /**
  * Gets the User ID of a given post

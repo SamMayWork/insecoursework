@@ -75,7 +75,8 @@ CREATE TABLE IF NOT EXISTS Post_Views (
 CREATE TABLE IF NOT EXISTS Comment_Views (
   comment_id varchar (8) NOT NULL REFERENCES Comments(comment_id),
   views INT NOT NULL
-);
+  );
+
 
 insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('a2367eab', 'dish', true, 'sbaldock0@hostgator.com',         '2020-02-07');
 insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('75b6d7e5', 'seed', true, 'jgallelli1@weibo.com',            '2020-02-19');

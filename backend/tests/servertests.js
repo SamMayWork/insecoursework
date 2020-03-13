@@ -180,6 +180,8 @@ describe('dbabstraction Tests', function () {
    
    ////////////////////////////////////////////////////////////// CREATE POST
 
+    ////////////////////////////////////////////////////////////// CREATE POST
+
   describe('createPost', () => {
     let postid;
 
@@ -195,6 +197,8 @@ describe('dbabstraction Tests', function () {
     });
   });
 
+    ////////////////////////////////////////////////////////////// CREATE COMMENT
+
   describe('createComment', () => {
     let commentid;
 
@@ -209,6 +213,8 @@ describe('dbabstraction Tests', function () {
       assert.equal(result.comment_content, 'this is test content for testing the createComment function');
     });
   });
+
+    ////////////////////////////////////////////////////////////// CREATE BOARD
 
   describe('createBoard', () => {
     let boardid;
@@ -226,6 +232,18 @@ describe('dbabstraction Tests', function () {
         board_year: '2021/2022'});
     });
   });
+
+    ////////////////////////////////////////////////////////////// CREATE USER
+
+    describe('enrollUser', () => {
+      it('Should return the users id and the users display name', async () => {
+        const result = await dbabs.enrollUser('awesomeDisplayname', 'awesomeemail@gmail.com');
+        assert.ok(result.user_name !== undefined && result.user_name !== undefined);
+        assert.deepEqual(result, {
+          user_name: 'awesomeDisplayname',
+          user_email: 'awesomeemail@gmail.com'});
+      });
+    });
 });
 
 describe('Maintenance Module', () => {
