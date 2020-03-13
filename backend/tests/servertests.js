@@ -170,7 +170,8 @@ describe('dbabstraction Tests', function () {
      it('Should incrise the view by 1', async function() {
        let result = await dbabs.increasePostViews('11f3b99f');
        assert.deepEqual(result, {
-         
+         post_id : '11f3b99f',
+         views : 1
        })
      })
    })

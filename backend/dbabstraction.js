@@ -319,7 +319,8 @@ async function reportComment(user_id, comment_id) {
 async function increasePostViews(postid) {
   const query = 'UPDATE Post_Views SET views = views + 1 WHERE post_id = $1';
   const result = await executeQuery(query, [postid]);
-  return result;
+  console.log(result.rows);
+  return result.rows[0];
 }
 
 /**
@@ -329,7 +330,7 @@ async function increasePostViews(postid) {
 async function increaseCommentViews(commentid) {
   const query = 'UPDATE Comment_Views SET views = views + 1 WHERE comment_id = $1';
   const result = await executeQuery(query, [commentid]);
-  console.log(result);
+  
   return result;
 }
 
