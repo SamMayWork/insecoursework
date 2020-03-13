@@ -393,7 +393,7 @@ async function checkUserExists(email) {
   const results = await executeQuery(query, [email]);
   console.log(results.rows[0]);
   if (results !== undefined) {
-    return results.rows;    
+    return results.rows[0];    
   } 
   else {  
     return false;
