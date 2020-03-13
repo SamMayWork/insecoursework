@@ -403,8 +403,6 @@ async function checkUserExists(email) {
   };
 }
 
-
-
 /**
  * Switches between using the users real name and their UP number
  * @param {string} userid 
