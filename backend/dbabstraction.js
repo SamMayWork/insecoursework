@@ -318,7 +318,7 @@ async function reportComment(user_id, comment_id) {
  */
 async function increasePostViews(postid) {
   const query = 'UPDATE Post_Views SET views = views + 1 WHERE post_id = $1';
-  const query2 = 'SELECT * FROM Post_Views WHERE comment_id = $1';
+  const query2 = 'SELECT * FROM Post_Views WHERE post_id = $1';
   await executeQuery(query, [postid]);
   const result = await executeQuery(query2, [postid]) 
   console.log(result.rows);
