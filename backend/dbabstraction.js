@@ -421,10 +421,10 @@ async function changeName(userid, status) {
  * Enrolls a user into the DB
  * @param {object} userInformation 
  */
-async function enrollUser (userInformation) {
+async function enrollUser (displayName, email) {
   const query = "INSERT INTO users VALUES ($1, $2, $3, $4, $5);";
   const id = generateId(8);
-  await executeQuery(query, [id, userInformation.displayName, true,userInformation.email, new Date()]);
+  await executeQuery(query, [id, displayName, true, email, new Date()]);
   return id;
 }
 
