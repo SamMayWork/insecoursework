@@ -392,14 +392,14 @@ async function checkUserExists(email) {
   const query = 'SELECT * FROM users WHERE user_email = $1;';
   const results = await executeQuery(query, [email]);
 
-  if (results !== undefined) {
+  if (results.rowCount !== 0) {
     return {
       id: results.rows[0].user_id,
       exists: true,
     };
   }
   return {
-    exsists: false,
+    exists: false,
   };
 }
 
@@ -444,6 +444,14 @@ async function getCommentAuthor(commentid) {
   return results;
 }
 
+/**
+ * Gets the displau name of a user using their ID
+ * @param {string} userid 
+ */
+async function getDisplayNameById (userid) {
+  return executeQuery("SELECT user_displayname FROM users WHERE user_id = $1;", [userid]).rows[0].user_displayname;
+}
+
 // #endregion
 // ////////////////////////////////////////////////////////////// DELETING CONTENT
 // #region Deletion
@@ -485,6 +493,7 @@ module.exports.checkUserExists = checkUserExists;
 module.exports.getPostAuthor = getPostAuthor;
 module.exports.getCommentAuthor = getCommentAuthor;
 module.exports.changeName = changeName;
+module.exports.getDisplayNameById = getDisplayNameById;
 
 module.exports.reportPost = reportPost;
 module.exports.reportComment = reportComment;
