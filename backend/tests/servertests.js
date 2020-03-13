@@ -170,7 +170,7 @@ describe('dbabstraction Tests', function () {
     });
 
     it('Should return the ID and true for the row Email sbaldock0@hostgator.com', async function () {
-      let result = await dbabs.checkUserExists('qsbaldock0@hostgator.com');
+      let result = await dbabs.checkUserExists('a2367eab');
       assert.equal(result, {
         user_id : 'a2367eab' 
       });
