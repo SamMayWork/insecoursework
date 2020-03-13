@@ -242,7 +242,7 @@ describe('dbabstraction Tests', function () {
     describe('enrollUser', () => {
       it('Should return the users id and the users display name', async () => {
         const result = await dbabs.enrollUser('awesomeDisplayname', 'awesomeemail@gmail.com');
-        assert.ok(result.user_id !== undefined && result.user_name !== undefined);
+        assert.ok(result.user_name !== undefined && result.user_name !== undefined);
         assert.deepEqual(result, {
           user_name: 'awesomeDisplayname',
           user_email: 'awesomeemail@gmail.com'});

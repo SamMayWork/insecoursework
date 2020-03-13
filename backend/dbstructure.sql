@@ -6,7 +6,7 @@ CREATE DATABASE forumbackend;
 CREATE TABLE IF NOT EXISTS Users (
   user_id varchar(8) PRIMARY KEY,
   user_displayname varchar (100) NOT NULL,
-  user_email varchar(100) NOT NULL,user
+  user_email varchar(100) NOT NULL,
   user_userealname Boolean NOT NULL, 
   user_dateofregistration date NOT NULL
 );

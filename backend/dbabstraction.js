@@ -420,9 +420,8 @@ async function changeName(userid, status) {
 async function enrollUser(displayname, email) {
   const query = "INSERT INTO users VALUES ($1, $2, $3, $4, $5);";
   const id = generateId(8);
-  await executeQuery(query, [id, displayName, true, email, new Date()]);
+  await executeQuery(query, [id, displayname, true, email, new Date()]);
   return {
-    user_id: id,
     user_name: displayname,
     user_email: email,
     };
