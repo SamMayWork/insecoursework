@@ -250,9 +250,13 @@ async function createComment(comment_content, user_id, post_id) {
  */
 
 async function createReplyComment(comment_content, user_id, post_id, reply_id) {
-  const query = 'INSERT INTO Comments VALUES($1, $2, $3, $4, $5, $6);';
-  const results = await executeQuery(query, [generateId(8), comment_content, 0, user_id, post_id, reply_id]);
-  return results;
+  const replyCommentQuery = 'INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id, reply_id) VALUES($1, $2, $3, $4, $5, $6);';
+  const id = generateId(8);
+  await executeQuery(replyCommentQuery, [id, comment_content, 0, user_id, post_id, reply_id]);
+  return {
+    replyComment_id: id,
+    comment_content
+  };
 }
 
 // #endregion
@@ -484,7 +488,7 @@ module.exports.generateId = generateId;
 module.exports.createBoard = createBoard;
 module.exports.createPost = createPost;
 module.exports.createComment = createComment;
-module.exports.createReplyComment = createComment;
+module.exports.createReplyComment = createReplyComment;
 
 module.exports.editPost = editPost;
 module.exports.editComment = editComment;

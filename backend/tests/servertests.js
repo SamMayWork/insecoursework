@@ -248,6 +248,33 @@ describe('dbabstraction Tests', function () {
           user_email: 'awesomeemail@gmail.com'});
       });
     });
+
+    ////////////////////////////////////////////////////////////// CREATE REPLY COMMENT
+
+    describe('createReplyComment', () => {
+      let commentid;
+      let commentContent;
+      it('Should return the expected id and content', async () =>{
+        const result = await dbabs.createReplyComment('This is the reply comment that tests the reply comment function', '100bad41', '7c367dd6', 'he72ieq8');
+        assert.ok(result.replyComment_id !== undefined && result.comment_content !== undefined);
+        commentid = result.replyComment_id;
+        commentContent = result.comment_content;
+      });
+
+      it('Should return correct information when comment is searched for', async() => {
+        const result = await dbabs.getComment(commentid);
+        assert.equal(commentContent, 'This is the reply comment that tests the reply comment function');
+      });
+    });
+
+    ////////////////////////////////////////////////////////////// EDIT POST
+
+/*    describe('editPost', () => {
+      it('Should return the edited post details', async () => {
+        const result = await dbabs.editPost('')
+      })
+    })
+*/
 });
 
 describe('Maintenance Module', () => {
