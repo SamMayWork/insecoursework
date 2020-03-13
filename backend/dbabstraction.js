@@ -404,14 +404,14 @@ async function checkUserExists(email) {
 }
 
 /**
- * adds user to the database
- * @param {string} user_email the users email
- * @param {Date} user_dateofregistration the date of registration
+ * Enrolls a user into the DB
+ * @param {object} userInformation 
  */
-async function createUser(user_email, user_dateofregistration) {
-  const query = 'INSERT INTO User VALUES($1, $2, $3);';
-  const results = await executeQuery(query, [generateId(8), user_email, user_dateofregistration]);
-  return results;
+async function enrollUser (userInformation) {
+  const query = "INSERT INTO users VALUES ($1, $2, $3, $4, $5);";
+  const id = generateId(8);
+  await executeQuery(query, [id, userInformation.displayName, true,userInformation.email, new Date()]);
+  return id;
 }
 
 /**
@@ -470,6 +470,7 @@ module.exports.editComment = editComment;
 
 module.exports.deleteRecordBoard = deleteRecordBoard;
 
+module.exports.enrollUser;
 module.exports.checkUserExists = checkUserExists;
 module.exports.getPostAuthor = getPostAuthor;
 module.exports.getCommentAuthor = getCommentAuthor;

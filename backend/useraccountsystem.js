@@ -12,15 +12,23 @@ const logging = require('./logging');
 // ////////////////////////////////////////////////////////////// CREATING USERS
 
 /**
- * Stores a users' information inside of the database
- * @param {request} req
- * @param {response} res
+ * Enrolls a user in the DB
+ * @param {request} req 
+ * @param {response} res 
  */
-async function createUser(req, res) {
+async function enrollUser (req, res) {
   try {
-    const email = req.user.emails[0].value;
-    const currentDate = new Date();
-    dbabs.createUser(email, currentDate);
+    if (checkUserExists(req) === true) {
+      throw new error();
+    } else {
+      const userInformation = {
+        displayName : req.user.displayName,
+        email : req.user.emails[0].value
+      }
+      dbabs.enrollUser(userInformation);
+      res.status(200);
+      res.end();
+    }
   } catch (exception) {
     res.status(500);
     res.end();
@@ -72,7 +80,7 @@ async function getCommentAuthor(commentid) {
 
 // ////////////////////////////////////////////////////////////// EXPORTS
 
-module.exports.createUser = createUser;
+module.exports.enrollUser = enrollUser;
 
 module.exports.checkUserExists = checkUserExists;
 module.exports.getUsersID = getUsersID;
