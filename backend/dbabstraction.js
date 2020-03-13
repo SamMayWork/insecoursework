@@ -389,9 +389,9 @@ async function increaseCommentViews(commentid) {
  * @param {string} email Email address to search
  */
 async function checkUserExists(email) {
-  const query = 'SELECT user_id FROM users WHERE user_email = $1;';
+  const query = 'SELECT user_id FROM Users WHERE user_email = $1;';
   const results = await executeQuery(query, [email]);
-  console.log(results.user_id);
+  console.log(results.rows[0]);
   if (results !== undefined) {
     return results.rows;    
   } 
@@ -399,11 +399,7 @@ async function checkUserExists(email) {
     return false;
   }}
 
-async function getComment(commentid) {
-  const query = 'SELECT * FROM comments WHERE comment_id = $1;';
-  const results = await executeQuery(query, [commentid]);
-  return results.rows[0];
-}
+
 
 /**
  * adds user to the database
