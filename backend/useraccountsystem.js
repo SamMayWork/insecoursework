@@ -68,7 +68,7 @@ async function deleteUser(req, res) {
  * @param {request} req
  * @param {response} res
  */
-async function changeDisplayName(req, res) {
+async function useRealName(req, res) {
   try {
     if (checkUserExists(req) === false) {
       res.status(403);
@@ -76,7 +76,7 @@ async function changeDisplayName(req, res) {
       return;
     }
 
-    await dbabs.changeName(getUsersID(req), req.body.status);
+    await dbabs.switchDisplayNameType(getUsersID(req), req.body.status);
     res.status(200);
     res.end();
   } catch (exception) {
@@ -121,7 +121,7 @@ async function getCommentAuthor(commentid) {
 
 module.exports.enrollUser = enrollUser;
 
-module.exports.changeDisplayName = changeDisplayName;
+module.exports.useRealName = useRealName;
 
 module.exports.deleteUser = deleteUser;
 

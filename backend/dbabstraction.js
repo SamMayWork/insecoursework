@@ -419,9 +419,9 @@ async function getUserId (email) {
 /**
  * Switches between using the users real name and their UP number
  * @param {string} userid 
- * @param {boolean} status 
+ * @param {boolean} status if true, uses real name
  */
-async function changeName(userid, status) {
+async function useRealName(userid, status) {
   const query = "UPDATE users SET user_userealname = $1 WHERE user_id = $2;";
   executeQuery(query, [status, userid]);
 }
@@ -469,11 +469,25 @@ async function getCommentAuthor(commentid) {
 }
 
 /**
- * Gets the displau name of a user using their ID
- * @param {string} userid 
+ * Gets the display name of a user using their ID
+ * @param {string} userid the user id to get the display name for 
  */
 async function getDisplayNameById (userid) {
-  return executeQuery("SELECT user_displayname FROM users WHERE user_id = $1;", [userid]).rows[0].user_displayname;
+  try {
+    let query = 'SELECT user_userealname FROM users WHERE user_id = $1;';
+    let results = await executeQuery(query, [userid]); 
+    if (results.rows[0].user_userealname === true) {
+      query = 'SELECT user_displayname FROM users WHERE user_id = $1;';
+      results = await executeQuery(query, [userid]);
+      return results.rows[0].user_displayname;
+    } else {
+      query = 'SELECT user_email FROM users WHERE user_id = $1;';
+      results = await executeQuery(query, [userid]);
+      return results.rows[0].user_email;
+    }
+  } catch (exception) {
+    return undefined;
+  }
 }
 
 // #endregion
@@ -516,7 +530,7 @@ module.exports.enrollUser = enrollUser;
 module.exports.checkUserExists = checkUserExists;
 module.exports.getPostAuthor = getPostAuthor;
 module.exports.getCommentAuthor = getCommentAuthor;
-module.exports.changeName = changeName;
+module.exports.useRealName = useRealName;
 module.exports.getDisplayNameById = getDisplayNameById;
 module.exports.getUserId = getUserId;
 

@@ -2,7 +2,7 @@ const assert = require('assert');
 const dbabs = require('../dbabstraction');
 const uac = require('../useraccountsystem');
 
-describe('uac db testing', function () {
+describe('UAC Module DB Testing', function () {
   // describe('enrollUser', function () {
   //   it('Should return the users id and the users display name', async () => {
   //     const result = await dbabs.enrollUser('awesomeDisplayname', 'awesomeemail@gmail.com');
@@ -22,9 +22,39 @@ describe('uac db testing', function () {
       assert.equal(await dbabs.checkUserExists('thisisfake@fake.com'), false);
     });
   });
+
+  describe('getDisplayNameById', function () {
+    it('Should return the display name "out" for the id df3a26cf', async function () {
+      assert.equal(await dbabs.getDisplayNameById('df3a26cf'), 'out');
+    });
+
+    it('Should return undefined for a user account that does not exist', async function () {
+      assert.equal(await dbabs.getDisplayNameById('DOESNOTE'), undefined);
+    });
+
+    it('Should return the email address eallso5@ask.com for the row 6071154c', async function () {
+      assert.equal(await dbabs.getDisplayNameById('6071154c'), 'eallso5@ask.com');
+    });
+  });
+
+  describe('changeName', function () {
+    it('Should update the display name of the row a2367eab to "test"', async function () {
+      dbabs.switchDisplayNameType('a2367eab', true);
+      assert.equal(await dbabs.getDisplayNameById('a2367eab'), 'dish');
+    });
+
+
+  });
 });
 
-describe('uac testing', function () {
+describe('UAC Module Testing', function () {
+
+  describe ('useRealName', function () {
+    it('Should switch between using the users real name and their ID', async function () {
+      
+    });
+  });
+
   describe ('checkUserExists', function () {
     it('Should return true for the email sbaldock0@hostgator.com', async function () {
       assert.equal(await dbabs.checkUserExists('sbaldock0@hostgator.com'), true);
