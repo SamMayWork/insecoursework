@@ -403,6 +403,20 @@ async function checkUserExists(email) {
 }
 
 /**
+ * Gets the UserID for a given email address
+ * @param {string} email Email address to search 
+ */
+async function getUserId (email) {
+  try {
+    const query = 'SELECT user_id FROM Users WHERE user_email = $1;';
+    const results = await executeQuery(query, [email]);
+    return results.rows[0].user_id;
+  } catch (exception) {
+    return undefined;
+  }
+}
+
+/**
  * Switches between using the users real name and their UP number
  * @param {string} userid 
  * @param {boolean} status 
@@ -504,6 +518,7 @@ module.exports.getPostAuthor = getPostAuthor;
 module.exports.getCommentAuthor = getCommentAuthor;
 module.exports.changeName = changeName;
 module.exports.getDisplayNameById = getDisplayNameById;
+module.exports.getUserId = getUserId;
 
 module.exports.reportPost = reportPost;
 module.exports.reportComment = reportComment;

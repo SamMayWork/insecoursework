@@ -102,18 +102,6 @@ async function checkUserExists(req) {
 }
 
 /**
- * Gets the ID of the user from a request
- * @param {request} req
- */
-async function getUsersID(req) {
-  try {
-    return await (dbabs.checkUserExists(req.user.emails[0].value)).id;
-  } catch (exception) {
-    return undefined;
-  }
-}
-
-/**
  * Gets the author ID of a given post
  * @param {string} postid
  */
@@ -138,6 +126,5 @@ module.exports.changeDisplayName = changeDisplayName;
 module.exports.deleteUser = deleteUser;
 
 module.exports.checkUserExists = checkUserExists;
-module.exports.getUsersID = getUsersID;
 module.exports.getPostAuthor = getPostAuthor;
 module.exports.getCommentAuthor = getCommentAuthor;
