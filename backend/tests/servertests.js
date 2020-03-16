@@ -263,7 +263,7 @@ describe('searchPosts', function () {
 
   it('Should return the expected content for the post_title drawn tube heat bean', async function () {
     let result = await dbabs.searchPosts('drawn tube heat bean');
-    assert.deepEqual(result, {
+    assert.equal(result, {
       post_id : 'ad7e89d1',
       keyword_id : '2f64b1d3',
       board_id : 'cfd5636c',
