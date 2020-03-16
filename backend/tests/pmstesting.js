@@ -1,30 +1,8 @@
-// CREATED ON 25/02/2020
-
-// This is the tests file for the dbabstraction.js file
-//
-// Tests are done using Mocha JS and are run using Travis CI
-
 const assert = require('assert');
 const dbabs = require('../dbabstraction');
-const logging = require('../logging');
-const mm = require('../maintainmodule');
-const uac = require('../useraccountsystem');
 
-// ////////////////////////////////////////////////////////////// CONNECTION TESTS
 
-describe('logging tests', () => {
-  it('Should have all different text methods appear correctly', () => {
-    logging.coldStartMessage('This should be a cold-start message!');
-    logging.errorMessage('This should be an error message!');
-    logging.logHttpGetMessage({}, 'This should be a HTTP GET message!');
-    logging.logHttpPostMessage({}, 'This should be a HTTP POST message!');
-    logging.successMessage('This should be a success message!');
-    logging.warningMessage('This should be a warning message!');
-    assert.ok(true);
-  });
-});
-
-describe('dbabstraction Tests', function () {
+describe('PMS Module DB Tests', function () {
   
   ////////////////////////////////////////////////////////////// get board
   describe('getBoard', function () {
@@ -63,7 +41,7 @@ describe('dbabstraction Tests', function () {
 
     it('Should return all of the rows in the database', async () => {
       const results = await dbabs.getAllBoards();
-      assert.equal(results.length, 20);
+      assert.equal(results.length, 44);
     });
   });
 
@@ -166,8 +144,8 @@ describe('dbabstraction Tests', function () {
   ////////////////////////////////////////////////////////////// INCRISING POST VIEWS
   
 
-   describe('incrising_Post_Views', function() {
-     it('Should incrise the view by 1', async function() {
+   describe('increasing_Post_Views', function() {
+     it('Should increase the view by 1', async function() {
        let result = await dbabs.increasePostViews('11f3b99f');
        assert.deepEqual(result, {
          post_id : '11f3b99f',
@@ -233,40 +211,5 @@ describe('dbabstraction Tests', function () {
     });
   });
 
-    ////////////////////////////////////////////////////////////// CREATE USER
-
-    describe('enrollUser', () => {
-      it('Should return the users id and the users display name', async () => {
-        const result = await dbabs.enrollUser('awesomeDisplayname', 'awesomeemail@gmail.com');
-        assert.ok(result.user_name !== undefined && result.user_name !== undefined);
-        assert.deepEqual(result, {
-          user_name: 'awesomeDisplayname',
-          user_email: 'awesomeemail@gmail.com'});
-      });
-    });
+    ////////////////////////////////////////////////////////////// CREATE USER   
 });
-
-describe('Maintenance Module', () => {
-  describe('Cold Start Procedure', () => {
-    it('Should not throw any errors', async () => {
-      assert.doesNotThrow(mm.coldStart, Error, 'Error Thrown');
-    });
-  });
-});
-
-describe('uac testing', function () {
-  describe ('checkUserExists', function () {
-    it('Should return true for the email sbaldock0@hostgator.com', async function () {
-      assert.deepEqual(await dbabs.checkUserExists('sbaldock0@hostgator.com'), {
-        id : 'a2367eab',
-        exists : true
-      });
-    });
-
-    it('Should return false for the email fake@notinthedb.com', async function () {
-      assert.deepEqual(await dbabs.checkUserExists('fake@notinthedb.com'), {
-        exists : false
-      });
-    });
-  });
-})
