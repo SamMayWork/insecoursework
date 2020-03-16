@@ -309,7 +309,7 @@ async function reportComment(user_id, comment_id) {
 }
 
 // #endregion
-// ////////////////////////////////////////////////////////////// INCREASING-LIKES
+// ////////////////////////////////////////////////////////////// INCREASING-VIEWS
 // #region Increasing Post Views
 
 /**
@@ -321,7 +321,6 @@ async function increasePostViews(postid) {
   const query2 = 'SELECT * FROM Post_Views WHERE post_id = $1';
   await executeQuery(query, [postid]);
   const result = await executeQuery(query2, [postid]) 
-  console.log(result.rows);
   return result.rows[0];
 }
 

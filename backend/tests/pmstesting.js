@@ -144,8 +144,8 @@ describe('PMS Module DB Tests', function () {
   ////////////////////////////////////////////////////////////// INCRISING POST VIEWS
   
 
-   describe('incrising_Post_Views', function() {
-     it('Should incrise the view by 1', async function() {
+   describe('increasing_Post_Views', function() {
+     it('Should increase the view by 1', async function() {
        let result = await dbabs.increasePostViews('11f3b99f');
        assert.deepEqual(result, {
          post_id : '11f3b99f',
