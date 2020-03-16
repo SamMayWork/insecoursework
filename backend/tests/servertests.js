@@ -163,7 +163,7 @@ describe('dbabstraction Tests', function () {
   });
 
   
-  ////////////////////////////////////////////////////////////// INCRISING POST VIEWS
+  ////////////////////////////////////////////////////////////// INCRISING VIEWS
   
 
    describe('incrising_Post_Views', function() {
@@ -175,7 +175,7 @@ describe('dbabstraction Tests', function () {
        })
      })
    })
-   
+
 
    
    ////////////////////////////////////////////////////////////// CREATE POST
