@@ -75,14 +75,15 @@ CREATE TABLE IF NOT EXISTS Post_Views (
 CREATE TABLE IF NOT EXISTS Comment_Views (
   comment_id varchar (8) NOT NULL REFERENCES Comments(comment_id),
   views INT NOT NULL
-);
+  );
+
 
 insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('a2367eab', 'dish', true, 'sbaldock0@hostgator.com',         '2020-02-07');
 insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('75b6d7e5', 'seed', true, 'jgallelli1@weibo.com',            '2020-02-19');
 insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('100bad41', 'come', true, 'rdellow2@storify.com',            '2020-02-04');
 insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('1901eddf', 'brother', true, 'jdaniellot3@ezinearticles.com',   '2020-02-13');
 insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('f217baa2', 'since',  true, 'sgoford4@mtv.com',                '2020-02-05');
-insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('6071154c', 'carried', true, 'eallso5@ask.com',                 '2020-02-23');
+insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('6071154c', 'carried', false, 'eallso5@ask.com',                 '2020-02-23');
 insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('03a3f1a2', 'anywhere',  true, 'stomlin6@wikia.com',              '2020-02-27');
 insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('ca77860f', 'strange',  true, 'jmusker7@nymag.com',              '2020-02-10');
 insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('966abbd2', 'proper',  true, 'tfirbank8@rediff.com',            '2020-02-20');
