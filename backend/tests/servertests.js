@@ -227,7 +227,7 @@ describe('dbabstraction Tests', function () {
 //        board_year: '2021/2022'});
 //    });
 //  });
-//});
+
 
 describe('Maintenance Module', () => {
   describe('Cold Start Procedure', () => {
@@ -280,5 +280,6 @@ describe('searchPosts', function () {
   it('Should return undefined if the post does not exist', async function () {
     let result = await dbabs.searchPosts('DOESNOTE');
     assert.equal(result, undefined);
-  });
-})
+  })
+});
+});
