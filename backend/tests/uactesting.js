@@ -38,12 +38,10 @@ describe('UAC Module DB Testing', function () {
   });
 
   describe('changeName', function () {
-    it('Should update the display name of the row a2367eab to "test"', async function () {
-      dbabs.switchDisplayNameType('a2367eab', true);
+    it('Should update change the value of userealname and return the displayname', async function () {
+      dbabs.useRealName('a2367eab', true);
       assert.equal(await dbabs.getDisplayNameById('a2367eab'), 'dish');
     });
-
-
   });
 });
 
@@ -51,7 +49,45 @@ describe('UAC Module Testing', function () {
 
   describe ('useRealName', function () {
     it('Should switch between using the users real name and their ID', async function () {
-      
+      let req = {
+        user : {
+          emails : [
+            { value : 'sbaldock0@hostgator.com' }
+          ]
+        },
+        body : {
+          status : false
+        }
+      }
+
+      let res = {
+        status : function (value) {},
+        end : function () {}
+      }
+
+      let displayname = await dbabs.getDisplayNameById('a2367eab');
+      uac.useRealName(req, res);
+      assert.equal(displayname, await dbabs.getDisplayNameById('a2367eab'));
+    });
+
+    it('Should not throw and error if the user does not exist', async function () {
+      let req = {
+        user : {
+          emails : [
+            { value : 'notuser@hostgator.com' }
+          ]
+        },
+        body : {
+          status : false
+        }
+      }
+
+      let res = {
+        status : function (value) {},
+        end : function () {}
+      }
+
+      assert.doesNotThrow(() => {uac.useRealName(req, res)});
     });
   });
 
