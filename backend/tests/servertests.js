@@ -65,7 +65,7 @@ describe('dbabstraction Tests', function () {
  //     const results = await dbabs.getAllBoards();
  //     assert.equal(results.length, 20);
  //   });
- // });
+  });
 
 ////////////////////////////////////////////////////////////// GENERATE ID
 
