@@ -148,7 +148,7 @@ async function getComment(commentid) {
 async function searchPosts(searchstring) {
   const query = 'SELECT * FROM posts WHERE post_title LIKE $1;';
   const results = await executeQuery(query, [searchstring]);
-  return results;
+  return results.rows[0];
 }
 
 /**

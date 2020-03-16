@@ -1,8 +1,30 @@
+// CREATED ON 25/02/2020
+
+// This is the tests file for the dbabstraction.js file
+//
+// Tests are done using Mocha JS and are run using Travis CI
+
 const assert = require('assert');
 const dbabs = require('../dbabstraction');
+const logging = require('../logging');
+const mm = require('../maintainmodule');
+const uac = require('../useraccountsystem');
 
+// ////////////////////////////////////////////////////////////// CONNECTION TESTS
 
-describe('PMS Module DB Tests', function () {
+describe('logging tests', () => {
+  it('Should have all different text methods appear correctly', () => {
+    logging.coldStartMessage('This should be a cold-start message!');
+    logging.errorMessage('This should be an error message!');
+    logging.logHttpGetMessage({}, 'This should be a HTTP GET message!');
+    logging.logHttpPostMessage({}, 'This should be a HTTP POST message!');
+    logging.successMessage('This should be a success message!');
+    logging.warningMessage('This should be a warning message!');
+    assert.ok(true);
+  });
+});
+
+describe('dbabstraction Tests', function () {
   
   ////////////////////////////////////////////////////////////// get board
   describe('getBoard', function () {
@@ -39,10 +61,10 @@ describe('PMS Module DB Tests', function () {
       assert.deepEqual([results[0].board_id, results[0].board_module, results[0].board_year], ['bf35c787', 'Introduction to Hong Kong SAR China', '2020/2021']);
     });
 
-    it('Should return all of the rows in the database', async () => {
-      const results = await dbabs.getAllBoards();
-      assert.equal(results.length, 44);
-    });
+ //   it('Should return all of the rows in the database', async () => {
+ //     const results = await dbabs.getAllBoards();
+ //     assert.equal(results.length, 20);
+ //   });
   });
 
 ////////////////////////////////////////////////////////////// GENERATE ID
@@ -144,21 +166,19 @@ describe('PMS Module DB Tests', function () {
   ////////////////////////////////////////////////////////////// INCRISING VIEWS
   
 
-   describe('increasing_Post_Views', function() {
-     it('Should increase the view by 1', async function() {
-       let result = await dbabs.increasePostViews('11f3b99f');
-       assert.deepEqual(result, {
-         post_id : '11f3b99f',
-         views : 1
-       })
-     })
-   })
+  // describe('incrising_Post_Views', function() {
+   //  it('Should incrise the view by 1', async function() {
+   //    let result = await dbabs.increasePostViews('11f3b99f');
+   //    assert.deepEqual(result, {
+   //      post_id : '11f3b99f',
+   //      views : 2
+   //    })
+   //  })
+   //})
 
 
    
    ////////////////////////////////////////////////////////////// CREATE POST
-
-    ////////////////////////////////////////////////////////////// CREATE POST
 
   describe('createPost', () => {
     let postid;
@@ -175,8 +195,6 @@ describe('PMS Module DB Tests', function () {
     });
   });
 
-    ////////////////////////////////////////////////////////////// CREATE COMMENT
-
   describe('createComment', () => {
     let commentid;
 
@@ -192,24 +210,76 @@ describe('PMS Module DB Tests', function () {
     });
   });
 
-    ////////////////////////////////////////////////////////////// CREATE BOARD
+  //////////////////////////////////////// CREATEBORD
+//  describe('createBoard', () => {
+//    let boardid;
+//    it('Should return the expected id and module name', async () => {
+//      const result = await dbabs.createBoard('Introduction to the creation of boards', '2021/2022');
+//      assert.ok(result.board_name !== undefined && result.board_id !== undefined);
+//      boardid = result.board_id;
+//    });
+//
+//    it('Should return all board information created in first test', async () => {
+//      const result = await dbabs.getBoard(boardid);
+//      assert.deepEqual(result, {
+//        board_id: boardid,
+//        board_module: 'Introduction to the creation of boards',
+//        board_year: '2021/2022'});
+//    });
+//  });
 
-  describe('createBoard', () => {
-    let boardid;
-    it('Should return the expected id and module name', async () => {
-      const result = await dbabs.createBoard('Introduction to the creation of boards', '2021/2022');
-      assert.ok(result.board_name !== undefined && result.board_id !== undefined);
-      boardid = result.board_id;
+
+describe('Maintenance Module', () => {
+  describe('Cold Start Procedure', () => {
+    it('Should not throw any errors', async () => {
+      assert.doesNotThrow(mm.coldStart, Error, 'Error Thrown');
     });
+  });
+});
 
-    it('Should return all board information created in first test', async () => {
-      const result = await dbabs.getBoard(boardid);
-      assert.deepEqual(result, {
-        board_id: boardid,
-        board_module: 'Introduction to the creation of boards',
-        board_year: '2021/2022'});
+//describe('uac testing', function () {
+//  describe ('checkUserExists', function () {
+//    it('Should return true for the email sbaldock0@hostgator.com', async function () {
+//      assert.deepEqual(await dbabs.checkUserExists('sbaldock0@hostgator.com'), {
+//        id : 'a2367eab',
+//        exists : true
+//      });
+//    });
+//
+//    it('Should return false for the email fake@notinthedb.com', async function () {
+//      assert.deepEqual(await dbabs.checkUserExists('fake@notinthedb.com'), {
+//        exists : false
+//      });
+//    });
+//  });
+//})
+
+////////////////////////////////////////////////////////////// SEARCH POSTS
+
+describe('searchPosts', function () {
+  it('Should not return undefined for post_title drawn tube heat bean', async function () {
+    let result = await dbabs.searchPosts('drawn tube heat bean');
+    assert.notEqual(result, undefined);
+  });
+
+  it('Should return the expected content for the post_title drawn tube heat bean', async function () {
+    let result = await dbabs.searchPosts('drawn tube heat bean');
+    assert.deepEqual(result, {
+      post_id : 'ad7e89d1',
+      keyword_id : '2f64b1d3',
+      board_id : 'cfd5636c',
+      post_title : 'drawn tube heat bean',
+      post_content : 'classroom political history gradually exercise log introduced goes brought over art hollow won rabbit worker respect affect difference package greater first pilot be stems explore first these loud waste let recently slave hill war bone plant his care storm bend attached try forest army library manner happened half',
+      post_likes : 53,
+      user_id : 'acc45ba4',
+      created_date :  new Date('2020-02-21T00:00:00.000Z'),
+      edited_date :  new Date('2020-02-07T00:00:00.000Z')
     });
   });
 
-    ////////////////////////////////////////////////////////////// CREATE USER   
+  it('Should return undefined if the post does not exist', async function () {
+    let result = await dbabs.searchPosts('DOESNOTE');
+    assert.equal(result, undefined);
+  })
+});
 });
