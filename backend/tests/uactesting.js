@@ -34,28 +34,27 @@ describe('UAC Module DB Testing', function () {
     });
   });
 
-  // describe('enrollUser', () => {
-  //   it('Should return the users id and the users display name', async () => {
-  //     const result = await dbabs.enrollUser('awesomeDisplayName', 'awesomeemail@gmail.com');
-  //     console.log('/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////');
-  //     console.log(await dbabs.getUser(result));
-  //     console.log({
-  //       user_id : result,
-  //       user_displayname : 'awesomeDisplayName',
-  //       user_userealname : true,
-  //       user_email : 'awesomeemail@gmail.com',
-  //       user_dateofregistration : new Date()
-  //     });  
-      
-  //     assert.deepEqual(await dbabs.getUser(result), {
-  //       user_id : result,
-  //       user_displayname : 'awesomeDisplayName',
-  //       user_userealname : true,
-  //       user_email : 'awesomeemail@gmail.com',
-  //       user_dateofregistration : new Date()
-  //     });
-  //   });
-  // });
+  describe('enrollUser', () => {
+    it('Should return the users id and the users display name', async () => {
+      const result = await dbabs.enrollUser('awesomeDisplayName', 'awesomeemail@gmail.com');
+      console.log(result);
+      console.log(await dbabs.getUser(result.id));
+      console.log({
+        user_id : result.id,
+        user_displayname : 'awesomeDisplayName',
+        user_userealname : true,
+        user_email : 'awesomeemail@gmail.com',
+        user_dateofregistration : result.insertionDate
+      });
+      assert.deepEqual(await dbabs.getUser(result), {
+        user_id : result.id,
+        user_displayname : 'awesomeDisplayName',
+        user_userealname : true,
+        user_email : 'awesomeemail@gmail.com',
+        user_dateofregistration : result.insertionDate
+      });
+    });
+  });
 
   describe('getUser', function () {
     it ('Should return undefined if the user does not exist', async function () {
@@ -78,7 +77,7 @@ describe('UAC Module DB Testing', function () {
   ////////////////////////////////////////////////////////////// CREATE REPLY COMMENT
 
   // describe('createReplyComment', () => {
-    583  //   let commentContent;
+    //   let commentContent;
   //   it('Should return the expected id and content', async () =>{
   //     const result = await dbabs.createReplyComment('This is the reply comment that tests the reply comment function', '100bad41', '7c367dd6', 'he72ieq8');
   //     assert.ok(result.replyComment_id !== undefined && result.comment_content !== undefined);

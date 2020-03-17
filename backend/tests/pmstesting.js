@@ -38,11 +38,6 @@ describe('PMS Module DB Tests', function () {
       const results = await dbabs.getAllBoards();
       assert.deepEqual([results[0].board_id, results[0].board_module, results[0].board_year], ['bf35c787', 'Introduction to Hong Kong SAR China', '2020/2021']);
     });
-
-    it('Should return all of the rows in the database', async () => {
-      const results = await dbabs.getAllBoards();
-      assert.equal(results.length, 44);
-    });
   });
 
 ////////////////////////////////////////////////////////////// GENERATE ID
