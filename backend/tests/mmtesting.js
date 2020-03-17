@@ -2,16 +2,27 @@
 //
 // coldStart
 //    - Tests for does not throw
-//    - Does not currently test to make sure all of the boards are inserted correctly
+//    - Tests to make sure some of the rows have been inserted properly
 
 const assert = require('assert');
 const dbabs = require('../dbabstraction');
 const mm = require('../maintainmodule');
 
-describe('Maintenance Module', function () {
-  describe('Cold Start Procedure', function () {
-    it('Should not throw any errors', async function () {
+// ////////////////////////////////////////////////////////////// ESLINT DISABLES
+
+/* eslint-disable no-undef */
+
+// ////////////////////////////////////////////////////////////// MMM TESTING
+
+describe('Maintenance Module', () => {
+  describe('Cold Start Procedure', () => {
+    it('Should not throw any errors', async () => {
       assert.doesNotThrow(mm.coldStart, Error, 'Error Thrown');
     });
+
+    it('Should insert the rows correctly', async () => {
+      let query = "SELECT * FROM Board WHERE board_module = 'Educational Computing';";
+      assert.deepEqual((await dbabs.executeRawQuerySync(query)).rowCount, 1);
+    }); 
   });
 });
