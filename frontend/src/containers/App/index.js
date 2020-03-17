@@ -10,7 +10,7 @@ import React from 'react';
 import Login from '../LoginPage';
 import Dashboard from '../DashboardPage';
 import Account from '../AccountPage';
-import Post from '../PostEdit';
+import Post from '../PostPage';
 import Comment from '../CommentEdit';
 import PostView from '../PostView';
 import Module from '../ModulePage';
