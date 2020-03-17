@@ -90,7 +90,7 @@ app.get('/get', async (req, res) => {
  * Handler for / so if someone just types in our IP they will get index.html
  */
 app.get('/', (req, res) => {
-  res.sendFile('frontend/index.html');
+  res.sendFile('frontend/index.html', {root : __dirname});
   res.status(200);
   res.end();
 });
