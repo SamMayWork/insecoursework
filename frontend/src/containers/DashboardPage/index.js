@@ -5,11 +5,12 @@
  * First screen user's see after logging in, provides them useful info at a glance
  */
 
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import List from '../../components/List';
 import Comment from '../../components/Comment';
 
 import Navbar from '../../containers/Navbar';
+import Sidebar from '../../components/Sidebar';
 
 export default class DashboardPage extends Component {
   constructor(props) {
@@ -17,11 +18,22 @@ export default class DashboardPage extends Component {
     this.state = {
       error: null,
       isLoaded: false,
-      items: []
+      items: [],
+      openSidebar: false
     }
   }
   render() {
     const {error, isLoaded, comments } = this.state;
+    const handleSidebarOpen = () => {
+			this.setState({
+				openSidebar: true
+			})
+		};
+		const handleSidebarClose = () => {
+			this.setState({
+				openSidebar: false
+			})
+		};
     if (error) {
       return <div>Error: {error.message}</div>
     } else if (!isLoaded) {
@@ -31,8 +43,14 @@ export default class DashboardPage extends Component {
       return (
         <div className = "dashboardPage">
           <Navbar
-          	title = "Dashboard"
-          />
+						title = "Modules"
+						onSidebarOpen = {handleSidebarOpen}
+					/>
+					<Sidebar
+						onClose = {handleSidebarClose}
+						open = {this.state.openSidebar}
+						variant = {'temporary'}
+					/>
           <List>
             {comments.map((comment, i) => (
               <Comment

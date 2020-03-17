@@ -22,6 +22,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -90,7 +91,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Navbar(props) {
+const Navbar = props => {
+	const {className, onSidebarOpen, ...rest} = props;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -181,6 +183,7 @@ export default function Navbar(props) {
             className={classes.menuButton}
             color="inherit"
             aria-label="open drawer"
+            onClick = {onSidebarOpen}
           >
             <MenuIcon />
           </IconButton>
@@ -241,3 +244,10 @@ export default function Navbar(props) {
     </div>
   );
 }
+
+Navbar.propTypes = {
+	className: PropTypes.string,
+	onSidebarOpen: PropTypes.func
+}
+
+export default Navbar;

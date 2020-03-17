@@ -1,7 +1,18 @@
+import React, {forwardRef} from 'react';
+import PropTypes from 'prop-types';
+import {makeStyles} from '@material-ui/styles';
+import {
+	Drawer,
+	Button,
+	ListItem
+} from '@material-ui/core';
 import ImageIcon from '@material-ui/icons/Image';
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
 
-import { SidebarNav } from './components';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import ModuleIcon from '@material-ui/icons/ViewModule';
+
+import {NavLink as RouterLink} from 'react-router-dom';
 
 import {
 	List
@@ -12,9 +23,18 @@ const useStyles = makeStyles(theme => ({
 		display: 'flex',
 		flexDirection: 'column',
 		height: '100%',
-		padding: theme.spacing(2)
+		// padding: theme.spacing(2)
 	}
 }));
+
+const CustomRouterLink = forwardRef((props, ref) => (
+	<div
+		ref={ref}
+		style = {{flexGrow: 1}}
+	>
+		<RouterLink {...props} />
+	</div>
+));
 
 const Sidebar = props => {
 	const { open, variant, onClose, className, ...rest } = props;
@@ -28,7 +48,7 @@ const Sidebar = props => {
     {
       title: 'Modules',
       href: '/module',
-      icon: <PeopleIcon />
+      icon: <ModuleIcon />
     },
     {
       title: 'Account',
@@ -48,7 +68,7 @@ const Sidebar = props => {
 				{...rest}
 			>
 				<List>
-					{pages.map(page => {
+					{pages.map(page => (
 						<ListItem
 							className = {classes.item}
 							disableGutters
@@ -57,19 +77,21 @@ const Sidebar = props => {
 							<Button
 				        activeClassName={classes.active}
 				        className={classes.button}
-				        component={CustomRouterLink}
 				        to={page.href}
+				        component={CustomRouterLink}
 				      >
 				        <div className={classes.icon}>{page.icon}</div>
 				        {page.title}
 				      </Button>
 						</ListItem>
-					})}
+					))}
 				</List>
 			</div>
 		</Drawer>
 	);
 }
+
+// {/*component={CustomRouterLink}*/}
 
 Sidebar.propTypes = {
 	className: PropTypes.string,
