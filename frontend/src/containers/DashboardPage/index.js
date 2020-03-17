@@ -30,7 +30,9 @@ export default class DashboardPage extends Component {
       console.log(comments);
       return (
         <div className = "dashboardPage">
-          <Navbar/>
+          <Navbar
+          	title = "Dashboard"
+          />
           <List>
             {comments.map((comment, i) => (
               <Comment
