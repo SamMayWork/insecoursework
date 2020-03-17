@@ -434,7 +434,7 @@ async function useRealName(userid, status) {
  * @param {object} userInformation 
  */
 async function enrollUser(displayname, email) {
-  const query = "INSERT INTO users VALUES ($1, $2, $3, $4, $5);";
+  const query = "INSERT INTO users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) VALUES ($1, $2, $3, $4, $5);";
   const id = generateId(8);
   await executeQuery(query, [id, displayname, true, email, new Date()]);
   return id;

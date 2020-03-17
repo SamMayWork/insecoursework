@@ -213,3 +213,31 @@ describe('PMS Module DB Tests', function () {
 
     ////////////////////////////////////////////////////////////// CREATE USER   
 });
+
+
+describe('searchPosts', function () {
+  it('Should not return undefined for post_title drawn tube heat bean', async function () {
+    let result = await dbabs.searchPosts('drawn tube heat bean');
+    assert.notEqual(result, undefined);
+  });
+
+  it('Should return the expected content for the post_title drawn tube heat bean', async function () {
+    let result = await dbabs.searchPosts('drawn tube heat bean');
+    assert.deepEqual(result, {
+      post_id : 'ad7e89d1',
+      keyword_id : '2f64b1d3',
+      board_id : 'cfd5636c',
+      post_title : 'drawn tube heat bean',
+      post_content : 'classroom political history gradually exercise log introduced goes brought over art hollow won rabbit worker respect affect difference package greater first pilot be stems explore first these loud waste let recently slave hill war bone plant his care storm bend attached try forest army library manner happened half',
+      post_likes : 53,
+      user_id : 'acc45ba4',
+      created_date :  new Date('2020-02-21T00:00:00.000Z'),
+      edited_date :  new Date('2020-02-07T00:00:00.000Z')
+    });
+  });
+
+  it('Should return undefined if the post does not exist', async function () {
+    let result = await dbabs.searchPosts('DOESNOTE');
+    assert.equal(result, undefined);
+  })
+});

@@ -3,16 +3,6 @@ const dbabs = require('../dbabstraction');
 const uac = require('../useraccountsystem');
 
 describe('UAC Module DB Testing', function () {
-  // describe('enrollUser', function () {
-  //   it('Should return the users id and the users display name', async () => {
-  //     const result = await dbabs.enrollUser('awesomeDisplayname', 'awesomeemail@gmail.com');
-  //     assert.ok(result.user_name !== undefined && result.user_name !== undefined);
-  //     assert.deepEqual(result, {
-  //       user_name: 'awesomeDisplayname',
-  //       user_email: 'awesomeemail@gmail.com'});
-  //   });
-  // });
-
   describe('checkUserExists', function () {
     it('Should return true for the email sbaldock0@hostgator.com', async function () {
       assert.equal(await dbabs.checkUserExists('sbaldock0@hostgator.com'), true);
@@ -43,10 +33,68 @@ describe('UAC Module DB Testing', function () {
       assert.equal(await dbabs.getDisplayNameById('a2367eab'), 'dish');
     });
   });
+
+  // describe('enrollUser', () => {
+  //   it('Should return the users id and the users display name', async () => {
+  //     const result = await dbabs.enrollUser('awesomeDisplayName', 'awesomeemail@gmail.com');
+  //     console.log('/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////');
+  //     console.log(await dbabs.getUser(result));
+  //     console.log({
+  //       user_id : result,
+  //       user_displayname : 'awesomeDisplayName',
+  //       user_userealname : true,
+  //       user_email : 'awesomeemail@gmail.com',
+  //       user_dateofregistration : new Date()
+  //     });  
+      
+  //     assert.deepEqual(await dbabs.getUser(result), {
+  //       user_id : result,
+  //       user_displayname : 'awesomeDisplayName',
+  //       user_userealname : true,
+  //       user_email : 'awesomeemail@gmail.com',
+  //       user_dateofregistration : new Date()
+  //     });
+  //   });
+  // });
+
+  describe('getUser', function () {
+    it ('Should return undefined if the user does not exist', async function () {
+      assert.equal(await dbabs.getUser('DOESNOTE'), undefined);
+    });
+
+    it ('Should return the correct content for the row f217baa2', async function () {
+      assert.deepEqual(await dbabs.getUser('a2367eab'), {
+        user_id : 'a2367eab',
+        user_displayname : 'dish',
+        user_userealname : true,
+        user_email : 'sbaldock0@hostgator.com',
+        user_dateofregistration : new Date()
+      });
+    });
+  });
+
+  //assert.ok(result.user_name !== undefined && result.user_name !== undefined);
+
+  ////////////////////////////////////////////////////////////// CREATE REPLY COMMENT
+
+  // describe('createReplyComment', () => {
+  //   let commentid;
+  //   let commentContent;
+  //   it('Should return the expected id and content', async () =>{
+  //     const result = await dbabs.createReplyComment('This is the reply comment that tests the reply comment function', '100bad41', '7c367dd6', 'he72ieq8');
+  //     assert.ok(result.replyComment_id !== undefined && result.comment_content !== undefined);
+  //     commentid = result.replyComment_id;
+  //     commentContent = result.comment_content;
+  //   });
+
+  //   it('Should return correct information when comment is searched for', async() => {
+  //     const result = await dbabs.getComment(commentid);
+  //     assert.equal(commentContent, 'This is the reply comment that tests the reply comment function');
+  //   });
+  // });
 });
 
 describe('UAC Module Testing', function () {
-
   describe ('useRealName', function () {
     it('Should switch between using the users real name and their ID', async function () {
       let req = {
