@@ -1,3 +1,9 @@
+// Tests for the Maintenance Module, function listing:
+//
+// coldStart
+//    - Tests for does not throw
+//    - Does not currently test to make sure all of the boards are inserted correctly
+
 const assert = require('assert');
 const dbabs = require('../dbabstraction');
 const mm = require('../maintainmodule');

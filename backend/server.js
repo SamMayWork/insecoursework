@@ -10,7 +10,6 @@
 //  : --logging, logs every HTTP request made to the server, listing the resource and the IP
 //  : --coldstart, cold starts the system and creates all of the tables in the DB, requires restart
 //  : --nodb, starts the server with no attached Database, responding to queries with a template JSON
-//  : --softreset, removes all records from the Database, requires restart
 
 // ////////////////////////////////////////////////////////////// ESLINT-DISABLES
 
@@ -58,12 +57,6 @@ if (argv.coldstart) {
   logging.coldStartMessage('Cold-Start procedure has been finished, continuing to start the server!');
 }
 
-if (argv.softreset) {
-  logging.warningMessage('Soft Reset mode has been enabled, clearing the server now.');
-  maintain.softreset();
-  logging.warningMessage('Content of the Database has been cleared and the structure has been preserved');
-  logging.warningMessage('Restart the server without the --softreset, but with the --coldstart operation to begin normal operation');
-}
 // #endregion
 // ////////////////////////////////////////////////////////////// GETTING
 // #region Getting

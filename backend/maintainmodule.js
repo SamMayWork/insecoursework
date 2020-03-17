@@ -7,10 +7,6 @@ const logging = require('./logging');
 const dbabs = require('./dbabstraction');
 const modules = require('./modules');
 
-// ////////////////////////////////////////////////////////////// ESLINT-DISABLES
-
-/* eslint-disable no-use-before-define */
-
 // ////////////////////////////////////////////////////////////// MAINTAIN MODULE
 
 /**
@@ -25,14 +21,4 @@ function coldStart() {
   }
 }
 
-/**
- * Performs a soft reset on the DB, deleting all of the records but preserving the structure
- *
- * Please know what you're doing if you enable this option on startup.
- */
-function softReset() {
-  dbabs.deleteAllStoredContent();
-}
-
 module.exports.coldStart = coldStart;
-module.exports.softReset = softReset;
