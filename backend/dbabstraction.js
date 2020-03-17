@@ -437,11 +437,21 @@ async function enrollUser(displayname, email) {
   const query = "INSERT INTO users VALUES ($1, $2, $3, $4, $5);";
   const id = generateId(8);
   await executeQuery(query, [id, displayname, true, email, new Date()]);
-  return {
-    user_name: displayname,
-    user_email: email,
-    };
+  return id;
+}
+
+/**
+ * Gets a users information based on an id
+ * @param {string} userid 
+ */
+async function getUser (userid) {
+  const query = 'SELECT * FROM users WHERE user_id = $1;';
+  try {
+    return (await executeQuery(query, [userid])).results.rows[0];
+  } catch (exception) {
+    return undefined;
   }
+}
 
 /**
  * Gets the User ID of a given post
@@ -536,6 +546,7 @@ module.exports.getCommentAuthor = getCommentAuthor;
 module.exports.useRealName = useRealName;
 module.exports.getDisplayNameById = getDisplayNameById;
 module.exports.getUserId = getUserId;
+module.exports.getUser = getUser;
 
 module.exports.reportPost = reportPost;
 module.exports.reportComment = reportComment;
