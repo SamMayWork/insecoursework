@@ -447,7 +447,8 @@ async function enrollUser(displayname, email) {
 async function getUser (userid) {
   const query = 'SELECT * FROM users WHERE user_id = $1;';
   try {
-    return (await executeQuery(query, [userid])).results.rows[0];
+    const result = await executeQuery(query, [userid]); 
+    return result.rows[0];
   } catch (exception) {
     return undefined;
   }

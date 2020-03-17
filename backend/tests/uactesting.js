@@ -62,13 +62,13 @@ describe('UAC Module DB Testing', function () {
       assert.equal(await dbabs.getUser('DOESNOTE'), undefined);
     });
 
-    it ('Should return the correct content for the row f217baa2', async function () {
+    it ('Should return the correct content for the row a2367eab', async function () {
       assert.deepEqual(await dbabs.getUser('a2367eab'), {
         user_id : 'a2367eab',
         user_displayname : 'dish',
         user_userealname : true,
         user_email : 'sbaldock0@hostgator.com',
-        user_dateofregistration : new Date()
+        user_dateofregistration : new Date('2020-02-07T00:00:00.000Z')
       });
     });
   });
@@ -78,8 +78,7 @@ describe('UAC Module DB Testing', function () {
   ////////////////////////////////////////////////////////////// CREATE REPLY COMMENT
 
   // describe('createReplyComment', () => {
-  //   let commentid;
-  //   let commentContent;
+    583  //   let commentContent;
   //   it('Should return the expected id and content', async () =>{
   //     const result = await dbabs.createReplyComment('This is the reply comment that tests the reply comment function', '100bad41', '7c367dd6', 'he72ieq8');
   //     assert.ok(result.replyComment_id !== undefined && result.comment_content !== undefined);
