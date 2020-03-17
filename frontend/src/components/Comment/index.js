@@ -3,7 +3,7 @@ import LikeButton from "../LikeButton";
 
 import "./index.css";
 
-function Comment(props) {
+export default Comment = props => {
   return (
     <div className="comment">
       <div className="comment_title">
@@ -15,18 +15,15 @@ function Comment(props) {
             {props.author}
           </div>
           <div className="comment_replies">
-          {new Date(props.date).toLocaleDateString()}
+          	{props.replies}
           </div>
           <div className="comment_stats">
-          <div className="comment_likes">
-            <LikeButton/>
-          </div>  
+		        <div className="comment_likes">
+		          <LikeButton/>
+		        </div>  
           </div>
         </div>
-
       </div>
      </div>
   );
 }
-
-export default Comment;

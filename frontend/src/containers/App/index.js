@@ -2,8 +2,7 @@
  * 
  * App
  * 
- * This component is the skeleton around the actual pages and only contains code
- * which is seen on all pages
+ * This component is the skeleton around the actual pages and only contains code which is seen on all pages
  */
 
 import React from 'react';
@@ -13,7 +12,8 @@ import Dashboard from '../DashboardPage';
 import Account from '../AccountPage';
 import Post from '../PostEdit';
 import Comment from '../CommentEdit';
-import PostView from'../PostView';
+import PostView from '../PostView';
+import Module from '../ModulePage';
 
 import {
   BrowserRouter as Router,
@@ -29,10 +29,11 @@ export default function App() {
       <Router>
         <Switch>
           <Route exact path="/" component={Login}/>
-          <Route path="/dashboard" component={Dashboard}/>
           <Route path="/account" component={Account}/>
-          <Route path="/post" component={Post}/>
           <Route path="/comment" component={Comment}/>
+          <Route path="/dashboard" component={Dashboard}/>
+          <Route path="/module" component={Module}/>
+          <Route path="/post" component={Post}/>
           <Route path="/postview" component={PostView}/>
         </Switch>
       </Router>
