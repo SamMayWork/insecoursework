@@ -25,6 +25,9 @@ import {
   Select,
   MenuItem,
 } from '@material-ui/core';
+
+import BackBar from '../../components/BackBar';
+
 import styled from 'styled-components';
 
 import './accountPage.css';
@@ -207,6 +210,9 @@ class DeleteDialog extends Component {
 export function AccountPage() {
   return (
     <div className = "accountPage">
+    	<BackBar
+    		title = "Account"
+    	/>
       <NotificationZone/>
       <PrivacyZone/>
       <DangerZone/>

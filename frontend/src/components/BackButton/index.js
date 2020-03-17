@@ -1,0 +1,33 @@
+import React from 'react';
+import { makeStyles } from '@material-ui/styles/';
+import {
+	IconButton
+} from '@material-ui/core';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { withRouter } from 'react-router-dom';
+
+const useStyles = makeStyles(theme => ({
+  backButton: {
+    
+  },
+}));
+
+function BackButton(props) {
+	const classes = useStyles();
+	const handleBack = () => {
+		props.history.goBack();
+	}
+	return (
+		<IconButton
+			onClick = { handleBack }
+	    edge="start"
+	    className={classes.backButton}
+	    color="inherit"
+	    aria-label="go back"
+	  >
+	    <ArrowBackIcon />
+	  </IconButton>
+	);
+}
+
+export default withRouter(BackButton);
