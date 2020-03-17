@@ -1,3 +1,8 @@
+// All of the tests for the logging module, since there is no DB
+// testing for this module and since none of the functions do anything
+// that can crash the system this is just a visual check to make sure
+// that all of the functions are printing correctly.
+
 const assert = require('assert');
 const logging = require('../logging');
 
