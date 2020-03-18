@@ -13,10 +13,10 @@
 
 const mailer = require('nodemailer');
 const dbabs = require('./dbabstraction');
-const login = require('../emaillogin');
+// const login = require('../emaillogin');
 const logging = require('./logging');
 
-let available = true;
+let available = false;
 let transporter;
 
 // ////////////////////////////////////////////////////////////// CONNECTION GENERATOR
