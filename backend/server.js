@@ -10,7 +10,6 @@
 //  : --logging, logs every HTTP request made to the server, listing the resource and the IP
 //  : --coldstart, cold starts the system and creates all of the tables in the DB, requires restart
 //  : --nodb, starts the server with no attached Database, responding to queries with a template JSON
-//  : --softreset, removes all records from the Database, requires restart
 
 // ////////////////////////////////////////////////////////////// ESLINT-DISABLES
 
@@ -42,9 +41,9 @@ app.use(express.static('frontend/build/'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use(GoogleAuth("817279853236-toe6rfq5ebg7rife6fvd82hh0eclpt3t.apps.googleusercontent.com"));
+app.use(GoogleAuth('817279853236-toe6rfq5ebg7rife6fvd82hh0eclpt3t.apps.googleusercontent.com'));
 app.use('/forum', GoogleAuth.guardMiddleware());
-//#endregion
+// #endregion
 // ////////////////////////////////////////////////////////////// COMMAND LINE ARGUMENTS
 // #region Command line arguments
 if (argv.nodb) {
@@ -58,12 +57,6 @@ if (argv.coldstart) {
   logging.coldStartMessage('Cold-Start procedure has been finished, continuing to start the server!');
 }
 
-if (argv.softreset) {
-  logging.warningMessage('Soft Reset mode has been enabled, clearing the server now.');
-  maintain.softreset();
-  logging.warningMessage('Content of the Database has been cleared and the structure has been preserved');
-  logging.warningMessage('Restart the server without the --softreset, but with the --coldstart operation to begin normal operation');
-}
 // #endregion
 // ////////////////////////////////////////////////////////////// GETTING
 // #region Getting
@@ -97,7 +90,7 @@ app.get('/get', async (req, res) => {
  * Handler for / so if someone just types in our IP they will get index.html
  */
 app.get('/', (req, res) => {
-  res.sendFile('frontend/index.html');
+  res.sendFile('frontend/index.html', { root: __dirname });
   res.status(200);
   res.end();
 });
@@ -234,18 +227,18 @@ app.post('forum/report', (req, res) => {
 });
 // #endregion
 // ////////////////////////////////////////////////////////////// UAC ENDPOINTS
-//#region UAC Endpoints
+// #region UAC Endpoints
 
-app.post('uac/register', async function () {
-
-});
-
-app.post('forum/uac/', async function () {
+app.post('uac/register', async () => {
 
 });
 
+app.post('forum/uac/', async () => {
 
-//#endregion
+});
+
+
+// #endregion
 // ////////////////////////////////////////////////////////////// CATCH-ALLS
 // #region 404 Handlers
 // Catch-all for 404's
