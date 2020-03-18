@@ -21,8 +21,8 @@ describe('Maintenance Module', () => {
     });
 
     it('Should insert the rows correctly', async () => {
-      let query = "SELECT * FROM Board WHERE board_module = 'Educational Computing';";
+      const query = "SELECT * FROM Board WHERE board_module = 'Educational Computing';";
       assert.deepEqual((await dbabs.executeRawQuerySync(query)).rowCount, 1);
-    }); 
+    });
   });
 });

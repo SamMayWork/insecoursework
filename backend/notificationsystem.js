@@ -11,8 +11,8 @@
 
 // ////////////////////////////////////////////////////////////// REQUIRES
 
-const dbabs = require('./dbabstraction');
 const mailer = require('nodemailer');
+const dbabs = require('./dbabstraction');
 const login = require('../emaillogin');
 const logging = require('./logging');
 
@@ -21,19 +21,19 @@ let transporter;
 
 // ////////////////////////////////////////////////////////////// CONNECTION GENERATOR
 
-function startConnection () {
+function startConnection() {
   try {
     transporter = mailer.createTransport({
-      service : 'gmail',
-      auth : {
-        user : emailinformation.email,
-        pass : emailinformation.password
-      }
+      service: 'gmail',
+      auth: {
+        user: emailinformation.email,
+        pass: emailinformation.password,
+      },
     });
   } catch (exception) {
     available = false;
     logging.errorMessage(exception);
-    logging.errorMessage("Email Spin-up failed, continuing without mailing services");
+    logging.errorMessage('Email Spin-up failed, continuing without mailing services');
     logging.warningMessage("(Have you made sure you've got an emaillogin.js file?)");
   }
 }
@@ -45,43 +45,43 @@ startConnection();
 /**
  * Generates and sends an SMTP email
  * @param {string} email Email address to send to
- * @param {string} subject Subject line 
+ * @param {string} subject Subject line
  * @param {string} message Content of the email (plaintext only currently)
- * 
+ *
  * @returns A JSON object containing a status code (.code) and a messageId if successful
  */
-async function sendEmail (email, subject, message) {
+async function sendEmail(email, subject, message) {
   if (!available) {
-    logging.errorMessage("Email functionality has been turned off");
+    logging.errorMessage('Email functionality has been turned off');
     return {
-      code : 101
+      code: 101,
     };
   }
 
   try {
-    let info = await transporter.sendMail({
-      from : "inseforum@gmail.com",
-      to : email,
-      subject : subject,
-      text : message
+    const info = await transporter.sendMail({
+      from: 'inseforum@gmail.com',
+      to: email,
+      subject,
+      text: message,
     });
     return {
-      id : info.messageId,
-      code : 252
-    }
+      id: info.messageId,
+      code: 252,
+    };
   } catch (exception) {
     logging.errorMessage(exception);
     return {
-      code : 111
+      code: 111,
     };
   }
 }
 
 /**
  * Changes the status of email sending from the notification module
- * @param {boolean} status 
+ * @param {boolean} status
  */
-function emailAvailableStatus (status) {
+function emailAvailableStatus(status) {
   available = status;
 }
 
@@ -89,7 +89,7 @@ function emailAvailableStatus (status) {
 
 /**
  * Generates an email to the request address using only the provided message parameter
- * @param {request} req 
+ * @param {request} req
  * @param {string} message Message to send to the user
  */
 async function generateGenericEmail(req, subject, message) {
@@ -100,7 +100,7 @@ async function generateGenericEmail(req, subject, message) {
 
 /**
  * Sends an emai to the user when their post has been successfully created
- * @param {request} req 
+ * @param {request} req
  * @param {string} postid ID of the created post
  */
 async function generatePostConfirmation(req, postid) {
@@ -110,11 +110,10 @@ async function generatePostConfirmation(req, postid) {
   }
   let content = `Hi ${await dbabs.getDisplayNameByEmail(req.user.emails[0].value)},\n\n`;
   content += `We're sending you this email to confirm ✔️ that "${postInformation.post_title}" was posted on ${postInformation.created_date}\n\n`;
-  content += `Thanks, (Unofficial)UoP Forum team\n\nBleep Bloop I am a robot 🤖, report any errors ❌ to up891153@myport.ac.uk`;
-  const result = await sendEmail(req.user.emails[0].value, "Post Confirmation!", content);
+  content += 'Thanks, (Unofficial)UoP Forum team\n\nBleep Bloop I am a robot 🤖, report any errors ❌ to up891153@myport.ac.uk';
+  const result = await sendEmail(req.user.emails[0].value, 'Post Confirmation!', content);
   return result.code;
 }
-
 
 
 // ////////////////////////////////////////////////////////////// EXPORTS

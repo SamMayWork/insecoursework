@@ -6,8 +6,8 @@
 const assert = require('assert');
 const logging = require('../logging');
 
-describe('logging tests', function () {
-  it('Should have all different text methods appear correctly', function () {
+describe('logging tests', () => {
+  it('Should have all different text methods appear correctly', () => {
     logging.coldStartMessage('This should be a cold-start message!');
     logging.errorMessage('This should be an error message!');
     logging.logHttpGetMessage({}, 'This should be a HTTP GET message!');

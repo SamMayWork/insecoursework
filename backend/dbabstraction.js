@@ -182,11 +182,11 @@ async function createBoard(board_name, board_year) {
   const query = 'INSERT INTO Board (board_id, board_module, board_year) VALUES ($1, $2, $3);';
   const id = generateId(8);
   await executeQuery(query, [id, board_name, board_year]);
-    return{ 
+  return {
     board_name,
     board_id: id,
-    };
-};
+  };
+}
 
 /**
  * Creates a list of keywords for a post to be associated with
@@ -237,7 +237,7 @@ async function createComment(comment_content, user_id, post_id) {
   await executeQuery(commentQuery, [id, comment_content, 0, user_id, post_id]);
   return {
     comment_id: id,
-    comment_content
+    comment_content,
   };
 }
 
@@ -320,7 +320,7 @@ async function increasePostViews(postid) {
   const query = 'UPDATE Post_Views SET views = views + 1 WHERE post_id = $1';
   const query2 = 'SELECT * FROM Post_Views WHERE post_id = $1';
   await executeQuery(query, [postid]);
-  const result = await executeQuery(query2, [postid]) 
+  const result = await executeQuery(query2, [postid]);
   return result.rows[0];
 }
 
@@ -331,7 +331,7 @@ async function increasePostViews(postid) {
 async function increaseCommentViews(commentid) {
   const query = 'UPDATE Comment_Views SET views = views + 1 WHERE comment_id = $1';
   await executeQuery(query, [commentid]);
-  const result = await executeQuery(query2, [commentid])  
+  const result = await executeQuery(query2, [commentid]);
   return result;
 }
 
@@ -395,7 +395,7 @@ async function checkUserExists(email) {
   const query = 'SELECT user_id FROM Users WHERE user_email = $1;';
   const results = await executeQuery(query, [email]);
   try {
-    return results.rows[0].user_id !== undefined ? true : false;
+    return results.rows[0].user_id !== undefined;
   } catch (exception) {
     return false;
   }
@@ -403,9 +403,9 @@ async function checkUserExists(email) {
 
 /**
  * Gets the UserID for a given email address
- * @param {string} email Email address to search 
+ * @param {string} email Email address to search
  */
-async function getUserId (email) {
+async function getUserId(email) {
   try {
     const query = 'SELECT user_id FROM Users WHERE user_email = $1;';
     const results = await executeQuery(query, [email]);
@@ -417,27 +417,27 @@ async function getUserId (email) {
 
 /**
  * Switches between using the users real name and their UP number
- * @param {string} userid 
+ * @param {string} userid
  * @param {boolean} status if true, uses real name
  */
 async function useRealName(userid, status) {
-  const query = "UPDATE users SET user_userealname = $1 WHERE user_id = $2;";
+  const query = 'UPDATE users SET user_userealname = $1 WHERE user_id = $2;';
   executeQuery(query, [status, userid]);
 }
 
 /**
  * Creates a user and enrolls them into the DB
- * @param {object} userInformation 
+ * @param {object} userInformation
  */
 async function enrollUser(displayname, email) {
-  const query = "INSERT INTO users VALUES ($1, $2, $3, $4, $5);";
+  const query = 'INSERT INTO users VALUES ($1, $2, $3, $4, $5);';
   const id = generateId(8);
   await executeQuery(query, [id, displayname, true, email, new Date()]);
   return {
     user_name: displayname,
     user_email: email,
-    };
-  }
+  };
+}
 
 /**
  * Gets the User ID of a given post
@@ -469,27 +469,26 @@ async function getCommentAuthor(commentid) {
 
 /**
  * Gets the display name of a user using their ID
- * @param {string} userid the user id to get the display name for 
+ * @param {string} userid the user id to get the display name for
  */
-async function getDisplayNameById (userid) {
+async function getDisplayNameById(userid) {
   try {
     let query = 'SELECT user_userealname FROM users WHERE user_id = $1;';
-    let results = await executeQuery(query, [userid]); 
+    let results = await executeQuery(query, [userid]);
     if (results.rows[0].user_userealname === true) {
       query = 'SELECT user_displayname FROM users WHERE user_id = $1;';
       results = await executeQuery(query, [userid]);
       return results.rows[0].user_displayname;
-    } else {
-      query = 'SELECT user_email FROM users WHERE user_id = $1;';
-      results = await executeQuery(query, [userid]);
-      return results.rows[0].user_email;
     }
+    query = 'SELECT user_email FROM users WHERE user_id = $1;';
+    results = await executeQuery(query, [userid]);
+    return results.rows[0].user_email;
   } catch (exception) {
     return undefined;
   }
 }
 
-async function getDisplayNameByEmail (email) {
+async function getDisplayNameByEmail(email) {
   return await getDisplayNameById(await getUserId(email));
 }
 

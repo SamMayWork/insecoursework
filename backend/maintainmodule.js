@@ -1,7 +1,7 @@
 // Created on 07/02/2020
 //
 // This module is responsible for the cold-start operation of the
-// system. This operation should be run anually to create all of 
+// system. This operation should be run anually to create all of
 // the new boards
 
 const logging = require('./logging');

@@ -41,9 +41,9 @@ app.use(express.static('frontend/build/'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use(GoogleAuth("817279853236-toe6rfq5ebg7rife6fvd82hh0eclpt3t.apps.googleusercontent.com"));
+app.use(GoogleAuth('817279853236-toe6rfq5ebg7rife6fvd82hh0eclpt3t.apps.googleusercontent.com'));
 app.use('/forum', GoogleAuth.guardMiddleware());
-//#endregion
+// #endregion
 // ////////////////////////////////////////////////////////////// COMMAND LINE ARGUMENTS
 // #region Command line arguments
 if (argv.nodb) {
@@ -90,7 +90,7 @@ app.get('/get', async (req, res) => {
  * Handler for / so if someone just types in our IP they will get index.html
  */
 app.get('/', (req, res) => {
-  res.sendFile('frontend/index.html', {root : __dirname});
+  res.sendFile('frontend/index.html', { root: __dirname });
   res.status(200);
   res.end();
 });
@@ -227,18 +227,18 @@ app.post('forum/report', (req, res) => {
 });
 // #endregion
 // ////////////////////////////////////////////////////////////// UAC ENDPOINTS
-//#region UAC Endpoints
+// #region UAC Endpoints
 
-app.post('uac/register', async function () {
-
-});
-
-app.post('forum/uac/', async function () {
+app.post('uac/register', async () => {
 
 });
 
+app.post('forum/uac/', async () => {
 
-//#endregion
+});
+
+
+// #endregion
 // ////////////////////////////////////////////////////////////// CATCH-ALLS
 // #region 404 Handlers
 // Catch-all for 404's
