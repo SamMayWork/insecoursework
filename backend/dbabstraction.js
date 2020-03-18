@@ -88,7 +88,7 @@ function generateId(length) {
 // ////////////////////////////////////////////////////////////// GETTING-CONTENT
 // #region Getting Content
 /**
- * Gets a post and all of its content (including comments), this method hides the
+ * Gets a post and all of its content, this method hides the
  * raw database output in a JSON object with aliases for the column names to simplify use
  * @param {string} postid The ID of the post to get
  */
@@ -489,6 +489,10 @@ async function getDisplayNameById (userid) {
   }
 }
 
+async function getDisplayNameByEmail (email) {
+  return await getDisplayNameById(await getUserId(email));
+}
+
 // #endregion
 // ////////////////////////////////////////////////////////////// DELETING CONTENT
 // #region Deletion
@@ -532,6 +536,7 @@ module.exports.getCommentAuthor = getCommentAuthor;
 module.exports.useRealName = useRealName;
 module.exports.getDisplayNameById = getDisplayNameById;
 module.exports.getUserId = getUserId;
+module.exports.getDisplayNameByEmail = getDisplayNameByEmail;
 
 module.exports.reportPost = reportPost;
 module.exports.reportComment = reportComment;

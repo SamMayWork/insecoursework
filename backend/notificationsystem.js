@@ -4,6 +4,11 @@
 // out to the target using, any module can call it and it interfaces with the
 // email API and with dbabs itself
 
+// Status Codes
+// 252 - Everything went alright but we're not confirming the address is correct
+// 111 - Client Error
+// 101 - Connection blocked
+
 // ////////////////////////////////////////////////////////////// REQUIRES
 
 const dbabs = require('./dbabstraction');
@@ -93,8 +98,21 @@ async function generateGenericEmail(req, subject, message) {
   return result.code;
 }
 
+/**
+ * Sends an emai to the user when their post has been successfully created
+ * @param {request} req 
+ * @param {string} postid ID of the created post
+ */
 async function generatePostConfirmation(req, postid) {
-  const content = `Hi `
+  const postInformation = await dbabs.getPost(postid);
+  if (postInformation === undefined || await !dbabs.checkUserExists(req.user.emails[0].value)) {
+    return 101;
+  }
+  let content = `Hi ${await dbabs.getDisplayNameByEmail(req.user.emails[0].value)},\n\n`;
+  content += `We're sending you this email to confirm ✔️ that "${postInformation.post_title}" was posted on ${postInformation.created_date}\n\n`;
+  content += `Thanks, (Unofficial)UoP Forum team\n\nBleep Bloop I am a robot 🤖, report any errors ❌ to up891153@myport.ac.uk`;
+  const result = await sendEmail(req.user.emails[0].value, "Post Confirmation!", content);
+  return result.code;
 }
 
 
@@ -104,5 +122,6 @@ async function generatePostConfirmation(req, postid) {
 module.exports.emailAvailableStatus = emailAvailableStatus;
 
 module.exports.generateGenericEmail = generateGenericEmail;
+module.exports.generatePostConfirmation = generatePostConfirmation;
 
 module.exports.sendEmail = sendEmail;

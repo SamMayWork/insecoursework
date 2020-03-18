@@ -50,6 +50,16 @@ describe('UAC Module DB Testing', () => {
       assert.equal(await dbabs.getDisplayNameById('a2367eab'), 'dish');
     });
   });
+
+  describe('getDisplayNameByEmail', () => {
+    it('Should return the correct displayname for the email osibbef@japanpost.jp', async () => {
+      assert.equal(await dbabs.getDisplayNameByEmail('osibbef@japanpost.jp'), 'largest');
+    });
+
+    it('Should return undefined if the email specified is not in the database', async () => {
+      assert.equal(await dbabs.getDisplayNameByEmail('thisisnotavalidemail@email.com'), undefined);
+    });
+  });
 });
 // #endregion
 // ////////////////////////////////////////////////////////////// MODULE TESTING
