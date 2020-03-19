@@ -415,6 +415,16 @@ async function getUserId(email) {
   }
 }
 
+async function getUserID(email) {
+  try {
+    const query = 'SELECT user_id FROM Users WHERE user_email = $1;';
+    const results = await executeQuery(query, [email]);
+    return results.rows[0];
+  } catch (exception) {
+    return undefined;
+  }
+}
+
 /**
  * Switches between using the users real name and their UP number
  * @param {string} userid
@@ -535,6 +545,7 @@ module.exports.getCommentAuthor = getCommentAuthor;
 module.exports.useRealName = useRealName;
 module.exports.getDisplayNameById = getDisplayNameById;
 module.exports.getUserId = getUserId;
+module.exports.getUserId = getUserID;
 module.exports.getDisplayNameByEmail = getDisplayNameByEmail;
 
 module.exports.reportPost = reportPost;

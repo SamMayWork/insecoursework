@@ -292,9 +292,9 @@ describe('getUserId', function () {
   });
 
   it('Should return the expected content for the email sbaldock0@hostgator.com', async function () {
-    let result = await dbabs.getUserId('sbaldock0@hostgator.com');
+    let result = await dbabs.getUserID('sbaldock0@hostgator.com');
     assert.deepEqual(result, {
-      'a2367eab'
+      user_id : 'a2367eab'
   });
   });
 
