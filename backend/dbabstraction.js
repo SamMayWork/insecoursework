@@ -545,7 +545,7 @@ module.exports.getCommentAuthor = getCommentAuthor;
 module.exports.useRealName = useRealName;
 module.exports.getDisplayNameById = getDisplayNameById;
 module.exports.getUserId = getUserId;
-module.exports.getUserId = getUserID;
+module.exports.getUserID = getUserID;
 module.exports.getDisplayNameByEmail = getDisplayNameByEmail;
 
 module.exports.reportPost = reportPost;
