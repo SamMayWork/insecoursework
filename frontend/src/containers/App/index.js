@@ -13,6 +13,7 @@ import Account from '../AccountPage';
 import Post from '../PostPage';
 import Comment from '../CommentEdit';
 import PostView from '../PostView';
+import PostEditPage from '../PostEdit';
 import Module from '../ModulePage';
 
 import {
@@ -34,6 +35,7 @@ export default function App() {
           <Route path="/dashboard" component={Dashboard}/>
           <Route path="/module" component={Module}/>
           <Route path="/post" component={Post}/>
+          <Route path="/PostEdit" component={PostEditPage}/>
           <Route path="/postview" component={PostView}/>
         </Switch>
       </Router>

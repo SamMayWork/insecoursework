@@ -7,10 +7,11 @@
 
 import React, {Component, useState} from 'react';
 import List from '../../components/List';
-import Comment from '../../components/Comment';
+import DataCard from '../../components/DataCard';
 
 import Navbar from '../../containers/Navbar';
 import Sidebar from '../../components/Sidebar';
+import ReactWeather from 'react-open-weather';
 
 export default class DashboardPage extends Component {
   constructor(props) {
@@ -19,7 +20,13 @@ export default class DashboardPage extends Component {
       error: null,
       isLoaded: false,
       items: [],
-      openSidebar: false
+      openSidebar: false,
+      quicklinks: {
+        title: 'test',
+        author: 'test2',
+        replies: 'test3',
+        date: 'test4'
+      }
     }
   }
   render() {
@@ -51,7 +58,15 @@ export default class DashboardPage extends Component {
 						open = {this.state.openSidebar}
 						variant = {'temporary'}
 					/>
-          <List>
+
+          <DataCard
+            link1 = {this.state.quicklinks.link1}
+            link2 = {this.state.quicklinks.link2}
+            link3 = {this.state.quicklinks.link3}
+          /> 
+
+          
+          {/* <List>
             {comments.map((comment, i) => (
               <Comment
                 key = {i}
@@ -61,7 +76,7 @@ export default class DashboardPage extends Component {
                 date = {comment.date}
               />
             ))}
-          </List>
+          </List> */}
         </div>
       );
     }

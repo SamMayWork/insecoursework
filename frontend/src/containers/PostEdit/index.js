@@ -6,6 +6,7 @@
  */
 
 import React, {Component} from 'react';
+import BackBar from '../../components/BackBar'
 import {
   FormControl,
   InputLabel,
@@ -19,31 +20,50 @@ import {
 
 import './post.css';
 
-
 export default class PostEditPage extends Component {
-state = {
-  keywords: []
-}
-handleSubmit = () => {
-  const body = {
-    title: this.state.titleContent,
-    content: this.state.bodyContent,
-    keywords: this.state.keywords
-}
+  state = {
+    keywords: [],
+    pageTitle: 'Create a New Thread'
+  }
+  constructor(props) {
+    super(props);
+  }
+  handleSubmit = () => {
+    const body = {
+      title: this.state.titleContent,
+      content: this.state.bodyContent,
+      keywords: this.state.keywords
+    }
+    fetch("/forum/create?type=post", {
+      method: 'POST',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      },
+      body: JSON.stringify(body)
+    }); 
+  }
+  componentDidMount() {
+    // this.editPost();
+  }
 
 
-fetch("/forum/create?type=post", {
-  method: 'POST',
-  mode: 'cors',
-  cache: 'no-cache',
-  credentials: 'same-origin',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(body)
-}); 
-}
+  editPost(postnametochange) {
+    const body = {
+      title: 'Test',
+      content: 'TEst2',
+      keywords: ['test1', '2test2']
+    }
 
+    this.setState({
+      title: body.title,
+      content: body.content,
+      keywords: body.keywords,
+      pageTitle: 'Edit Existing Thread'
+    });
+  }
 
   //Send to server
   //confirmation of post success
@@ -55,94 +75,109 @@ fetch("/forum/create?type=post", {
 
 
 
- 
-handleTitleChange = (e) => {
-  this.setState({
-    titleContent: e.target.value
-  }, () => {
-    console.log('[TITLE CONTENT]:', this.state.titleContent);
-  });
-}
 
-handleBodyChange = (e) => {
-  this.setState({
-    bodyContent: e.target.value
-  }, () => {
-    console.log('[Body CONTENT]:', this.state.bodyContent);
-  });
-}
 
-handleKeyWordChange = (e) => {
-  if (e.keyCode == 13 || e.keyCode == 32) {
-    let joined = this.state.keywords.concat(e.target.value);
-    if(joined.length <= 5) {
+
+
+  handleTitleChange = (e) => {
+    let val = e.target.value.trim(); 
+    if(val.length > 0 && val.length <= 50) {
       this.setState({
-        keywords: joined
+        titleContent: e.target.value
+      }, () => {
+        console.log('[TITLE CONTENT]:', this.state.titleContent);
       });
-    } else {
-      return;
     }
-    e.target.value = '';
+  }
+
+  handleBodyChange = (e) => {
+    this.setState({
+      bodyContent: e.target.value
+    }, () => {
+      console.log('[Body CONTENT]:', this.state.bodyContent);
+    });
+  }
+  handleKeyWordChange = (e) => {
+    if (e.keyCode == 13 || e.keyCode == 32) {
+      let val = e.target.value.trim(); 
+      
+      console.log(val)
+
+      if((!this.state.keywords.includes(val)) && (val.length > 0 && val.length <= 30) && this.state.keywords.length < 5) {
+        let joined = this.state.keywords.concat(val);
+        this.setState({
+          keywords: joined
+        });
+      }
+      console.log(this.state.keywords)
+      e.target.value = ''; 
     }
-    
-}
-
-
-handleDeleteKeyword(val) {
-  console.log(val);
-}
-
-render() {
-  return (
-    <div className="postPage">
-    <FormControl fullWidth>
-      <TextField
-        autoFocus
-        margin="dense"
-        id="postTitle"
-        type="text"
-        label="Title"
-        onChange={this.handleTitleChange}
-        fullWidth
+  }
+  handleDeleteKeyword(keyword) {
+    this.setState({
+      keywords: this.state.keywords.filter((chip) => chip !== keyword)
+    })
+    console.log(this.state.keywords)
+  }
+  render() {
+    return (
+      <div><BackBar
+      title = {this.state.pageTitle}
       />
-      <TextField
-        autoFocus
-        margin="dense"
-        id="postTitle"
-        type="text"
-        label="Keywords"
-        onKeyDown={this.handleKeyWordChange}
-        fullWidth
-      />
-      <div>
-        {
-          this.state.keywords.map((keyword, i) => 
-            <Chip
-              key={i}
-              color="primary"
-              label={keyword}
-              onDelete={this.handleDeleteKeyword}
-            />
-          )
-        }
-      </div>
-      <TextField className="postBody"
-        autoFocus
-        margin="dense"
-        id="postTitle"
-        type="text"
-        multiline
-        onChange={this.handleBodyChange}
-        fullWidth
-        rows="10"
-      />
-      <Button onClick={this.handleSubmit} color="primary">
-        Confirm
-      </Button>
-    </FormControl>
-    </div>
-  );
-}
-}
+      <div className="postPage">
+      
+      <FormControl fullWidth>
+        <TextField
+          autoFocus
+          margin="dense"
+          id="postTitle"
+          type="text"
+          label="Title"
+          onChange={this.handleTitleChange}
+          inputProps={{ maxLength: 50 }}
+          value={this.state.title}
+          fullWidth
+        />
+        <TextField
+          autoFocus
+          margin="dense"
+          id="postTitle"
+          type="text"
+          label="Keywords"
+          onKeyDown={this.handleKeyWordChange}
+          inputProps={{ maxLength: 30 }}
+          fullWidth
 
-
+        />
+        <div>
+          {
+            this.state.keywords.map((keyword, i) => 
+              <Chip
+                key={keyword}
+                color="primary"
+                label={keyword}
+                onDelete={() => this.handleDeleteKeyword(keyword)}
+              />
+            )
+          }
+        </div>
+        <TextField className="postBody"
+          autoFocus
+          margin="dense"
+          id="postTitle"
+          type="text"
+          multiline
+          onChange={this.handleBodyChange}
+          fullWidth
+          value={this.state.content}
+          rows="10"
+          inputProps={{ maxLength: 1500 }}
+        />
+        <Button onClick={this.handleSubmit} color="primary">
+          Confirm
+        </Button>
+      </FormControl>
+      </div></div>
+    );
+  }
+}

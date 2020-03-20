@@ -93,6 +93,7 @@ function generateId(length) {
  * @param {string} postid The ID of the post to get
  */
 async function getPost(postid) {
+  
   const query = 'SELECT * FROM posts WHERE post_id = $1;';
   const results = await executeQuery(query, [postid]);
   return results.rows[0];
