@@ -60,6 +60,23 @@ describe('UAC Module DB Testing', () => {
       assert.equal(await dbabs.getDisplayNameByEmail('thisisnotavalidemail@email.com'), undefined);
     });
   });
+
+  describe('getUserId', function () {
+    it('Should not return undefined for the email sbaldock0@hostgator.com', async function () {
+      let result = await dbabs.getUserId('sbaldock0@hostgator.com');
+      assert.notEqual(result, undefined);
+    });
+  
+    it('Should return the expected content for the email sbaldock0@hostgator.com', async function () {
+      let result = await dbabs.getUserId('sbaldock0@hostgator.com');
+      assert.deepEqual(result, 'a2367eab');
+    });
+  
+    it('Should return undefined if the email does not exist', async function () {
+      let result = await dbabs.searchPosts('DOESNOTE');
+      assert.equal(result, undefined);
+    });
+  });
 });
 // #endregion
 // ////////////////////////////////////////////////////////////// MODULE TESTING

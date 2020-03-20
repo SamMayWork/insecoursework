@@ -1,6 +1,6 @@
 const assert = require('assert');
 const dbabs = require('../dbabstraction');
-
+const pms = require('../postmodule');
 
 describe('PMS Module DB Tests', () => {
   describe('searchPosts', () => {
@@ -239,3 +239,73 @@ describe('PMS Module DB Tests', () => {
 
   // //////////////////////////////////////////////////////////// CREATE USER
 });
+
+describe('Post Module Testing', () => {
+  describe('getPost', () => {
+    it('Should not return undefined when searching for post 11f3b99f', async () => {
+      const req = {
+        user: {
+          emails: [
+            { value: 'umoaksond@msu.edu' },
+          ],
+        },
+        query : {
+          postid : '11f3b99f'
+        }
+      };
+
+      const res = {
+        jsonresponse : 0,
+        status(value) {},
+        end() {},
+        json (content) { this.jsonresponse = content }
+      }
+     
+      await pms.getPost(req, res);
+      assert.notEqual(res.jsonresponse, undefined);
+    });
+
+    it('Should return the correct post information for the post 11f3b99f', async () => {
+      const req = {
+        user: {
+          emails: [
+            { value: 'umoaksond@msu.edu' },
+          ],
+        },
+        query : {
+          postid : '11f3b99f'
+        }
+      };
+
+      const res = {
+        jsonresponse : 0,
+        status(value) {},
+        end() {},
+        json (content) { this.jsonresponse = content }
+      }
+
+      await pms.getPost(req, res);
+      assert.deepEqual(res.jsonresponse.post_information, {
+        id: '11f3b99f',
+        title: 'stems till wore stretch',
+        content: 'exclaimed scene ice game also closer became law damage hold mail hour care give definition spread bent step walk modern mad whole beautiful your tank sense cold picture listen hunt phrase construction grade direction shaking fastened summer chair purpose birds herd safety discover toward folks nature talk truck',
+        likes: 10,
+        author: 'acc45ba4',
+      });
+    });
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
