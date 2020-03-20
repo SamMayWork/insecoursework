@@ -16,7 +16,7 @@ const dbabs = require('./dbabstraction');
 // const login = require('../emaillogin');
 const logging = require('./logging');
 
-let available = false;
+let available = true;
 let transporter;
 
 // ////////////////////////////////////////////////////////////// CONNECTION GENERATOR
