@@ -6,6 +6,7 @@
  */
 
 import React, {Component} from 'react';
+import BackBar from '../../components/BackBar'
 import {
   FormControl,
   InputLabel,
@@ -19,6 +20,10 @@ import './commentedit.css';
 
 
 export default class CommentEditPage extends Component {
+
+state = {
+  pageTitle: "Create a new comment",
+}
 
 
 //Require function to grab the post ID and the potential reply to ID
@@ -43,15 +48,9 @@ fetch("/forum/create?type=comment", {
 }
 
 
-  //Send to server
-  //confirmation of post success
-  //redirect user to post page if succesaful
-  //if failure, display error
 
-
-
-
-
+//Function to pull data of the comment being replied to, if such
+//comment is being replied to
 
 
 handleBodyChange = (e) => {
@@ -66,28 +65,42 @@ handleBodyChange = (e) => {
 
 render() {
   return (
-    <div class="postPage">
 
-  <FormControl fullWidth>
+    <div><BackBar
+      title = {this.state.pageTitle}
+      />
+
+
+      <div class="postPage">
+      
+      <FormControl fullWidth>
+
+
       <Comment
         text=""
         author="author"
         date={new Date().toLocaleDateString()}
       />
-      <TextField
-        autoFocus
-        margin="dense"
-        id="postTitle"
-        type="text"
-        onChange={this.handleBodyChange}
-        fullWidth
-      />
 
-      <Button onClick={this.handleSubmit} color="primary">
+
+        <TextField
+          autoFocus
+          margin="dense"
+          id="postTitle"
+          type="text"
+          label="Comment"
+          onKeyDown={this.handleBodyChange}
+          inputProps={{ maxLength: 1500 }}
+          fullWidth
+
+        />
+       
+      
+       <Button onClick={this.handleSubmit} color="primary">
         Confirm
       </Button>
-    </FormControl>
-    </div>
+      </FormControl>
+      </div></div>
   );
 }
 }

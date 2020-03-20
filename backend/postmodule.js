@@ -141,7 +141,7 @@ async function createPost(req, res) {
  */
 async function createComment(req, res, userid) {
   console.log(req.body);
-  /*
+  
   try {
     let results;
     if (req.body.reply === true) {
@@ -167,7 +167,7 @@ async function createComment(req, res, userid) {
     res.status(500);
     res.end('The server was unable to fufil this request');
   }
-  */
+  
  res.status(200).end();
 }
 
