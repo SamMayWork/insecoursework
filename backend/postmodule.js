@@ -280,7 +280,7 @@ function generateRetrievePostContent(post, comments) {
       title: post.post_title,
       content: post.post_content,
       likes: post.post_likes,
-      author: post.post_authorid,
+      author: post.user_id,
     },
 
     comments_information: [
@@ -288,8 +288,12 @@ function generateRetrievePostContent(post, comments) {
     ],
   };
 
+  if (comments === undefined) {
+    return info;
+  }
+
   // Iterate through all of the comments and append their information as objects
-  for (const row of comments.rows) {
+  for (const row of comments) {
     info.comments_information.push({
       id: row.comment_id,
       content: row.comment_content,
