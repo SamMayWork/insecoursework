@@ -41,6 +41,11 @@ async function getPost(req, res) {
     return;
   }
 
+  // Change all of the ids to the display names of the users
+  postResult = convertPostIdToName(postResult);
+  commentResult = convertCommentsIdToName(commentsResult);
+
+
   res.json(generateRetrievePostContent(postResult, commentsResult));
   res.status(200);
   res.end();
@@ -268,6 +273,35 @@ function filterContent(content) {
 // #endregion
 // ////////////////////////////////////////////////////////////// DATA-PACKERS
 // #region Data-Packers
+
+/**
+ * Converts a post's user_id to the correct display name
+ * @param {Object} post The JSON Post to convert
+ */
+async function convertPostIdToName (post) {
+  if (post.user_id !== undefined) {
+    post.user_id = await dbabs.getDisplayNameById(user_id);
+  }
+
+  return post;
+}
+
+/**
+ * Converts a comment ID to the correct display name
+ * @param {Object} comments The JSON Comment to convert
+ */
+async function convertCommentsIdToName (comments) {
+  const changedComments = [];
+  for(let comment of comments) {
+    if(comment.user_id !== undefined) {
+      comment.user_id = await dbabs.getDisplayNameById(user_id);
+      changedComments.push(comment);
+    }
+  }
+
+  return changedComments;
+}
+
 /**
  * Takes the result of 2 DB queries and formats them into a single JSON object
  * @param {object} post The Post to be formatted
