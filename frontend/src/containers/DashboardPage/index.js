@@ -11,7 +11,13 @@ import DataCard from '../../components/DataCard';
 
 import Navbar from '../../containers/Navbar';
 import Sidebar from '../../components/Sidebar';
-import ReactWeather from 'react-open-weather';
+
+import Weather from 'simple-react-weather'
+import links from "./data.js";
+import './dashboard.css';
+
+
+
 
 export default class DashboardPage extends Component {
   constructor(props) {
@@ -21,16 +27,14 @@ export default class DashboardPage extends Component {
       isLoaded: false,
       items: [],
       openSidebar: false,
-      quicklinks: {
-        title: 'test',
-        author: 'test2',
-        replies: 'test3',
-        date: 'test4'
-      }
     }
   }
+  
   render() {
     const {error, isLoaded, comments } = this.state;
+    const divStyle = {
+      color: 'black'
+    };
     const handleSidebarOpen = () => {
 			this.setState({
 				openSidebar: true
@@ -47,36 +51,32 @@ export default class DashboardPage extends Component {
       return <div>Loading...</div>
     } else {
       console.log(comments);
+      
+      
+      
+      
       return (
-        <div className = "dashboardPage">
-          <Navbar
+        <div>
+        <Navbar
 						title = "Modules"
 						onSidebarOpen = {handleSidebarOpen}
 					/>
+        <div className = "dashboardPage">
 					<Sidebar
 						onClose = {handleSidebarClose}
 						open = {this.state.openSidebar}
 						variant = {'temporary'}
 					/>
+          
+          <Weather style={divStyle} unit="C" city="Portsmouth" appid="45a03a49afb30df0fdfba49509ef8c1a" />
 
           <DataCard
-            link1 = {this.state.quicklinks.link1}
-            link2 = {this.state.quicklinks.link2}
-            link3 = {this.state.quicklinks.link3}
+            links = {links}
           /> 
 
           
-          {/* <List>
-            {comments.map((comment, i) => (
-              <Comment
-                key = {i}
-                title = {comment.title}
-                author = {comment.author}
-                replies = {comment.replies}
-                date = {comment.date}
-              />
-            ))}
-          </List> */}
+         
+        </div>
         </div>
       );
     }

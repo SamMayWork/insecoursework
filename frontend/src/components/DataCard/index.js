@@ -5,27 +5,17 @@ import "./index.css";
 
 const DataCard = props => {
   return (
-    <div className="comment">
-      <div className="comment_title">
-        {props.link1}
-      </div>
-      <div className = "comment_info">
-        <div className="comment_summary">
-          <div className="comment_author">
-            {props.link2}
-          </div>
-          <div className="comment_replies">
-          	{props.link3}
-          </div>
-          <div className="comment_stats">
-		        <div className="comment_likes">
-		          <LikeButton/>
-		        </div>  
+    (props.links.map((link, i)  => (
+           
+      <a key = {i} href = {link.href} target={link.type}>
+        <div className="comment">
+          <div className="comment_title">
+          {link.label}
           </div>
         </div>
-      </div>
-     </div>
-  );
+      </a>
+    )))
+  )
 }
 
 export default DataCard;

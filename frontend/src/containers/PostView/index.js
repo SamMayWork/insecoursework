@@ -56,7 +56,7 @@ export default class PostView extends Component {
     }
   }
   componentDidMount() {
-    fetch("https://www.localhost:8080/get?postid=11f3b99f")
+    fetch("/get?postid=11f3b99f")
       .then(res => res.json())
       .then(
         (result) => {

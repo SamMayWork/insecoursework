@@ -23,7 +23,30 @@ export default class CommentEditPage extends Component {
 
 state = {
   pageTitle: "Create a new comment",
+  
 }
+
+
+handleReply = () => {
+  fetch("/get?commentid=[id]", {
+    method: 'POST',
+    mode: 'cors',
+    cache: 'no-cache',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  }); 
+
+  const replied = {
+    body: "TEST BODY",
+    author: "TEST AUTHOR",
+    date: new Date().toLocaleDateString()
+  }
+
+}
+
 
 
 //Require function to grab the post ID and the potential reply to ID
@@ -35,22 +58,21 @@ handleSubmit = () => {
   }
 
 
-fetch("/forum/create?type=comment", {
-  method: 'POST',
-  mode: 'cors',
-  cache: 'no-cache',
-  credentials: 'same-origin',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(body)
-}); 
+  fetch("/forum/create?type=comment", {
+    method: 'POST',
+    mode: 'cors',
+    cache: 'no-cache',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  }); 
 }
 
 
 
-//Function to pull data of the comment being replied to, if such
-//comment is being replied to
+
 
 
 handleBodyChange = (e) => {
@@ -64,6 +86,7 @@ handleBodyChange = (e) => {
 
 
 render() {
+  
   return (
 
     <div><BackBar
@@ -77,9 +100,9 @@ render() {
 
 
       <Comment
-        text=""
-        author="author"
-        date={new Date().toLocaleDateString()}
+        text={this.replied.body}
+        author={this.replied.author}
+        date={this.replied.date}
       />
 
 
@@ -92,7 +115,6 @@ render() {
           onKeyDown={this.handleBodyChange}
           inputProps={{ maxLength: 1500 }}
           fullWidth
-
         />
        
       

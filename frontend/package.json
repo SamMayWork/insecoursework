@@ -4,18 +4,21 @@
   "private": true,
   "proxy": "http://localhost:8080",
   "dependencies": {
+    "@coderbyheart/react-weather-widget": "^1.4.5",
     "@material-ui/core": "^4.9.5",
     "@material-ui/icons": "^4.9.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.1",
     "@testing-library/user-event": "^7.2.1",
     "react": "^16.13.0",
+    "react-animated-weather": "^4.0.0",
     "react-dom": "^16.13.0",
     "react-fontawesome": "^1.7.1",
     "react-google-login": "^5.1.1",
     "react-open-weather": "^0.6.2",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
+    "simple-react-weather": "^1.0.1",
     "styled-components": "^5.0.1"
   },
   "scripts": {
