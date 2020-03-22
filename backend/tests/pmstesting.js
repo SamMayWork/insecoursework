@@ -290,7 +290,7 @@ describe('Post Module Testing', () => {
         title: 'stems till wore stretch',
         content: 'exclaimed scene ice game also closer became law damage hold mail hour care give definition spread bent step walk modern mad whole beautiful your tank sense cold picture listen hunt phrase construction grade direction shaking fastened summer chair purpose birds herd safety discover toward folks nature talk truck',
         likes: 10,
-        author: 'acc45ba4',
+        user: 'acc45ba4',
       });
     });
   });
