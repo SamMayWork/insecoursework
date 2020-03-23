@@ -249,14 +249,14 @@ const offensivelanguage = {
  * Filters a given string for swear/offensive words
  * @param {string} content Content to be filtered
  */
-function filterContent (content) {
+function filterContent(content) {
   let filteredContent = content;
-  for (var i = 0; i < content.length; i++) {
-    for (var j = 0; j < offensivelanguage.words.length; j++) {
-      let theWord = offensivelanguage.words[j]
-      if (i + theWord.dirty.length <= content.length){
-        if (content.substring(i, i + theWord.dirty.length) == theWord.dirty){
-          console.log(content.substring(i, i + theWord.dirty.length) == theWord.dirty)
+  for (let i = 0; i < content.length; i++) {
+    for (let j = 0; j < offensivelanguage.words.length; j++) {
+      const theWord = offensivelanguage.words[j];
+      if (i + theWord.dirty.length <= content.length) {
+        if (content.substring(i, i + theWord.dirty.length) == theWord.dirty) {
+          console.log(content.substring(i, i + theWord.dirty.length) == theWord.dirty);
           filteredContent = filteredContent.replace(theWord.dirty, theWord.clean);
         }
       }
@@ -280,7 +280,7 @@ function generateRetrievePostContent(post, comments) {
       title: post.post_title,
       content: post.post_content,
       likes: post.post_likes,
-      author: post.post_authorid,
+      author: post.user_id,
     },
 
     comments_information: [
@@ -288,8 +288,12 @@ function generateRetrievePostContent(post, comments) {
     ],
   };
 
+  if (comments === undefined) {
+    return info;
+  }
+
   // Iterate through all of the comments and append their information as objects
-  for (const row of comments.rows) {
+  for (const row of comments) {
     info.comments_information.push({
       id: row.comment_id,
       content: row.comment_content,

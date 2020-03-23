@@ -1,17 +1,43 @@
 const assert = require('assert');
 const dbabs = require('../dbabstraction');
+const pms = require('../postmodule');
 
+describe('PMS Module DB Tests', () => {
+  describe('searchPosts', () => {
+    it('Should not return undefined for post_title drawn tube heat bean', async () => {
+      const result = await dbabs.searchPosts('drawn tube heat bean');
+      assert.notEqual(result, undefined);
+    });
 
-describe('PMS Module DB Tests', function () {
-  
-  ////////////////////////////////////////////////////////////// get board
-  describe('getBoard', function () {
-    it('Should return all of the content for the given board', async function () {
-      let results = await dbabs.getBoard('d7227788');
+    it('Should return the expected content for the post_title drawn tube heat bean', async () => {
+      const result = await dbabs.searchPosts('drawn tube heat bean');
+      assert.deepEqual(result, {
+        post_id: 'ad7e89d1',
+        keyword_id: '2f64b1d3',
+        board_id: 'cfd5636c',
+        post_title: 'drawn tube heat bean',
+        post_content: 'classroom political history gradually exercise log introduced goes brought over art hollow won rabbit worker respect affect difference package greater first pilot be stems explore first these loud waste let recently slave hill war bone plant his care storm bend attached try forest army library manner happened half',
+        post_likes: 53,
+        user_id: 'acc45ba4',
+        created_date: new Date('2020-02-21T00:00:00.000Z'),
+        edited_date: new Date('2020-02-07T00:00:00.000Z'),
+      });
+    });
+
+    it('Should return undefined if the post does not exist', async () => {
+      const result = await dbabs.searchPosts('DOESNOTE');
+      assert.equal(result, undefined);
+    });
+  });
+
+  // //////////////////////////////////////////////////////////// get board
+  describe('getBoard', () => {
+    it('Should return all of the content for the given board', async () => {
+      const results = await dbabs.getBoard('d7227788');
       assert.deepEqual(results, {
-        board_id : 'd7227788',
-        board_module : 'Introduction to India',
-        board_year : '2020/2021'
+        board_id: 'd7227788',
+        board_module: 'Introduction to India',
+        board_year: '2020/2021',
       });
     });
 
@@ -21,11 +47,11 @@ describe('PMS Module DB Tests', function () {
     });
   });
 
- ////////////////////////////////////////////////////////////// GET ALL BOARDS 
+  // //////////////////////////////////////////////////////////// GET ALL BOARDS
 
-  describe('getAllBoards', function () {
-    it('Should return a result that is not undefined', async function () {
-      let results = await dbabs.getAllBoards();
+  describe('getAllBoards', () => {
+    it('Should return a result that is not undefined', async () => {
+      const results = await dbabs.getAllBoards();
       assert.notEqual(results, undefined);
     });
 
@@ -40,11 +66,11 @@ describe('PMS Module DB Tests', function () {
     });
   });
 
-////////////////////////////////////////////////////////////// GENERATE ID
+  // //////////////////////////////////////////////////////////// GENERATE ID
 
-  describe('generateId', function () {
-    it('Should return a random string that is the provided amount of characters in length', function () {
-      let result = dbabs.generateId(8);
+  describe('generateId', () => {
+    it('Should return a random string that is the provided amount of characters in length', () => {
+      const result = dbabs.generateId(8);
       assert.equal(result.length, 8);
     });
 
@@ -54,7 +80,7 @@ describe('PMS Module DB Tests', function () {
     });
   });
 
-////////////////////////////////////////////////////////////// GET POST
+  // //////////////////////////////////////////////////////////// GET POST
 
   describe('getPost', () => {
     it('Should not return undefined for row for ID 11f3b99f', async () => {
@@ -83,77 +109,76 @@ describe('PMS Module DB Tests', function () {
     });
   });
 
-  ////////////////////////////////////////////////////////////// GET COMMENTS
+  // //////////////////////////////////////////////////////////// GET COMMENTS
 
-  describe('getComments', function () {
-    it('Should not return undefined for row for ID ad7e89d1', async function () {
-      let result = await dbabs.getComments('ad7e89d1');
+  describe('getComments', () => {
+    it('Should not return undefined for row for ID ad7e89d1', async () => {
+      const result = await dbabs.getComments('ad7e89d1');
       assert.notEqual(result, undefined);
     });
 
-    it('Should return the expected content for the row ad7e89d1', async function () {
-      let result = await dbabs.getComments('ad7e89d1');
+    it('Should return the expected content for the row ad7e89d1', async () => {
+      const result = await dbabs.getComments('ad7e89d1');
       assert.deepEqual(result[0], {
-        comment_id : 'q1f3b99f',
-        comment_content : 'Sight house has sex never. No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.' ,
-        comment_likes : 0 ,
-        user_id : '75b6d7e5',
-        post_id : 'ad7e89d1' ,
-        reply_id : null      
+        comment_id: 'q1f3b99f',
+        comment_content: 'Sight house has sex never. No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.',
+        comment_likes: 0,
+        user_id: '75b6d7e5',
+        post_id: 'ad7e89d1',
+        reply_id: null,
       });
     });
 
-    it('Should return an empty array if the post does not exist', async function () {
-      let result = await dbabs.getComments('DOESNOTE');
+    it('Should return an empty array if the post does not exist', async () => {
+      const result = await dbabs.getComments('DOESNOTE');
       assert.deepEqual(result, []);
-    })
+    });
   });
-  
-  ////////////////////////////////////////////////////////////// GET COMMENT
 
-  describe('getComment', function () {
-    it('Should not return undefined for row for ID q1f3b99f', async function () {
-      let result = await dbabs.getComment('q1f3b99f');
+  // //////////////////////////////////////////////////////////// GET COMMENT
+
+  describe('getComment', () => {
+    it('Should not return undefined for row for ID q1f3b99f', async () => {
+      const result = await dbabs.getComment('q1f3b99f');
       assert.notEqual(result, undefined);
     });
 
-    it('Should return the expected content for the row q1f3b99f', async function () {
-      let result = await dbabs.getComment('q1f3b99f');
+    it('Should return the expected content for the row q1f3b99f', async () => {
+      const result = await dbabs.getComment('q1f3b99f');
       assert.deepEqual(result, {
-        comment_id : 'q1f3b99f',
-        comment_content : 'Sight house has sex never. No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.' ,
-        comment_likes : 0 ,
-        user_id : '75b6d7e5',
-        post_id : 'ad7e89d1',
-        reply_id : undefined
+        comment_id: 'q1f3b99f',
+        comment_content: 'Sight house has sex never. No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.',
+        comment_likes: 0,
+        user_id: '75b6d7e5',
+        post_id: 'ad7e89d1',
+        reply_id: undefined,
       });
     });
 
-    it('Should return undefined if the post does not exist', async function () {
-      let result = await dbabs.getComment('DOESNOTE');
+    it('Should return undefined if the post does not exist', async () => {
+      const result = await dbabs.getComment('DOESNOTE');
       assert.equal(result, undefined);
-    })
+    });
   });
 
-  
-  ////////////////////////////////////////////////////////////// INCRISING VIEWS
-  
 
-   describe('increasing_Post_Views', function() {
-     it('Should increase the view by 1', async function() {
-       let result = await dbabs.increasePostViews('11f3b99f');
-       assert.deepEqual(result, {
-         post_id : '11f3b99f',
-         views : 1
-       })
-     })
-   })
+  // //////////////////////////////////////////////////////////// INCRISING VIEWS
 
 
-   
-   ////////////////////////////////////////////////////////////// CREATE POST
+  describe('increasing_Post_Views', () => {
+    it('Should increase the view by 1', async () => {
+      const result = await dbabs.increasePostViews('11f3b99f');
+      assert.deepEqual(result, {
+        post_id: '11f3b99f',
+        views: 1,
+      });
+    });
+  });
 
-    ////////////////////////////////////////////////////////////// CREATE POST
+
+  // //////////////////////////////////////////////////////////// CREATE POST
+
+  // //////////////////////////////////////////////////////////// CREATE POST
 
   describe('createPost', () => {
     let postid;
@@ -170,24 +195,24 @@ describe('PMS Module DB Tests', function () {
     });
   });
 
-    ////////////////////////////////////////////////////////////// CREATE COMMENT
+  // //////////////////////////////////////////////////////////// CREATE COMMENT
 
   describe('createComment', () => {
     let commentid;
 
     it('Should return the expected id and content', async () => {
-      const result = await dbabs.createComment('this is test content for testing the createComment function','100bad41', '7c367dd6');
+      const result = await dbabs.createComment('this is test content for testing the createComment function', '100bad41', '7c367dd6');
       assert.ok(result.comment_content !== undefined && result.comment_id !== undefined);
       commentid = result.comment_id;
-      });
+    });
 
-    it('Should return correct information when comment is searched for', async() => {
+    it('Should return correct information when comment is searched for', async () => {
       const result = await dbabs.getComment(commentid);
       assert.equal(result.comment_content, 'this is test content for testing the createComment function');
     });
   });
 
-    ////////////////////////////////////////////////////////////// CREATE BOARD
+  // //////////////////////////////////////////////////////////// CREATE BOARD
 
   describe('createBoard', () => {
     let boardid;
@@ -202,37 +227,80 @@ describe('PMS Module DB Tests', function () {
       assert.deepEqual(result, {
         board_id: boardid,
         board_module: 'Introduction to the creation of boards',
-        board_year: '2021/2022'});
+        board_year: '2021/2022',
+      });
     });
   });
 
-    ////////////////////////////////////////////////////////////// CREATE USER   
+  // //////////////////////////////////////////////////////////// CREATE USER
 });
 
+describe('Post Module Testing', () => {
+  describe('getPost', () => {
+    it('Should not return undefined when searching for post 11f3b99f', async () => {
+      const req = {
+        user: {
+          emails: [
+            { value: 'umoaksond@msu.edu' },
+          ],
+        },
+        query : {
+          postid : '11f3b99f'
+        }
+      };
 
-describe('searchPosts', function () {
-  it('Should not return undefined for post_title drawn tube heat bean', async function () {
-    let result = await dbabs.searchPosts('drawn tube heat bean');
-    assert.notEqual(result, undefined);
-  });
+      const res = {
+        jsonresponse : 0,
+        status(value) {},
+        end() {},
+        json (content) { this.jsonresponse = content }
+      }
+     
+      await pms.getPost(req, res);
+      assert.notEqual(res.jsonresponse, undefined);
+    });
 
-  it('Should return the expected content for the post_title drawn tube heat bean', async function () {
-    let result = await dbabs.searchPosts('drawn tube heat bean');
-    assert.deepEqual(result, {
-      post_id : 'ad7e89d1',
-      keyword_id : '2f64b1d3',
-      board_id : 'cfd5636c',
-      post_title : 'drawn tube heat bean',
-      post_content : 'classroom political history gradually exercise log introduced goes brought over art hollow won rabbit worker respect affect difference package greater first pilot be stems explore first these loud waste let recently slave hill war bone plant his care storm bend attached try forest army library manner happened half',
-      post_likes : 53,
-      user_id : 'acc45ba4',
-      created_date :  new Date('2020-02-21T00:00:00.000Z'),
-      edited_date :  new Date('2020-02-07T00:00:00.000Z')
+    it('Should return the correct post information for the post 11f3b99f', async () => {
+      const req = {
+        user: {
+          emails: [
+            { value: 'umoaksond@msu.edu' },
+          ],
+        },
+        query : {
+          postid : '11f3b99f'
+        }
+      };
+
+      const res = {
+        jsonresponse : 0,
+        status(value) {},
+        end() {},
+        json (content) { this.jsonresponse = content }
+      }
+
+      await pms.getPost(req, res);
+      assert.deepEqual(res.jsonresponse.post_information, {
+        id: '11f3b99f',
+        title: 'stems till wore stretch',
+        content: 'exclaimed scene ice game also closer became law damage hold mail hour care give definition spread bent step walk modern mad whole beautiful your tank sense cold picture listen hunt phrase construction grade direction shaking fastened summer chair purpose birds herd safety discover toward folks nature talk truck',
+        likes: 10,
+        author: 'acc45ba4',
+      });
     });
   });
-
-  it('Should return undefined if the post does not exist', async function () {
-    let result = await dbabs.searchPosts('DOESNOTE');
-    assert.equal(result, undefined);
-  })
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
