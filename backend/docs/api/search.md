@@ -2,7 +2,7 @@
 
 There are 2 methods for searching for content, it only works for posts though, they are under the /get/search extension
   1. Searching for posts using their title (this is basically 1-1) (/get/search?type=post&searchterm=**[param]**)
-  2. Searching for posts using their keywords                      (/get/search?type=post&searchterm=**[param]**)
+  2. Searching for posts using their keywords                      (/get/search?type=post&searchtags=**[param]**)
 
 (As of the build this documentation is included in, all of this functionality works)
 
