@@ -5,8 +5,8 @@ import App from '../index';
 
 const renderer = new ShallowRenderer();
 
-describe('<App />', () => {
-	describe('Validation testing', () => {
+describe('<AccountPage />', () => {
+	describe('Validation tests', () => {
 		it('should render and match the snapshot', () => {
 		  renderer.render(<App />);
 		  const renderedOutput = renderer.getRenderOutput();

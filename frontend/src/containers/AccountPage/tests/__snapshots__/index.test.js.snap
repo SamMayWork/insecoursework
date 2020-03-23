@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AccountPage /> Validation tests should render and match the snapshot 1`] = `
+<div
+  className="accountPage"
+>
+  <BackBar
+    title="Account"
+  />
+  <NotificationZone />
+  <PrivacyZone />
+  <DangerZone />
+</div>
+`;
