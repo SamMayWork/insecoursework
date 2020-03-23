@@ -30,16 +30,22 @@ const logging = require('./logging');
  */
 
 async function getPost(req, res) {
+
+  // Increase the views, get the content and then start processing
   await dbabs.increasePostViews(req.query.postid);
   const { postid } = req.query;
-  const postResult = await dbabs.getPost(postid);
-  const commentsResult = await dbabs.getComments(postid);
+  let postResult = await dbabs.getPost(postid);
+  let commentsResult = await dbabs.getComments(postid);
 
   if (postResult === undefined || commentsResult === undefined) {
     res.status(404);
     res.end();
     return;
   }
+
+  // Change all of the ids to the display names of the users
+  postResult = await convertPostIdToName(postResult);
+  commentResult = await convertCommentsIdToName(commentsResult);
 
   res.json(generateRetrievePostContent(postResult, commentsResult));
   res.status(200);
@@ -53,13 +59,15 @@ async function getPost(req, res) {
  */
 async function getComment(req, res) {
   await dbabs.increaseCommentViews(req.query.commentid);
-  const comment = await dbabs.getComment(req.query.commentid);
+  let comment = await dbabs.getComment(req.query.commentid);
 
   if (comment === undefined) {
     req.status(404);
     req.end();
     return;
   }
+
+  comment = await convertCommentsIdToName([comment]);
 
   res.json(comment);
   res.status(200);
@@ -268,6 +276,35 @@ function filterContent(content) {
 // #endregion
 // ////////////////////////////////////////////////////////////// DATA-PACKERS
 // #region Data-Packers
+
+/**
+ * Converts a post's user_id to the correct display name
+ * @param {Object} post The JSON Post to convert
+ */
+async function convertPostIdToName (post) {
+  if (post.user_id !== undefined) {
+    post.user_id = await dbabs.getDisplayNameById(post.user_id);
+  }
+
+  return post;
+}
+
+/**
+ * Converts a comment ID to the correct display name
+ * @param {Object} comments The JSON Comment to convert
+ */
+async function convertCommentsIdToName (comments) {
+  const changedComments = [];
+  for(let comment of comments) {
+    if(comment.user_id !== undefined) {
+      comment.user_id = await dbabs.getDisplayNameById(comment.user_id);
+      changedComments.push(comment);
+    }
+  }
+
+  return changedComments;
+}
+
 /**
  * Takes the result of 2 DB queries and formats them into a single JSON object
  * @param {object} post The Post to be formatted
@@ -280,7 +317,7 @@ function generateRetrievePostContent(post, comments) {
       title: post.post_title,
       content: post.post_content,
       likes: post.post_likes,
-      author: post.user_id,
+      user: post.user_id,
     },
 
     comments_information: [
@@ -298,7 +335,7 @@ function generateRetrievePostContent(post, comments) {
       id: row.comment_id,
       content: row.comment_content,
       likes: row.comment_likes,
-      author: row.user_id,
+      user: row.user_id,
       repliesto: row.reply_id,
     });
   }
