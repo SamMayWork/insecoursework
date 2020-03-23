@@ -48,7 +48,7 @@
 //       const result = await ns.generatePostConfirmation(req, '47160ce5');
 //       assert.equal(result, 252);
 //     });
-
+    
 //     it('Should return the correct status code when the email address is invalid', async () => {
 //       const req = {
 //         user: {
@@ -73,6 +73,22 @@
 
 //       const result = await ns.generatePostConfirmation(req, 'DOESNOTE');
 //       assert.equal(result, 101)
+//     });
+//   });
+
+//   describe('generateRegistrationConfirmation', () => {
+//     it ('Should return code 252 for valid data', async () => {
+//       const req = {
+//         user: {
+//           displayName : "Samuel May",
+//           emails: [
+//             { value: testEmail },
+//           ],
+//         }
+//       }
+
+//       const result = await ns.generateRegistrationConfirmation(req);
+//       assert.equal(result, 252);
 //     });
 //   });
 // });
