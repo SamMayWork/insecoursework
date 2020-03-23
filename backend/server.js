@@ -229,7 +229,7 @@ app.post('forum/report', (req, res) => {
 // ////////////////////////////////////////////////////////////// UAC ENDPOINTS
 // #region UAC Endpoints
 
-app.post('/forum/uac', (req, res) => {
+app.post('/forum/uac', async (req, res) => {
   handleNoDB(req, res);
   handlePostLogging(req);
 
