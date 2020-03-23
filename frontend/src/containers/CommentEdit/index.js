@@ -27,25 +27,7 @@ state = {
 }
 
 
-handleReply = () => {
-  fetch("/get?commentid=[id]", {
-    method: 'POST',
-    mode: 'cors',
-    cache: 'no-cache',
-    credentials: 'same-origin',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(body)
-  }); 
 
-  const replied = {
-    body: "TEST BODY",
-    author: "TEST AUTHOR",
-    date: new Date().toLocaleDateString()
-  }
-
-}
 
 
 

@@ -1,4 +1,32 @@
-// Created on 11/02/2020
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: postmodule.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: postmodule.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// Created on 11/02/2020
 //
 // This is the module that is responsible for all of the actions related to
 // the post management system (PMS) inside of the system architecture
@@ -30,22 +58,16 @@ const logging = require('./logging');
  */
 
 async function getPost(req, res) {
-
-  // Increase the views, get the content and then start processing
   await dbabs.increasePostViews(req.query.postid);
   const { postid } = req.query;
-  let postResult = await dbabs.getPost(postid);
-  let commentsResult = await dbabs.getComments(postid);
+  const postResult = await dbabs.getPost(postid);
+  const commentsResult = await dbabs.getComments(postid);
 
   if (postResult === undefined || commentsResult === undefined) {
     res.status(404);
     res.end();
     return;
   }
-
-  // Change all of the ids to the display names of the users
-  postResult = await convertPostIdToName(postResult);
-  commentResult = await convertCommentsIdToName(commentsResult);
 
   res.json(generateRetrievePostContent(postResult, commentsResult));
   res.status(200);
@@ -59,15 +81,13 @@ async function getPost(req, res) {
  */
 async function getComment(req, res) {
   await dbabs.increaseCommentViews(req.query.commentid);
-  let comment = await dbabs.getComment(req.query.commentid);
+  const comment = await dbabs.getComment(req.query.commentid);
 
   if (comment === undefined) {
     req.status(404);
     req.end();
     return;
   }
-
-  comment = await convertCommentsIdToName([comment]);
 
   res.json(comment);
   res.status(200);
@@ -113,43 +133,37 @@ async function getAll(req, res) {
 
 // #endregion
 // ////////////////////////////////////////////////////////////// POSTING CONTENT
-// #region Posting Content //GREENED OUT
+// #region Posting Content
 /**
  * Creates a new Post inside of the database
  * @param {request} req The request from the user
  * @param {response} res The response to the user
  */
 async function createPost(req, res) {
-  /*
   const userid = await dbabs.getUserIDFromEmail(req.user.emails[0]);
 
   if (userid !== undefined) {
-    */
     // The user is authorised if the email is within our database
     const title = filterContent(req.body.title);
     const content = filterContent(req.body.content);
 
-    for (let i = 0; i < req.body.keywords.length; i++) {
+    for (let i = 0; i &lt; req.body.keywords.length; i++) {
       req.body.keywords[i] = filterContent(req.body.keywords[i]);
     }
 
-    console.log(title, content, req.body.keywords);
     dbabs.createPost(title, content, keywords);
     res.status(200);
     res.end();
-    
-  //}
+  }
 }
 
 /**
- * Creates a comment //GREENED OUT
+ * Creates a comment
  * @param {request} req
  * @param {response} res
  * @param {string} userid UserID for the database
  */
 async function createComment(req, res, userid) {
-  console.log(req.body);
-  
   try {
     let results;
     if (req.body.reply === true) {
@@ -175,8 +189,6 @@ async function createComment(req, res, userid) {
     res.status(500);
     res.end('The server was unable to fufil this request');
   }
-  
- res.status(200).end();
 }
 
 // #endregion
@@ -265,14 +277,14 @@ const offensivelanguage = {
  * Filters a given string for swear/offensive words
  * @param {string} content Content to be filtered
  */
-function filterContent(content) {
+function filterContent (content) {
   let filteredContent = content;
-  for (let i = 0; i < content.length; i++) {
-    for (let j = 0; j < offensivelanguage.words.length; j++) {
-      const theWord = offensivelanguage.words[j];
-      if (i + theWord.dirty.length <= content.length) {
-        if (content.substring(i, i + theWord.dirty.length) == theWord.dirty) {
-          console.log(content.substring(i, i + theWord.dirty.length) == theWord.dirty);
+  for (var i = 0; i &lt; content.length; i++) {
+    for (var j = 0; j &lt; offensivelanguage.words.length; j++) {
+      let theWord = offensivelanguage.words[j]
+      if (i + theWord.dirty.length &lt;= content.length){
+        if (content.substring(i, i + theWord.dirty.length) == theWord.dirty){
+          console.log(content.substring(i, i + theWord.dirty.length) == theWord.dirty)
           filteredContent = filteredContent.replace(theWord.dirty, theWord.clean);
         }
       }
@@ -284,35 +296,6 @@ function filterContent(content) {
 // #endregion
 // ////////////////////////////////////////////////////////////// DATA-PACKERS
 // #region Data-Packers
-
-/**
- * Converts a post's user_id to the correct display name
- * @param {Object} post The JSON Post to convert
- */
-async function convertPostIdToName (post) {
-  if (post.user_id !== undefined) {
-    post.user_id = await dbabs.getDisplayNameById(post.user_id);
-  }
-
-  return post;
-}
-
-/**
- * Converts a comment ID to the correct display name
- * @param {Object} comments The JSON Comment to convert
- */
-async function convertCommentsIdToName (comments) {
-  const changedComments = [];
-  for(let comment of comments) {
-    if(comment.user_id !== undefined) {
-      comment.user_id = await dbabs.getDisplayNameById(comment.user_id);
-      changedComments.push(comment);
-    }
-  }
-
-  return changedComments;
-}
-
 /**
  * Takes the result of 2 DB queries and formats them into a single JSON object
  * @param {object} post The Post to be formatted
@@ -325,7 +308,7 @@ function generateRetrievePostContent(post, comments) {
       title: post.post_title,
       content: post.post_content,
       likes: post.post_likes,
-      user: post.user_id,
+      author: post.post_authorid,
     },
 
     comments_information: [
@@ -333,17 +316,13 @@ function generateRetrievePostContent(post, comments) {
     ],
   };
 
-  if (comments === undefined) {
-    return info;
-  }
-
   // Iterate through all of the comments and append their information as objects
-  for (const row of comments) {
+  for (const row of comments.rows) {
     info.comments_information.push({
       id: row.comment_id,
       content: row.comment_content,
       likes: row.comment_likes,
-      user: row.user_id,
+      author: row.user_id,
       repliesto: row.reply_id,
     });
   }
@@ -367,3 +346,26 @@ module.exports.createPost = createPost;
 module.exports.editPost = editPost;
 module.exports.editComment = editComment;
 // #endregion
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#changeDisplayName">changeDisplayName</a></li><li><a href="global.html#changeName">changeName</a></li><li><a href="global.html#checkUserExists">checkUserExists</a></li><li><a href="global.html#coldStart">coldStart</a></li><li><a href="global.html#coldStartMessage">coldStartMessage</a></li><li><a href="global.html#createBoard">createBoard</a></li><li><a href="global.html#createComment">createComment</a></li><li><a href="global.html#createKeywords">createKeywords</a></li><li><a href="global.html#createPost">createPost</a></li><li><a href="global.html#createReplyComment">createReplyComment</a></li><li><a href="global.html#deleteRecordBoard">deleteRecordBoard</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#editComment">editComment</a></li><li><a href="global.html#editPost">editPost</a></li><li><a href="global.html#enrollUser">enrollUser</a></li><li><a href="global.html#errorMessage">errorMessage</a></li><li><a href="global.html#executeQuery">executeQuery</a></li><li><a href="global.html#executeRawQuerySync">executeRawQuerySync</a></li><li><a href="global.html#filterContent">filterContent</a></li><li><a href="global.html#generateId">generateId</a></li><li><a href="global.html#generateRetrievePostContent">generateRetrievePostContent</a></li><li><a href="global.html#getAll">getAll</a></li><li><a href="global.html#getAllBoards">getAllBoards</a></li><li><a href="global.html#getBoard">getBoard</a></li><li><a href="global.html#getComment">getComment</a></li><li><a href="global.html#getCommentAuthor">getCommentAuthor</a></li><li><a href="global.html#getComments">getComments</a></li><li><a href="global.html#getDisplayNameById">getDisplayNameById</a></li><li><a href="global.html#getPost">getPost</a></li><li><a href="global.html#getPostAuthor">getPostAuthor</a></li><li><a href="global.html#getUsersID">getUsersID</a></li><li><a href="global.html#handleGetLogging">handleGetLogging</a></li><li><a href="global.html#handleNoDB">handleNoDB</a></li><li><a href="global.html#handlePostLogging">handlePostLogging</a></li><li><a href="global.html#increaseCommentViews">increaseCommentViews</a></li><li><a href="global.html#increasePostViews">increasePostViews</a></li><li><a href="global.html#logHttpGetMessage">logHttpGetMessage</a></li><li><a href="global.html#logHttpPostMessage">logHttpPostMessage</a></li><li><a href="global.html#reportComment">reportComment</a></li><li><a href="global.html#reportPost">reportPost</a></li><li><a href="global.html#searchPosts">searchPosts</a></li><li><a href="global.html#searchTags">searchTags</a></li><li><a href="global.html#softReset">softReset</a></li><li><a href="global.html#successMessage">successMessage</a></li><li><a href="global.html#warningMessage">warningMessage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Sun Mar 15 2020 22:28:43 GMT+0000 (Greenwich Mean Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
