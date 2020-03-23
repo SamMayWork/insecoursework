@@ -3,7 +3,7 @@ import LikeButton from "../LikeButton";
 
 import "./index.css";
 
-export default Comment = props => {
+const Comment = props => {
   return (
     <div className="comment">
       <div className="comment_title">
@@ -27,3 +27,5 @@ export default Comment = props => {
      </div>
   );
 }
+
+export default Comment;
