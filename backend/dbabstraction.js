@@ -116,7 +116,7 @@ async function getComments(postid) {
 async function getBoard(boardid) {
   const query = 'SELECT * FROM posts WHERE board_id = $1;';
   const results = await executeQuery(query, [boardid]);
-  return results.rows[0];
+  return results.rows;
 }
 
 /**

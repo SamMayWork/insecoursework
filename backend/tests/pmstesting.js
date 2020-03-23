@@ -31,6 +31,18 @@ describe('PMS Module DB Tests', () => {
       assert.equal(result, undefined);
     });
   });
+
+  describe('getBoard', () => {
+    it('Should not return undefined for the board bf35c787', async () => {
+      const results = await dbabs.getBoard('bf35c787');
+      assert.notEqual(results, undefined);
+    });
+
+    it('Should return 6 rows for the board bf35c787', async () => {
+      const results = await dbabs.getBoard('bf35c787');
+      assert.equal(results.length, 6);
+    });
+  });
   //#endregion
 
 
@@ -61,22 +73,7 @@ describe('PMS Module DB Tests', () => {
     });
   });
 
-  // //////////////////////////////////////////////////////////// get board
-  describe('getBoard', () => {
-    it('Should return all of the content for the given board', async () => {
-      const results = await dbabs.getBoard('d7227788');
-      assert.deepEqual(results, {
-        board_id: 'd7227788',
-        board_module: 'Introduction to India',
-        board_year: '2020/2021',
-      });
-    });
-
-    it('Should not return undefined', async () => {
-      const results = await dbabs.getBoard('d7227788');
-      assert.notEqual(results, undefined);
-    });
-  });
+  
 
   // //////////////////////////////////////////////////////////// GET ALL BOARDS
 
@@ -234,8 +231,8 @@ describe('PMS Module DB Tests', () => {
     });
 
     it('Should return all board information created in first test', async () => {
-      const result = await dbabs.getBoard(boardid);
-      assert.deepEqual(result, {
+      const result = await dbabs.executeRawQuerySync(`SELECT * FROM Board WHERE board_id='${boardid}';` );
+      assert.deepEqual(result.rows[0], {
         board_id: boardid,
         board_module: 'Introduction to the creation of boards',
         board_year: '2021/2022',
