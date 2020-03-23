@@ -1,14 +1,14 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import AccountPage from '../index';
+import LoginPage from '../index';
 
 const renderer = new ShallowRenderer();
 
-describe('<AccountPage />', () => {
+describe('<LoginPage />', () => {
 	describe('Validation tests', () => {
 		it('should render and match the snapshot', () => {
-		  renderer.render(<AccountPage />);
+		  renderer.render(<LoginPage />);
 		  const renderedOutput = renderer.getRenderOutput();
 		  expect(renderedOutput).toMatchSnapshot();
 		});

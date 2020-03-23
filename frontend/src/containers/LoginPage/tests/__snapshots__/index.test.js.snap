@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LoginPage /> Validation tests should render and match the snapshot 1`] = `
+<div
+  className="loginPage"
+>
+  <h1>
+    UoP Forum
+  </h1>
+  <u
+    accessType="online"
+    buttonText="Login with Google"
+    clientId="817279853236-toe6rfq5ebg7rife6fvd82hh0eclpt3t.apps.googleusercontent.com"
+    cookiePolicy="single_host_origin"
+    disabledStyle={
+      Object {
+        "opacity": 0.6,
+      }
+    }
+    fetchBasicProfile={true}
+    icon={true}
+    isSignedIn={false}
+    jsSrc="https://apis.google.com/js/api.js"
+    onRequest={[Function]}
+    onSuccess={[Function]}
+    prompt=""
+    scope="profile email"
+    tag="button"
+    theme="light"
+    type="button"
+    uxMode="popup"
+  />
+</div>
+`;
