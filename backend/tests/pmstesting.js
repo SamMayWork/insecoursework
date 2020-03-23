@@ -3,6 +3,37 @@ const dbabs = require('../dbabstraction');
 const pms = require('../postmodule');
 
 describe('PMS Module DB Tests', () => {
+
+  //#region Getting Content
+  describe('getPost', () => {
+    it('Should not return undefined for row for ID 11f3b99f', async () => {
+      const result = await dbabs.getPost('11f3b99f');
+      assert.notEqual(result, undefined);
+    });
+
+    it('Should return the expected content for the row 11f3b99f', async () => {
+      const result = await dbabs.getPost('11f3b99f');
+      assert.deepEqual(result, {
+        post_id: '11f3b99f',
+        keyword_id: '986fcdbe',
+        board_id: 'bf35c787',
+        post_title: 'stems till wore stretch',
+        post_content: 'exclaimed scene ice game also closer became law damage hold mail hour care give definition spread bent step walk modern mad whole beautiful your tank sense cold picture listen hunt phrase construction grade direction shaking fastened summer chair purpose birds herd safety discover toward folks nature talk truck',
+        post_likes: 10,
+        user_id: 'acc45ba4',
+        created_date: new Date('2020-02-02T00:00:00.000Z'),
+        edited_date: new Date('2020-02-06T00:00:00.000Z'),
+      });
+    });
+
+    it('Should return undefined if the post does not exist', async () => {
+      const result = await dbabs.getPost('DOESNOTE');
+      assert.equal(result, undefined);
+    });
+  });
+  //#endregion
+
+
   describe('searchPosts', () => {
     it('Should not return undefined for post_title drawn tube heat bean', async () => {
       const result = await dbabs.searchPosts('drawn tube heat bean');
@@ -87,32 +118,7 @@ describe('PMS Module DB Tests', () => {
 
   // //////////////////////////////////////////////////////////// GET POST
 
-  describe('getPost', () => {
-    it('Should not return undefined for row for ID 11f3b99f', async () => {
-      const result = await dbabs.getPost('11f3b99f');
-      assert.notEqual(result, undefined);
-    });
-
-    it('Should return the expected content for the row 11f3b99f', async () => {
-      const result = await dbabs.getPost('11f3b99f');
-      assert.deepEqual(result, {
-        post_id: '11f3b99f',
-        keyword_id: '986fcdbe',
-        board_id: 'bf35c787',
-        post_title: 'stems till wore stretch',
-        post_content: 'exclaimed scene ice game also closer became law damage hold mail hour care give definition spread bent step walk modern mad whole beautiful your tank sense cold picture listen hunt phrase construction grade direction shaking fastened summer chair purpose birds herd safety discover toward folks nature talk truck',
-        post_likes: 10,
-        user_id: 'acc45ba4',
-        created_date: new Date('2020-02-02T00:00:00.000Z'),
-        edited_date: new Date('2020-02-06T00:00:00.000Z'),
-      });
-    });
-
-    it('Should return undefined if the post does not exist', async () => {
-      const result = await dbabs.getPost('DOESNOTE');
-      assert.equal(result, undefined);
-    });
-  });
+  
 
   // //////////////////////////////////////////////////////////// GET COMMENTS
 
@@ -242,6 +248,28 @@ describe('PMS Module DB Tests', () => {
 
 describe('Post Module Testing', () => {
   describe('getPost', () => {
+    it('Should not throw and error for a post that does not exist', async () => {
+      const req = {
+        user: {
+          emails: [
+            { value: 'umoaksond@msu.edu' },
+          ],
+        },
+        query : {
+          postid : 'DOESNOTE'
+        }
+      };
+
+      const res = {
+        jsonresponse : 0,
+        status(value) {},
+        end() {},
+        json (content) { this.jsonresponse = content }
+      }
+
+      assert.doesNotThrow(() => { pms.getPost(req, res); });
+    });
+
     it('Should not return undefined when searching for post 11f3b99f', async () => {
       const req = {
         user: {

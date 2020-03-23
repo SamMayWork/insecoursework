@@ -37,7 +37,7 @@ async function getPost(req, res) {
   let postResult = await dbabs.getPost(postid);
   let commentsResult = await dbabs.getComments(postid);
 
-  if (postResult === undefined || commentsResult === undefined) {
+  if (postResult === undefined) {
     res.status(404);
     res.end();
     return;

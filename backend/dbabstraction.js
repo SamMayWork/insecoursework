@@ -433,6 +433,7 @@ async function enrollUser(displayname, email) {
   const query = 'INSERT INTO users VALUES ($1, $2, $3, $4, $5);';
   const id = generateId(8);
   await executeQuery(query, [id, displayname, true, email, new Date()]);
+  console.log(displayname);
   return {
     user_name: displayname,
     user_email: email,
