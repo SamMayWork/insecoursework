@@ -7,7 +7,7 @@ import TestModules from './data.js';
 
 import Module from '../../components/Module';
 
-const ModulePage = props => {
+const ModulesPage = props => {
 	const [openSidebar, setOpenSidebar] = useState(false);
 	const [modules, setModules] = useState([]);
 	const updateModules = modules => {
@@ -41,4 +41,4 @@ const ModulePage = props => {
 	);
 };
 
-export default ModulePage;
+export default ModulesPage;
