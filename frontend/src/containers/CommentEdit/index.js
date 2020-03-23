@@ -39,13 +39,6 @@ handleReply = () => {
     // body: JSON.stringify(body)
   }); 
 
-  const replied = {
-    body: "TEST BODY",
-    author: "TEST AUTHOR",
-    date: new Date().toLocaleDateString()
-  }
-
-}
 
 
 

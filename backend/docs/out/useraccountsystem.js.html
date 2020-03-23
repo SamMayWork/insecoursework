@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: useraccountsystem.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: useraccountsystem.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// Created on 12/02/2020
+//
+// This is the User Account System file for the backend, all of the converting between
+// ID's happens here along with all of the enrolling and deletion
+
+// ////////////////////////////////////////////////////////////// REQUIRES
+
+const dbabs = require('./dbabstraction');
+const logging = require('./logging');
+
+// ////////////////////////////////////////////////////////////// CREATING USERS
+
+/**
+ * Enrolls a new user in the DB
+ * @param {request} req
+ * @param {response} res
+ */
+async function enrollUser(req, res) {
+  try {
+    if (checkUserExists(req) === true) {
+      throw new error();
+    } else {
+      const userInformation = {
+        displayName: req.user.displayName,
+        email: req.user.emails[0].value,
+      };
+      dbabs.enrollUser(userInformation);
+      res.status(200);
+      res.end();
+    }
+  } catch (exception) {
+    res.status(500);
+    res.end();
+  }
+}
+
+// ////////////////////////////////////////////////////////////// DELETING USERS
+
+/**
+ * Deletes a user from the database
+ * @param {request} req
+ * @param {response} res
+ */
+async function deleteUser(req, res) {
+  try {
+    if (checkUserExists(req) === false) {
+      res.status(403);
+      res.end();
+      return;
+    }
+  } catch (exception) {
+
+  }
+}
+
+// ////////////////////////////////////////////////////////////// PREFERENCES
+
+/**
+ * Allows a user to change between using their real name and their UP number
+ * @param {request} req
+ * @param {response} res
+ */
+async function changeDisplayName(req, res) {
+  try {
+    if (checkUserExists(req) === false) {
+      res.status(403);
+      res.end();
+      return;
+    }
+
+    await dbabs.changeName(getUsersID(req), req.body.status);
+    res.status(200);
+    res.end();
+  } catch (exception) {
+    res.status(500);
+    res.end();
+  }
+}
+
+
+// ////////////////////////////////////////////////////////////// AUTHORISATION
+
+/**
+ * Checks users email exsists inside of our database
+ * @param {request} req
+ */
+async function checkUserExists(req) {
+  try {
+    return await (dbabs.checkUserExists(req.user.emails[0].value)).exists;
+  } catch (exception) {
+    logging.warningMessage(exception);
+    return false;
+  }
+}
+
+/**
+ * Gets the ID of the user from a request
+ * @param {request} req
+ */
+async function getUsersID(req) {
+  try {
+    return await (dbabs.checkUserExists(req.user.emails[0].value)).id;
+  } catch (exception) {
+    return undefined;
+  }
+}
+
+/**
+ * Gets the author ID of a given post
+ * @param {string} postid
+ */
+async function getPostAuthor(postid) {
+  return dbabs.getPostAuthor(postid).user_id;
+}
+
+/**
+ * Gets the author ID of a given comment
+ * @param {string} commentid
+ */
+async function getCommentAuthor(commentid) {
+  return dbabs.getCommentAuthor(commentid).user_id;
+}
+
+// ////////////////////////////////////////////////////////////// EXPORTS
+
+module.exports.enrollUser = enrollUser;
+
+module.exports.changeDisplayName = changeDisplayName;
+
+module.exports.deleteUser;
+
+module.exports.checkUserExists = checkUserExists;
+module.exports.getUsersID = getUsersID;
+module.exports.getPostAuthor = getPostAuthor;
+module.exports.getCommentAuthor = getCommentAuthor;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#changeDisplayName">changeDisplayName</a></li><li><a href="global.html#changeName">changeName</a></li><li><a href="global.html#checkUserExists">checkUserExists</a></li><li><a href="global.html#coldStart">coldStart</a></li><li><a href="global.html#coldStartMessage">coldStartMessage</a></li><li><a href="global.html#createBoard">createBoard</a></li><li><a href="global.html#createComment">createComment</a></li><li><a href="global.html#createKeywords">createKeywords</a></li><li><a href="global.html#createPost">createPost</a></li><li><a href="global.html#createReplyComment">createReplyComment</a></li><li><a href="global.html#deleteRecordBoard">deleteRecordBoard</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#editComment">editComment</a></li><li><a href="global.html#editPost">editPost</a></li><li><a href="global.html#enrollUser">enrollUser</a></li><li><a href="global.html#errorMessage">errorMessage</a></li><li><a href="global.html#executeQuery">executeQuery</a></li><li><a href="global.html#executeRawQuerySync">executeRawQuerySync</a></li><li><a href="global.html#filterContent">filterContent</a></li><li><a href="global.html#generateId">generateId</a></li><li><a href="global.html#generateRetrievePostContent">generateRetrievePostContent</a></li><li><a href="global.html#getAll">getAll</a></li><li><a href="global.html#getAllBoards">getAllBoards</a></li><li><a href="global.html#getBoard">getBoard</a></li><li><a href="global.html#getComment">getComment</a></li><li><a href="global.html#getCommentAuthor">getCommentAuthor</a></li><li><a href="global.html#getComments">getComments</a></li><li><a href="global.html#getDisplayNameById">getDisplayNameById</a></li><li><a href="global.html#getPost">getPost</a></li><li><a href="global.html#getPostAuthor">getPostAuthor</a></li><li><a href="global.html#getUsersID">getUsersID</a></li><li><a href="global.html#handleGetLogging">handleGetLogging</a></li><li><a href="global.html#handleNoDB">handleNoDB</a></li><li><a href="global.html#handlePostLogging">handlePostLogging</a></li><li><a href="global.html#increaseCommentViews">increaseCommentViews</a></li><li><a href="global.html#increasePostViews">increasePostViews</a></li><li><a href="global.html#logHttpGetMessage">logHttpGetMessage</a></li><li><a href="global.html#logHttpPostMessage">logHttpPostMessage</a></li><li><a href="global.html#reportComment">reportComment</a></li><li><a href="global.html#reportPost">reportPost</a></li><li><a href="global.html#searchPosts">searchPosts</a></li><li><a href="global.html#searchTags">searchTags</a></li><li><a href="global.html#softReset">softReset</a></li><li><a href="global.html#successMessage">successMessage</a></li><li><a href="global.html#warningMessage">warningMessage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Sun Mar 15 2020 22:28:43 GMT+0000 (Greenwich Mean Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

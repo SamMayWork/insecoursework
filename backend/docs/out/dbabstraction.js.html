@@ -1,4 +1,32 @@
-// File Created on 07/02/2020
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: dbabstraction.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: dbabstraction.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// File Created on 07/02/2020
 //
 // Database abstraction layer for the repository pattern.
 //
@@ -70,14 +98,14 @@ function executeRawQuerySync(query) {
  * @param {number} length The length of the ID to return
  */
 function generateId(length) {
-  if (length <= 0) {
+  if (length &lt;= 0) {
     return undefined;
   }
 
   const values = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   const generatedId = [];
 
-  for (let i = 0; i < length; i++) {
+  for (let i = 0; i &lt; length; i++) {
     generatedId.unshift(values[Math.floor(Math.random() * values.length)]);
   }
 
@@ -88,12 +116,11 @@ function generateId(length) {
 // ////////////////////////////////////////////////////////////// GETTING-CONTENT
 // #region Getting Content
 /**
- * Gets a post and all of its content, this method hides the
+ * Gets a post and all of its content (including comments), this method hides the
  * raw database output in a JSON object with aliases for the column names to simplify use
  * @param {string} postid The ID of the post to get
  */
 async function getPost(postid) {
-  
   const query = 'SELECT * FROM posts WHERE post_id = $1;';
   const results = await executeQuery(query, [postid]);
   return results.rows[0];
@@ -149,7 +176,7 @@ async function getComment(commentid) {
 async function searchPosts(searchstring) {
   const query = 'SELECT * FROM posts WHERE post_title LIKE $1;';
   const results = await executeQuery(query, [searchstring]);
-  return results.rows[0];
+  return results;
 }
 
 /**
@@ -183,11 +210,11 @@ async function createBoard(board_name, board_year) {
   const query = 'INSERT INTO Board (board_id, board_module, board_year) VALUES ($1, $2, $3);';
   const id = generateId(8);
   await executeQuery(query, [id, board_name, board_year]);
-  return {
+    return{ 
     board_name,
     board_id: id,
-  };
-}
+    };
+};
 
 /**
  * Creates a list of keywords for a post to be associated with
@@ -238,7 +265,7 @@ async function createComment(comment_content, user_id, post_id) {
   await executeQuery(commentQuery, [id, comment_content, 0, user_id, post_id]);
   return {
     comment_id: id,
-    comment_content,
+    comment_content
   };
 }
 
@@ -310,7 +337,7 @@ async function reportComment(user_id, comment_id) {
 }
 
 // #endregion
-// ////////////////////////////////////////////////////////////// INCREASING-VIEWS
+// ////////////////////////////////////////////////////////////// INCREASING-LIKES
 // #region Increasing Post Views
 
 /**
@@ -321,7 +348,8 @@ async function increasePostViews(postid) {
   const query = 'UPDATE Post_Views SET views = views + 1 WHERE post_id = $1';
   const query2 = 'SELECT * FROM Post_Views WHERE post_id = $1';
   await executeQuery(query, [postid]);
-  const result = await executeQuery(query2, [postid]);
+  const result = await executeQuery(query2, [postid]) 
+  console.log(result.rows);
   return result.rows[0];
 }
 
@@ -332,7 +360,7 @@ async function increasePostViews(postid) {
 async function increaseCommentViews(commentid) {
   const query = 'UPDATE Comment_Views SET views = views + 1 WHERE comment_id = $1';
   await executeQuery(query, [commentid]);
-  const result = await executeQuery(query, [commentid]);
+  const result = await executeQuery(query2, [commentid])  
   return result;
 }
 
@@ -395,50 +423,41 @@ async function increaseCommentViews(commentid) {
 async function checkUserExists(email) {
   const query = 'SELECT user_id FROM Users WHERE user_email = $1;';
   const results = await executeQuery(query, [email]);
-  try {
-    return results.rows[0].user_id !== undefined;
-  } catch (exception) {
-    return false;
-  }
-}
 
-/**
- * Gets the UserID for a given email address
- * @param {string} email Email address to search
- */
-async function getUserId(email) {
-  try {
-    const query = 'SELECT user_id FROM Users WHERE user_email = $1;';
-    const results = await executeQuery(query, [email]);
-    return results.rows[0].user_id;
-  } catch (exception) {
-    return undefined;
+  if (results.rowCount !== 0) {
+    return {
+      id: results.rows[0].user_id,
+      exists: true,
+    };
   }
+  return {
+    exists: false,
+  };
 }
 
 /**
  * Switches between using the users real name and their UP number
- * @param {string} userid
- * @param {boolean} status if true, uses real name
+ * @param {string} userid 
+ * @param {boolean} status 
  */
-async function useRealName(userid, status) {
-  const query = 'UPDATE users SET user_userealname = $1 WHERE user_id = $2;';
+async function changeName(userid, status) {
+  const query = "UPDATE users SET user_userealname = $1 WHERE user_id = $2;";
   executeQuery(query, [status, userid]);
 }
 
 /**
  * Creates a user and enrolls them into the DB
- * @param {object} userInformation
+ * @param {object} userInformation 
  */
 async function enrollUser(displayname, email) {
-  const query = 'INSERT INTO users VALUES ($1, $2, $3, $4, $5);';
+  const query = "INSERT INTO users VALUES ($1, $2, $3, $4, $5);";
   const id = generateId(8);
   await executeQuery(query, [id, displayname, true, email, new Date()]);
   return {
     user_name: displayname,
     user_email: email,
-  };
-}
+    };
+  }
 
 /**
  * Gets the User ID of a given post
@@ -447,11 +466,7 @@ async function enrollUser(displayname, email) {
 async function getPostAuthor(postid) {
   const query = 'SELECT user_id FROM posts where post_id=$1;';
   const results = await executeQuery(query, [postid]);
-  try {
-    return results.rows[0].user_id;
-  } catch (exception) {
-    return undefined;
-  }
+  return results;
 }
 
 /**
@@ -461,36 +476,15 @@ async function getPostAuthor(postid) {
 async function getCommentAuthor(commentid) {
   const query = 'SELECT user_id FROM comments where comment_id=$1;';
   const results = await executeQuery(query, [commentid]);
-  try {
-    return results.rows[0].user_id;
-  } catch (exception) {
-    return undefined;
-  }
+  return results;
 }
 
 /**
- * Gets the display name of a user using their ID
- * @param {string} userid the user id to get the display name for
+ * Gets the displau name of a user using their ID
+ * @param {string} userid 
  */
-async function getDisplayNameById(userid) {
-  try {
-    let query = 'SELECT user_userealname FROM users WHERE user_id = $1;';
-    let results = await executeQuery(query, [userid]);
-    if (results.rows[0].user_userealname === true) {
-      query = 'SELECT user_displayname FROM users WHERE user_id = $1;';
-      results = await executeQuery(query, [userid]);
-      return results.rows[0].user_displayname;
-    }
-    query = 'SELECT user_email FROM users WHERE user_id = $1;';
-    results = await executeQuery(query, [userid]);
-    return results.rows[0].user_email;
-  } catch (exception) {
-    return undefined;
-  }
-}
-
-async function getDisplayNameByEmail(email) {
-  return await getDisplayNameById(await getUserId(email));
+async function getDisplayNameById (userid) {
+  return executeQuery("SELECT user_displayname FROM users WHERE user_id = $1;", [userid]).rows[0].user_displayname;
 }
 
 // #endregion
@@ -533,10 +527,8 @@ module.exports.enrollUser = enrollUser;
 module.exports.checkUserExists = checkUserExists;
 module.exports.getPostAuthor = getPostAuthor;
 module.exports.getCommentAuthor = getCommentAuthor;
-module.exports.useRealName = useRealName;
+module.exports.changeName = changeName;
 module.exports.getDisplayNameById = getDisplayNameById;
-module.exports.getUserId = getUserId;
-module.exports.getDisplayNameByEmail = getDisplayNameByEmail;
 
 module.exports.reportPost = reportPost;
 module.exports.reportComment = reportComment;
@@ -546,3 +538,26 @@ module.exports.increaseCommentViews = increaseCommentViews;
 
 module.exports.executeRawQuerySync = executeRawQuerySync;
 // #endregion
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#changeDisplayName">changeDisplayName</a></li><li><a href="global.html#changeName">changeName</a></li><li><a href="global.html#checkUserExists">checkUserExists</a></li><li><a href="global.html#coldStart">coldStart</a></li><li><a href="global.html#coldStartMessage">coldStartMessage</a></li><li><a href="global.html#createBoard">createBoard</a></li><li><a href="global.html#createComment">createComment</a></li><li><a href="global.html#createKeywords">createKeywords</a></li><li><a href="global.html#createPost">createPost</a></li><li><a href="global.html#createReplyComment">createReplyComment</a></li><li><a href="global.html#deleteRecordBoard">deleteRecordBoard</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#editComment">editComment</a></li><li><a href="global.html#editPost">editPost</a></li><li><a href="global.html#enrollUser">enrollUser</a></li><li><a href="global.html#errorMessage">errorMessage</a></li><li><a href="global.html#executeQuery">executeQuery</a></li><li><a href="global.html#executeRawQuerySync">executeRawQuerySync</a></li><li><a href="global.html#filterContent">filterContent</a></li><li><a href="global.html#generateId">generateId</a></li><li><a href="global.html#generateRetrievePostContent">generateRetrievePostContent</a></li><li><a href="global.html#getAll">getAll</a></li><li><a href="global.html#getAllBoards">getAllBoards</a></li><li><a href="global.html#getBoard">getBoard</a></li><li><a href="global.html#getComment">getComment</a></li><li><a href="global.html#getCommentAuthor">getCommentAuthor</a></li><li><a href="global.html#getComments">getComments</a></li><li><a href="global.html#getDisplayNameById">getDisplayNameById</a></li><li><a href="global.html#getPost">getPost</a></li><li><a href="global.html#getPostAuthor">getPostAuthor</a></li><li><a href="global.html#getUsersID">getUsersID</a></li><li><a href="global.html#handleGetLogging">handleGetLogging</a></li><li><a href="global.html#handleNoDB">handleNoDB</a></li><li><a href="global.html#handlePostLogging">handlePostLogging</a></li><li><a href="global.html#increaseCommentViews">increaseCommentViews</a></li><li><a href="global.html#increasePostViews">increasePostViews</a></li><li><a href="global.html#logHttpGetMessage">logHttpGetMessage</a></li><li><a href="global.html#logHttpPostMessage">logHttpPostMessage</a></li><li><a href="global.html#reportComment">reportComment</a></li><li><a href="global.html#reportPost">reportPost</a></li><li><a href="global.html#searchPosts">searchPosts</a></li><li><a href="global.html#searchTags">searchTags</a></li><li><a href="global.html#softReset">softReset</a></li><li><a href="global.html#successMessage">successMessage</a></li><li><a href="global.html#warningMessage">warningMessage</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Sun Mar 15 2020 22:28:43 GMT+0000 (Greenwich Mean Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
