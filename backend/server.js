@@ -229,12 +229,15 @@ app.post('forum/report', (req, res) => {
 // ////////////////////////////////////////////////////////////// UAC ENDPOINTS
 // #region UAC Endpoints
 
-app.post('uac/register', async () => {
+app.post('/forum/uac', (req, res) => {
+  handleNoDB(req, res);
+  handlePostLogging(req);
 
-});
-
-app.post('forum/uac/', async () => {
-
+  // Save the user into the DB
+  if (req.query.register === 1) {
+    enrollUser(req, res);
+    await ns.generateRegistrationConfirmation (req);
+  }
 });
 
 
