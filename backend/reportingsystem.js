@@ -2,6 +2,11 @@
 
 // This module is responsible for tracking and handling reports on the forum
 
+// Since this is a prototype the functionality for this system has been implemented but
+// it has been done in a way which does not scale with the system, this currently marks
+// either a comment or post as reported and nothing else.
+
+
 // ////////////////////////////////////////////////////////////// REQUIRES
 
 const dbabs = require('./dbabstraction');
@@ -14,11 +19,9 @@ const dbabs = require('./dbabstraction');
  * @param {response} res
  */
 async function reportPost(req, res) {
-  // 1 - Check the user is authorised to report the content
-  // 2 - Check to see if the user has already reported the content before
-  //  2.a - If the content has never been reported before by anyone, start the report procedure
-  // 3 - Check to see if we're over the limit for deletion, and if we are, remove all of the content
-  tempBlock();
+  await dbabs.reportPost(req.body.postid);
+  res.status(200);
+  res.end();
 }
 
 /**
@@ -27,16 +30,8 @@ async function reportPost(req, res) {
  * @param {response} res
  */
 async function reportComment(req, res) {
-  // 1 - Check the user is authorised to report the content
-  // 2 - Check to see if the user has already reported the content before
-  //  2.a - If the content has never been reported before by anyone, start the report procedure
-  // 3 - Check to see if we're over the limit for deletion, and if we are, remove all of the content
-  tempBlock();
-}
-
-// While we're deciding what we're doing with this module return status 500 and exit
-function tempBlock(res) {
-  res.status(500);
+  await dbabs.reportComment(req.body.commentid); 
+  res.status(200);
   res.end();
 }
 

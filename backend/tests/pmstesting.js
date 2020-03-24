@@ -23,6 +23,7 @@ describe('PMS Module DB Tests', () => {
         user_id: 'acc45ba4',
         created_date: new Date('2020-02-02T00:00:00.000Z'),
         edited_date: new Date('2020-02-06T00:00:00.000Z'),
+        reported : false
       });
     });
 
@@ -64,6 +65,7 @@ describe('PMS Module DB Tests', () => {
         user_id: 'acc45ba4',
         created_date: new Date('2020-02-21T00:00:00.000Z'),
         edited_date: new Date('2020-02-07T00:00:00.000Z'),
+        reported : false
       });
     });
 
@@ -134,6 +136,7 @@ describe('PMS Module DB Tests', () => {
         user_id: '75b6d7e5',
         post_id: 'ad7e89d1',
         reply_id: null,
+        reported : false
       });
     });
 
@@ -160,6 +163,7 @@ describe('PMS Module DB Tests', () => {
         user_id: '75b6d7e5',
         post_id: 'ad7e89d1',
         reply_id: undefined,
+        reported : false
       });
     });
 
