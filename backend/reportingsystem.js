@@ -30,7 +30,7 @@ async function reportPost(req, res) {
  * @param {response} res
  */
 async function reportComment(req, res) {
-  await dbabs.reportComment(req.query.commentid); 
+  await dbabs.reportComment(req.query.commentid);
   res.status(200);
   res.end();
 }
