@@ -216,11 +216,11 @@ app.post('forum/report', (req, res) => {
   }
 
   if (req.query.post !== undefined) {
-    reporting.reportPost(req, res);
+    await reporting.reportPost(req, res);
   }
 
   if (req.query.comment !== undefined) {
-    reporting.reportComment(req, res);
+    await reporting.reportComment(req, res);
   }
 
   res.end();
