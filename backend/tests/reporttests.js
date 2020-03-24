@@ -2,6 +2,9 @@ const assert = require('assert');
 const dbabs = require('../dbabstraction');
 const rs = require('../reportingsystem');
 
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
+
 describe('Reporting System DB Tests', () => {
   describe('reportPost', () => {
     it('Should set the reported field correctly for the post row d6804d59', async () => {
@@ -11,7 +14,7 @@ describe('Reporting System DB Tests', () => {
     });
 
     it('Should not crash if the row does not exist', async () => {
-      assert.doesNotThrow(() => { dbabs.reportPost('DOESNOTE') });
+      assert.doesNotThrow(() => { dbabs.reportPost('DOESNOTE'); });
     });
   });
 
@@ -23,9 +26,9 @@ describe('Reporting System DB Tests', () => {
     });
 
     it('Should not crash if the row does not exist', async () => {
-      assert.doesNotThrow(() => { dbabs.reportComment('DOESNOTE') });
+      assert.doesNotThrow(() => { dbabs.reportComment('DOESNOTE'); });
     });
-  })
+  });
 });
 
 describe('Reporting System Module Tests', () => {
@@ -37,7 +40,7 @@ describe('Reporting System Module Tests', () => {
             { value: 'notuser@hostgator.com' },
           ],
         },
-        body: {
+        query: {
           postid: 'a20241c7',
         },
       };
@@ -61,7 +64,7 @@ describe('Reporting System Module Tests', () => {
             { value: 'notuser@hostgator.com' },
           ],
         },
-        body: {
+        query: {
           commentid: 'd27324aa',
         },
       };
