@@ -110,13 +110,13 @@ async function getComments(postid) {
 }
 
 /**
- * Gets a specific board
- * @param {string} boardid
+ * Gets all of the posts from a specific board
+ * @param {string} boardid The ID of the board to get the posts for
  */
 async function getBoard(boardid) {
-  const query = 'SELECT * FROM board WHERE board_id = $1;';
+  const query = 'SELECT * FROM posts WHERE board_id = $1;';
   const results = await executeQuery(query, [boardid]);
-  return results.rows[0];
+  return results.rows;
 }
 
 /**
@@ -331,7 +331,7 @@ async function increasePostViews(postid) {
 async function increaseCommentViews(commentid) {
   const query = 'UPDATE Comment_Views SET views = views + 1 WHERE comment_id = $1';
   await executeQuery(query, [commentid]);
-  const result = await executeQuery(query2, [commentid]);
+  const result = await executeQuery(query, [commentid]);
   return result;
 }
 
@@ -433,6 +433,7 @@ async function enrollUser(displayname, email) {
   const query = 'INSERT INTO users VALUES ($1, $2, $3, $4, $5);';
   const id = generateId(8);
   await executeQuery(query, [id, displayname, true, email, new Date()]);
+  console.log(displayname);
   return {
     user_name: displayname,
     user_email: email,

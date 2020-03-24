@@ -90,7 +90,7 @@ app.get('/get', async (req, res) => {
  * Handler for / so if someone just types in our IP they will get index.html
  */
 app.get('/', (req, res) => {
-  res.sendFile('frontend/index.html', { root: __dirname });
+  res.sendFile('frontend/build/index.html', { root: __dirname });
   res.status(200);
   res.end();
 });
@@ -229,12 +229,15 @@ app.post('forum/report', (req, res) => {
 // ////////////////////////////////////////////////////////////// UAC ENDPOINTS
 // #region UAC Endpoints
 
-app.post('uac/register', async () => {
+app.post('/forum/uac', async (req, res) => {
+  handleNoDB(req, res);
+  handlePostLogging(req);
 
-});
-
-app.post('forum/uac/', async () => {
-
+  // Save the user into the DB
+  if (req.query.register === 1) {
+    enrollUser(req, res);
+    await ns.generateRegistrationConfirmation (req);
+  }
 });
 
 

@@ -13,7 +13,7 @@
 
 const mailer = require('nodemailer');
 const dbabs = require('./dbabstraction');
-// const login = require('../emaillogin');
+const login = require('../emaillogin');
 const logging = require('./logging');
 
 let available = true;
@@ -115,6 +115,17 @@ async function generatePostConfirmation(req, postid) {
   return result.code;
 }
 
+/**
+ * Generates a confirmation sent to the user when they have registered
+ * @param {request} req 
+ */
+async function generateRegistrationConfirmation (req) {
+  let content = `Hi ${req.user.displayName},\n\n`;
+  content += `We are just letting you know you have been successfully enrolled in the UUoP Forum site!\n\n`;
+  content += 'Thanks, (Unofficial)UoP Forum team\n\nBleep Bloop I am a robot 🤖, report any errors ❌ to up891153@myport.ac.uk';  
+  const result = await sendEmail(req.user.emails[0].value, 'Registration Confirmation', content);
+  return result.code;
+}
 
 // ////////////////////////////////////////////////////////////// EXPORTS
 
@@ -122,5 +133,6 @@ module.exports.emailAvailableStatus = emailAvailableStatus;
 
 module.exports.generateGenericEmail = generateGenericEmail;
 module.exports.generatePostConfirmation = generatePostConfirmation;
+module.exports.generateRegistrationConfirmation = generateRegistrationConfirmation;
 
 module.exports.sendEmail = sendEmail;
