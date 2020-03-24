@@ -5,7 +5,7 @@ const rs = require('../reportingsystem');
 describe('Reporting System DB Tests', () => {
   describe('reportPost', () => {
     it('Should set the reported field correctly for the post row d6804d59', async () => {
-      dbabs.reportPost('d6804d59');
+      await dbabs.reportPost('d6804d59');
       const content = await dbabs.getPost('d6804d59');
       assert.equal(content.reported, true);
     });
@@ -17,7 +17,7 @@ describe('Reporting System DB Tests', () => {
 
   describe('reportComment', () => {
     it('Should set the reported field correct for the comment row 52362409', async () => {
-      dbabs.reportComment('52362409');
+      await dbabs.reportComment('52362409');
       const content = await dbabs.getComment('52362409');
       assert.equal(content.reported, true);
     });
