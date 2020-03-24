@@ -19,7 +19,7 @@ const dbabs = require('./dbabstraction');
  * @param {response} res
  */
 async function reportPost(req, res) {
-  await dbabs.reportPost(req.body.postid);
+  await dbabs.reportPost(req.query.postid);
   res.status(200);
   res.end();
 }
@@ -30,7 +30,7 @@ async function reportPost(req, res) {
  * @param {response} res
  */
 async function reportComment(req, res) {
-  await dbabs.reportComment(req.body.commentid); 
+  await dbabs.reportComment(req.query.commentid); 
   res.status(200);
   res.end();
 }

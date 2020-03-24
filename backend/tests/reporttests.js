@@ -37,7 +37,7 @@ describe('Reporting System Module Tests', () => {
             { value: 'notuser@hostgator.com' },
           ],
         },
-        body: {
+        query: {
           postid: 'a20241c7',
         },
       };
@@ -61,7 +61,7 @@ describe('Reporting System Module Tests', () => {
             { value: 'notuser@hostgator.com' },
           ],
         },
-        body: {
+        query: {
           commentid: 'd27324aa',
         },
       };
