@@ -34,16 +34,15 @@ endpoint: /get?postid=**[param]**
   }
 ```
 
-Getting a board and all of its information
+Getting a board and all of its posts
 endpoint: /get?boardid=**[param]**
-  - To be honest, this is pretty useless, but it returns all of the content for a board
+  - Returns all of the posts inside of the board
   - Returns the content in the format
 ``` JSON
-  { 
-    "board_id":"5a6744cd",
-    "board_module":"Introduction to Trinidad & Tobago",
-    "board_year":"2020/2021"
-  }
+[
+  {post},
+  {post}
+]
 ```
 
 Getting a comment and all of its information

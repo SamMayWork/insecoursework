@@ -110,13 +110,13 @@ async function getComments(postid) {
 }
 
 /**
- * Gets a specific board
- * @param {string} boardid
+ * Gets all of the posts from a specific board
+ * @param {string} boardid The ID of the board to get the posts for
  */
 async function getBoard(boardid) {
-  const query = 'SELECT * FROM board WHERE board_id = $1;';
+  const query = 'SELECT * FROM posts WHERE board_id = $1;';
   const results = await executeQuery(query, [boardid]);
-  return results.rows[0];
+  return results.rows;
 }
 
 /**
@@ -436,8 +436,8 @@ async function useRealName(userid, status) {
 async function enrollUser(displayname, email) {
   const query = 'INSERT INTO users VALUES ($1, $2, $3, $4, $5);';
   const id = generateId(8);
-  const insertionDate = new Date();
-  await executeQuery(query, [id, displayname, true, email, insertionDate]);
+  await executeQuery(query, [id, displayname, true, email, new Date()]);
+  console.log(displayname);
   return {
     user_name: displayname,
     user_email: email,
