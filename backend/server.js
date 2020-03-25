@@ -35,7 +35,7 @@ const reporting = require('./reportingsystem');
 const app = express();
 const listeningPort = 8080;
 
-app.use(express.static('frontend/build/'));
+app.use(express.static('frontend/'));
 
 // Sets parameters for recieving information
 app.use(bodyParser.urlencoded({ extended: true }));
