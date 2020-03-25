@@ -23,6 +23,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { argv } = require('yargs');
 const GoogleAuth = require('simple-google-openid');
+const cors = require('cors');
 
 const logging = require('./logging');
 const maintain = require('./maintainmodule');
@@ -35,6 +36,7 @@ const reporting = require('./reportingsystem');
 const app = express();
 const listeningPort = 8080;
 
+app.use(cors());
 app.use(express.static('frontend/'));
 
 // Sets parameters for recieving information
