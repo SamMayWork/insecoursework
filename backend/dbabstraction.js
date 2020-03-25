@@ -214,9 +214,9 @@ async function createKeywords(keywords) {
  */
 async function createPost(title, content, keywords, authorid, boardid) {
   const keywordsId = await createKeywords(keywords);
-  const postQuery = 'INSERT INTO Posts (post_id, keyword_id, board_id, post_title, post_content, post_likes, user_id, created_date) VALUES ($1,$2,$3,$4,$5,$6,$7,$8);';
+  const postQuery = 'INSERT INTO Posts (post_id, keyword_id, board_id, post_title, post_content, post_likes, user_id, created_date, reported) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9);';
   const id = generateId(8);
-  await executeQuery(postQuery, [id, keywordsId, boardid, title, content, 0, authorid, new Date()]);
+  await executeQuery(postQuery, [id, keywordsId, boardid, title, content, 0, authorid, new Date(), false]);
 
   return {
     keyword_id: keywordsId,
@@ -232,9 +232,9 @@ async function createPost(title, content, keywords, authorid, boardid) {
  */
 
 async function createComment(comment_content, user_id, post_id) {
-  const commentQuery = 'INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id) VALUES($1, $2, $3, $4, $5);';
+  const commentQuery = 'INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id, reported) VALUES($1, $2, $3, $4, $5, $6);';
   const id = generateId(8);
-  await executeQuery(commentQuery, [id, comment_content, 0, user_id, post_id]);
+  await executeQuery(commentQuery, [id, comment_content, 0, user_id, post_id, false]);
   return {
     comment_id: id,
     comment_content,
@@ -250,13 +250,9 @@ async function createComment(comment_content, user_id, post_id) {
  */
 
 async function createReplyComment(comment_content, user_id, post_id, reply_id) {
-  const replyCommentQuery = 'INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id, reply_id) VALUES($1, $2, $3, $4, $5, $6);';
-  const id = generateId(8);
-  await executeQuery(replyCommentQuery, [id, comment_content, 0, user_id, post_id, reply_id]);
-  return {
-    replyComment_id: id,
-    comment_content
-  };
+  const query = 'INSERT INTO Comments VALUES($1, $2, $3, $4, $5, $6, $7);';
+  const results = await executeQuery(query, [generateId(8), comment_content, 0, user_id, post_id, reply_id, false]);
+  return results;
 }
 
 // #endregion
@@ -291,13 +287,12 @@ async function editComment(commentContent, commentid) {
 // #region Reporting
 
 /**
- * Reporting a post
- * @param {String} user_id user_id of the useres that report
- * @param {String} post_id Post_id that is being reported
+ * Sets the reported field of a post to true
+ * @param {string} post_id 
  */
-async function reportPost(user_id, post_id) {
-  const query = 'INSERT INTO Reports_Posts VALUES($1, $2);';
-  const result = await executeQuery(query, [user_id, post_id]);
+async function reportPost(post_id) {
+  const query = 'UPDATE posts SET reported = $1 WHERE post_id = $2;';
+  const result = await executeQuery(query, [true, post_id]);
   return result;
 }
 
@@ -306,9 +301,9 @@ async function reportPost(user_id, post_id) {
  * @param {String} user_id User_id that reported
  * @param {String} comment_id comment_id that is being reported
  */
-async function reportComment(user_id, comment_id) {
-  const query = 'INSERT INTO Reports_Comments VALUES($1, $2);';
-  const result = await executeQuery(query, [user_id, comment_id]);
+async function reportComment(comment_id) {
+  const query = 'UPDATE comments SET reported = $1 WHERE comment_id = $2;';
+  const result = await executeQuery(query, [true, comment_id]);
   return result;
 }
 

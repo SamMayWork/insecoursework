@@ -215,12 +215,12 @@ app.post('forum/report', (req, res) => {
     return;
   }
 
-  if (req.query.post !== undefined) {
-    reporting.reportPost(req, res);
+  if (req.query.postid !== undefined) {
+    await reporting.reportPost(req, res);
   }
 
-  if (req.query.comment !== undefined) {
-    reporting.reportComment(req, res);
+  if (req.query.commentid !== undefined) {
+    await reporting.reportComment(req, res);
   }
 
   res.end();
