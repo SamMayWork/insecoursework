@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import momentPropTypes from 'react-moment-proptypes';
 
 import testData from './tests/testData.js';
 
@@ -23,7 +25,6 @@ import {
 	MuiPickersUtilsProvider
 } from '@material-ui/pickers';
 
-// import DateFnsUtils from '@date-io/date-fns';
 import MomentUtils from '@date-io/moment';
 
 const useStyles = makeStyles(theme => ({
@@ -43,11 +44,11 @@ const useStyles = makeStyles(theme => ({
 
 const PostSearch = props => {
 	const classes = useStyles();
-	const [keywords, setKeywords] = useState([]);
-	const [board, setBoard] = useState("INTPROG");
-	const [startDate, setStartDate] = useState(moment(new Date()));
-	const [startTime, setStartTime] = useState(moment(new Date()));
-	const boards = testData.boards;
+	const [keywords, setKeywords] = useState(props.keywords);
+	console.log('props.boards:', props);
+	const [board, setBoard] = useState(props.boards[0]);
+	const [startDate, setStartDate] = useState(props.startDate);
+	const [startTime, setStartTime] = useState(props.startTime);
 	const handleKeyWordChange = (e) => {
     if (e.keyCode == 13 || e.keyCode == 32) {
       let val = e.target.value.trim();
@@ -76,6 +77,7 @@ const PostSearch = props => {
 		<div className = {classes.root}>
 			<FormControl className = {classes.formControl}>
 				<TextField
+					value = {props.title}
 		      placeholder="Title..."
 		      classes={{
 		        root: classes.title
@@ -148,6 +150,7 @@ const PostSearch = props => {
       </FormControl>
       <FormControl className = {classes.formControl}>
 		    <TextField
+		    	value = {props.author}
 		      placeholder="Author..."
 		      classes={{
 		        root: classes.title
@@ -166,7 +169,7 @@ const PostSearch = props => {
 		      onChange={handleChangeBoard}
 		    >
 		    	{
-		    		boards.map((board, i) =>
+		    		props.boards.map((board, i) =>
 		    			<MenuItem key={i} value={board}>
 		    				{board}
 		    			</MenuItem>
@@ -182,6 +185,15 @@ const PostSearch = props => {
       </Button>
 		</div>
 	);
+}
+
+PostSearch.propTypes = {
+	title: PropTypes.string.isRequired,
+	boards: PropTypes.array.isRequired,
+	startTime: momentPropTypes.momentObj,
+	startDate: momentPropTypes.momentObj,
+	author: PropTypes.string.isRequired,
+	keywords: PropTypes.array.isRequired
 }
 
 export default PostSearch;

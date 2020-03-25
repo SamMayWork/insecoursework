@@ -7,6 +7,8 @@ import Sidebar from '../../components/Sidebar';
 
 import PostSearch from '../../components/PostSearch';
 
+import testData from '../../components/PostSearch/tests/testData.js';
+
 const PostPage = props => {
 	const [openSidebar, setOpenSidebar] = useState(false);
 	const handleSidebarOpen = () => {
@@ -23,11 +25,12 @@ const PostPage = props => {
 				onSidebarOpen = {handleSidebarOpen}
 			/>
 			<PostSearch
-				title = {""}
-				startDateTime = {new Date()}
-				keywords = {[]}
-				author = {""}
-				boards = {boards}
+				title = {testData.title}
+				startDate = {testData.startData}
+				startTime = {testData.startTime}
+				keywords = {testData.keywords}
+				author = {testData.author}
+				boards = {testData.boards}
 			/>
 			<Sidebar
 				onClose = {handleSidebarClose}
