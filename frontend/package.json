@@ -5,8 +5,11 @@
   "proxy": "http://localhost:8080",
   "dependencies": {
     "@coderbyheart/react-weather-widget": "^1.4.5",
+    "@date-io/date-fns": "^1.3.6",
+    "@date-io/moment": "^1.3.6",
     "@material-ui/core": "^4.9.5",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/pickers": "^3.2.10",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.1",
     "@testing-library/user-event": "^7.2.1",

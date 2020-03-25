@@ -3,5 +3,6 @@ export default {
 		'INDADD',
 		'INTPROG',
 		'MATHFUN'
-	]
+	],
+	startDateTime: new Date()
 };

@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import testData from './tests/testData.js';
 
+import moment from 'moment';
+
 import {
 	TextField,
 	Chip,
@@ -10,8 +12,19 @@ import {
 	InputLabel,
 	Select,
 	MenuItem,
-	Button
+	Button,
+	Grid
 } from '@material-ui/core';
+
+import {
+	KeyboardDatePicker,
+	KeyboardTimePicker,
+	DatePicker,
+	MuiPickersUtilsProvider
+} from '@material-ui/pickers';
+
+// import DateFnsUtils from '@date-io/date-fns';
+import MomentUtils from '@date-io/moment';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -32,6 +45,8 @@ const PostSearch = props => {
 	const classes = useStyles();
 	const [keywords, setKeywords] = useState([]);
 	const [board, setBoard] = useState("INTPROG");
+	const [startDate, setStartDate] = useState(moment(new Date()));
+	const [startTime, setStartTime] = useState(moment(new Date()));
 	const boards = testData.boards;
 	const handleKeyWordChange = (e) => {
     if (e.keyCode == 13 || e.keyCode == 32) {
@@ -51,6 +66,12 @@ const PostSearch = props => {
   	let board = e.target.value;
   	setBoard(board);
   }
+  const handleDateChange = date => {
+  	setStartDate(date);
+  }
+  const handleTimeChange = time => {
+  	setStartTime(time);
+  }
 	return (
 		<div className = {classes.root}>
 			<FormControl className = {classes.formControl}>
@@ -63,23 +84,41 @@ const PostSearch = props => {
 		    />
       </FormControl>
       <FormControl className = {classes.formControl}>
-		    <InputLabel id="demo-simple-select-label">
-		    	Board
-		    </InputLabel>
-		    <Select
-		      labelId="demo-simple-select-label"
-		      id="demo-simple-select"
-		      value={board}
-		      onChange={handleChangeBoard}
-		    >
-		    	{
-		    		boards.map((board, i) =>
-		    			<MenuItem key={i} value={board}>
-		    				{board}
-		    			</MenuItem>
-		    		)
-		    	}
-		    </Select>
+      	<MuiPickersUtilsProvider utils={MomentUtils}>
+      		<Grid 
+      			container
+      			direction="row"	
+      		>
+      			<Grid container item xs={6}>
+							<KeyboardDatePicker
+								fullWidth
+							  format="DD/MM/YYYY"
+							  margin="none"
+							  value={startDate}
+							  onChange={handleDateChange}
+							  id="start-date"
+							  maxDate = {moment(new Date())}
+							  label="Start Date"
+							  KeyboardButtonProps={{
+							    'aria-label': 'change date'
+							  }}
+							/>
+					  </Grid>
+					  <Grid container item xs={6}>
+							<KeyboardTimePicker
+								fullWidth
+							  margin="none"
+							  id="time-picker"
+							  label="Start Time"
+							  value={startTime}
+							  onChange={handleTimeChange}
+							  KeyboardButtonProps={{
+							    'aria-label': 'change time',
+							  }}
+							 />
+			      </Grid>
+		      </Grid>
+	      </MuiPickersUtilsProvider>
       </FormControl>
       <FormControl className = {classes.formControl}>
 		    <TextField
@@ -115,6 +154,25 @@ const PostSearch = props => {
 		      }}
 		      inputProps={{ 'aria-label': 'author' }}
 		    />
+      </FormControl>
+      <FormControl className = {classes.formControl}>
+		    <InputLabel id="demo-simple-select-label">
+		    	Board
+		    </InputLabel>
+		    <Select
+		      labelId="demo-simple-select-label"
+		      id="demo-simple-select"
+		      value={board}
+		      onChange={handleChangeBoard}
+		    >
+		    	{
+		    		boards.map((board, i) =>
+		    			<MenuItem key={i} value={board}>
+		    				{board}
+		    			</MenuItem>
+		    		)
+		    	}
+		    </Select>
       </FormControl>
       <Button
       	variant="contained"
