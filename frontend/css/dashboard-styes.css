@@ -1,3 +1,9 @@
-
+.boardtemplate {
+  margin-top: 1em;
+}
+.boardtemplate * {
+  display: inline;
+  margin-right: 1em;
+}
 
 /*# sourceMappingURL=dashboard-styes.css.map */
