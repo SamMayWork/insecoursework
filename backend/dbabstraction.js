@@ -342,44 +342,23 @@ async function increaseCommentViews(commentid) {
  * Function for liking/disliking a post
  * @param {boolean} like if true, the post is liked, if false it is disliked
  * @param {string} postId is the id of the post that is being liked/disliked
-//  */
-// async function ratePost(postid, like) {
-//   try {
-//     let query;
-//     if (like === true) {
-//       query = `update Posts set post_likes = post_likes + 1 where post_id = $1;`;
-//     } else {
-//       query = `update Posts set post_likes = post_likes - 1 where post_id = $1;`;
-//     }
-//     await executeQuery(query, [postid]);
-//   }
-//   catch (error) {
-//     logging.errorMessage(error);
-//   }
-// }
+ */
+async function ratePost(postid, like) {
+  let value = like ? 1 : -1;
+  let query = `UPDATE posts SET post_likes = post_likes + ${value} WHERE post_id = $1;`;
+  await executeQuery(query, [postid]);
+}
 
 /**
  * Function for liking/disliking comments on posts
  * @param {string} commentid is the id of the comment that is being liked/disliked
  * @param {boolean} like if true, the post is like, if false it is disliked
  */
-
-// async function rateComment(commentid, like) {
-//   try {
-//     let query;
-//     if (like === true) {
-//       query = `update Comments set comment_likes = comment_likes + 1 where comment_id = ${commentid};`;
-//     } else {
-//       query = `update Comments set comment_likes = comment_likes - 1 where comment_id = ${commentid}`;
-//     }
-//     return true;
-//   }
-//   const results = await executeQuery(query, [commentid]);
-//   catch (error) {
-//     logging.errorMessage(error);
-//     return false;
-//   }
-// }
+async function rateComment(commentid, like) {
+  let value = like ? 1 : -1;
+  let query = `UPDATE comments SET comment_likes = comment_likes + ${value} WHERE comment_id = $1;`;
+  await executeQuery(query, [commentid]);
+}
 
 // #endregion
 // ////////////////////////////////////////////////////////////// USER ACCOUNT QUERIES
@@ -542,6 +521,9 @@ module.exports.reportComment = reportComment;
 
 module.exports.increasePostViews = increasePostViews;
 module.exports.increaseCommentViews = increaseCommentViews;
+
+module.exports.ratePost = ratePost;
+module.exports.rateComment = rateComment;
 
 module.exports.executeRawQuerySync = executeRawQuerySync;
 // #endregion

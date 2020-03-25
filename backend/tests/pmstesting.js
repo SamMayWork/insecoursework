@@ -323,6 +323,42 @@ describe('Post Module Testing', () => {
       });
     });
   });
+
+  describe('ratePost', () => {
+    it('Should increase the likes of a post by 1 for the row 81e46a20', async () => {
+      await dbabs.ratePost('81e46a20', true);
+      const content = await dbabs.getPost('81e46a20');
+      assert.equal(content.post_likes, 1);
+    });
+
+    it('Should not crash when the row does not exist', async () => {
+      assert.doesNotThrow(async () => { await dbabs.ratePost('DOESNOTE', true); });
+    });
+
+    it('Should decrease the likes of a post by 1 for the row 81e46a20', async () => {
+      await dbabs.ratePost('81e46a20', false);
+      const content = await dbabs.getPost('81e46a20');
+      assert.equal(content.post_likes, 0);
+    });
+  });
+
+  describe('rateComment', () => {
+    it('Should increase the likes of a comment by 1 for the row c1dbe80b', async () => {
+      await dbabs.rateComment('c1dbe80b', true);
+      const content = await dbabs.getComment('c1dbe80b');
+      assert.equal(content.comment_likes, 1);
+    });
+
+    it('Should not crash when the row does not exist', async () => {
+      assert.doesNotThrow(async () => { await dbabs.rateComment("DOESNOTE", true); });
+    });
+
+    it('Should decrease the likes of a comment by 1 for the row c1dbe80b', async () => {
+      await dbabs.rateComment('c1dbe80b', false);
+      const content = await dbabs.getComment('c1dbe80b');
+      assert.equal(content.comment_likes, 0);
+    });
+  });
 });
 
 
