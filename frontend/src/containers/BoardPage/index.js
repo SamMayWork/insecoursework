@@ -2,6 +2,9 @@ import React, {useState, useEffect} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Navbar from '../Navbar';
 import Sidebar from '../../components/Sidebar';
+import {
+	useLocation
+} from 'react-router-dom';
 
 import Post from '../../components/Post';
 
@@ -11,14 +14,19 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
+const useQuery = () => {
+	return new URLSearchParams(useLocation().search);
+};
+	
 const BoardPage = props => {
 	const [posts, setPosts] = useState([]);
 	const [openSidebar, setOpenSidebar] = useState(false);
-	
 	const classes = useStyles();
+	let query = useQuery();
 	
-	const updatePosts = posts => {
-		fetch('/get?boardid=cfd5636c')
+	const updatePosts = board_id => {
+		console.log('board_id:', board_id);
+		fetch(`/get?boardid=${board_id}`)
 			.then(res => res.json())
 			.then(
 				(result) => {
@@ -31,7 +39,9 @@ const BoardPage = props => {
 				}
 			)
 	};
-	useEffect(() => {updatePosts(posts)}, []);
+	useEffect(() => {
+		updatePosts(query.get('id'));
+	}, []);
 	const handleSidebarOpen = () => {
 		setOpenSidebar(true);
 	};
@@ -62,7 +72,5 @@ const BoardPage = props => {
 		</div>
 	);
 };
-
-
 
 export default BoardPage;

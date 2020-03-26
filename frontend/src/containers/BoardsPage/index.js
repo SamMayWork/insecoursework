@@ -3,12 +3,12 @@ import {makeStyles, useTheme} from '@material-ui/styles';
 import Navbar from '../Navbar';
 import Sidebar from '../../components/Sidebar';
 
-import TestModules from './data.js';
-
 import Board from '../../components/Board';
-
-import testData from '../../components/PostSearch/tests/testData.js';
 import PostSearch from '../../components/PostSearch';
+
+import {
+	List
+} from '@material-ui/core';
 
 const BoardsPage = props => {
 	const [openSidebar, setOpenSidebar] = useState(false);
@@ -55,22 +55,17 @@ const BoardsPage = props => {
 				open = {openSidebar}
 				variant = {'temporary'}
 			/>
-			{
-			/*
-			<PostSearch
-				board = {testData.board}
-				boards = {testData.boards}
-			/>
-			*/
-			}
-			{boards.slice(0, 20).map((board, i) => (
-				<Board
-					key = {i}
-					title = {board.board_module}
-					year = {board.board_year}
-					views = {(i+1) * 10}
-				/>
-			))}
+			<div>
+				{boards.slice(0, 20).map((board, i) => (
+					<Board
+						key = {i}
+						href = {`/board?id=${board.board_id}`}
+						title = {board.board_module}
+						year = {board.board_year}
+						views = {(i+1) * 10}
+					/>
+				))}
+			</div>
 		</div>
 	);
 };

@@ -18,7 +18,7 @@ const PostPage = props => {
 	
 	// NOTE: Load boards from DB, here
 	const updatePost = post => {
-		 fetch(`/get?postid=11f3b99f`)
+		 fetch(`/get?postid=ad7e89d1`)
       .then(res => res.json())
       .then(
         (result) => {
@@ -59,9 +59,11 @@ const PostPage = props => {
 			{
 				comments.map((comment, i) => 
 					<Comment
+						key = {i}
 						title = {comment.title}
 						content = {comment.content}
 						likes = {comment.likes}
+						author = {comment.author}
 					/>
 				)
 			}

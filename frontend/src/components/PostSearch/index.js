@@ -214,7 +214,6 @@ const PostSearch = props => {
 }
 
 PostSearch.propTypes = {
-	boards: PropTypes.array.isRequired,
 	board: PropTypes.object.isRequired
 }
 

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {forwardRef} from 'react';
 import PropTypes from 'prop-types';
+import {NavLink as RouterLink} from 'react-router-dom';
 
 import {
 	Card,
@@ -8,11 +9,23 @@ import {
 	Typography,
 	Chip
 } from '@material-ui/core';
-import ViewsIcon from '@material-ui/icons/Visibility';
+
+const CustomRouterLink = forwardRef((props, ref) => (
+	<Card
+		ref={ref}
+		style = {{flexGrow: 1}}
+		style = {{ margin: '1rem' }}
+	>
+		<RouterLink {...props} />
+	</Card>
+));
 
 const Board = props => {
 	return (
-		<Card style = {{ margin: '1rem' }}>
+		<Card
+			component={CustomRouterLink}
+			to={props.href}	
+		>
 			<CardHeader
 				title = {props.title}
 				titleTypographyProps = {{variant: 'h7'}}
@@ -22,7 +35,6 @@ const Board = props => {
 				style = {{ fontSize: '0.8rem' }}
 			>
 				<div style = {{ marginBottom: '1rem' }}>{props.year}</div>
-				{/*<Chip icon={<ViewsIcon />} label={props.views}></Chip>*/}
 			</CardContent>
 		</Card>
 	);
