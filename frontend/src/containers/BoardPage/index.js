@@ -6,12 +6,23 @@ import {
 	useLocation,
 	NavLink as RouterLink
 } from 'react-router-dom';
+import {
+	Fab
+} from '@material-ui/core';
+import {
+	Add as AddIcon
+} from '@material-ui/icons';
 
 import Post from '../../components/Post';
 
 const useStyles = makeStyles(theme => ({
 	root: {
 		padding: theme.spacing(2)
+	},
+	fab: {
+		position: 'fixed',
+		right: theme.spacing(2),
+		bottom: theme.spacing(2)
 	}
 }));
 
@@ -41,6 +52,7 @@ const BoardPage = props => {
 			.then(
 				(result) => {
 					let posts = result;
+					posts.reverse();
 					console.log(posts);
 					setPosts(posts);
 				},
@@ -81,6 +93,9 @@ const BoardPage = props => {
 					/>
 				))}
 			</div>
+			<Fab href={`/forum/create?type=post&board_id=${query.get('id')}`} className={classes.fab} color="primary" aria-label="add">
+				<AddIcon/>
+			</Fab>
 		</div>
 	);
 };

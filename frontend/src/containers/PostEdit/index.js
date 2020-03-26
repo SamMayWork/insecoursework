@@ -16,9 +16,15 @@ import {
   Button,
   Chip
 } from '@material-ui/core';
-
+import {
+	useLocation
+} from 'react-router-dom';
 
 import './post.css';
+
+const useQuery = location => {
+	return new URLSearchParams(location.search);
+};
 
 export default class PostEditPage extends Component {
   state = {
@@ -26,66 +32,40 @@ export default class PostEditPage extends Component {
     pageTitle: 'Create a New Thread'
   }
   constructor(props) {
-    super(props);
-  }
+		super(props);
+		this.query = useQuery(this.props.location);
+	}
   handleSubmit = () => {
     const body = {
       title: this.state.titleContent,
       content: this.state.bodyContent,
-      keywords: this.state.keywords
+      keywords: this.state.keywords,
+      email: localStorage.getItem('email'),
+      boardid: this.query.get('board_id')
     }
+    console.log(body);
     fetch("/forum/create?type=post", {
       method: 'POST',
       mode: 'cors',
       cache: 'no-cache',
       credentials: 'same-origin',
       headers: {
-        'Content-Type': 'application/json;charset=utf-8'
+        'Content-Type': 'application/json;charset=utf-8',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
       },
       body: JSON.stringify(body)
-    }); 
+    })
+    .catch((error) => console.log(error));
   }
-  componentDidMount() {
-    // this.editPost();
-  }
-
-
-  editPost(postnametochange) {
-    const body = {
-      title: 'Test',
-      content: 'TEst2',
-      keywords: ['test1', '2test2']
-    }
-
-    this.setState({
-      title: body.title,
-      content: body.content,
-      keywords: body.keywords,
-      pageTitle: 'Edit Existing Thread'
-    });
-  }
-
   //Send to server
   //confirmation of post success
   //redirect user to post page if succesaful
   //if failure, display error
-
-
-
-
-
-
-
-
-
-
   handleTitleChange = (e) => {
     let val = e.target.value.trim(); 
     if(val.length > 0 && val.length <= 50) {
       this.setState({
         titleContent: e.target.value
-      }, () => {
-        console.log('[TITLE CONTENT]:', this.state.titleContent);
       });
     }
   }
@@ -93,8 +73,6 @@ export default class PostEditPage extends Component {
   handleBodyChange = (e) => {
     this.setState({
       bodyContent: e.target.value
-    }, () => {
-      console.log('[Body CONTENT]:', this.state.bodyContent);
     });
   }
 

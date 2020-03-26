@@ -52,9 +52,9 @@ export default class DashboardPage extends Component {
       return (
         <div>
         <Navbar
-						title = "Dashboard"
-						onSidebarOpen = {handleSidebarOpen}
-					/>
+					title = "Dashboard"
+					onSidebarOpen = {handleSidebarOpen}
+				/>
         <div className = "dashboardPage">
 					<Sidebar
 						onClose = {handleSidebarClose}

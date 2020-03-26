@@ -59,6 +59,12 @@ const PostSearch = props => {
       e.target.value = ''; 
     }
   };
+  const performSearch = () => {
+  	// 1. Gather non-null fields
+  	// 2. Convert to HTTP GET request and query-rise fields
+  	// 3. Re-direct
+  	console.log(title, keywords, author, startDate, startTime, board);
+  }
   const handleDeleteKeyword = keyword => {
     setKeywords(keywords.filter((chip) => chip !== keyword));
   }
@@ -72,6 +78,14 @@ const PostSearch = props => {
   const handleTimeChange = time => {
   	setStartTime(time);
   }
+  const handleTitleChange = e => {
+  	let title = e.target.value;
+  	setTitle(title);
+	}
+	const handleAuthorChange = e => {
+		let author = e.target.value;
+  	setAuthor(author);
+	}
 	return (
 		<Card className = {classes.root}>
 			<FormControl className = {classes.formControl}>
@@ -82,6 +96,7 @@ const PostSearch = props => {
 		      classes={{
 		        root: classes.title
 		      }}
+		      onChange = {handleTitleChange}
 		      inputProps={{ 'aria-label': 'title' }}
 		    />
       </FormControl>
@@ -153,6 +168,7 @@ const PostSearch = props => {
 		    	maxLength = {100}
 		    	value = {author}
 		      placeholder="Author..."
+		      onChange = {handleAuthorChange}
 		      classes={{
 		        root: classes.title
 		      }}
@@ -164,14 +180,14 @@ const PostSearch = props => {
   			container
   			direction="row"	
   		>
-  			{/*
+  			
   			<Grid container item xs={6}>
   				<InputLabel id="board-name-label">Board Name</InputLabel>
 					<Select
 						labelId = "board-name-label"
 						id="board-name-select"
 						value={board}
-						
+						fullWidth
 						onChange={handleChangeBoard}
 					>
 						{
@@ -189,7 +205,7 @@ const PostSearch = props => {
 						labelId = "board-year-label"
 						id="board-year-select"
 						value={board}
-						
+						fullWidth
 						onChange={handleChangeBoard}
 					>
 						{
@@ -201,11 +217,12 @@ const PostSearch = props => {
 						}
 					</Select>
 	      </Grid>
-	      */}
+	      
       </Grid>
       <Button
       	variant="contained"
       	color="primary"
+      	onClick = {performSearch}
       >
       	Search
       </Button>

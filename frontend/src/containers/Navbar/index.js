@@ -23,6 +23,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -96,6 +97,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const MenuItemWithRouter = withRouter(MenuItem);
+
 const Navbar = props => {
 	const {className, onSidebarOpen, ...rest} = props;
   const classes = useStyles();
@@ -112,7 +115,17 @@ const Navbar = props => {
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
   };
-
+	
+	const signOut = props => {
+		console.log('sign out props:', props);
+		
+		// 1. Clear session data
+		localStorage.clear();
+		
+		// 2. Re-direct to login page
+		
+	}
+	
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
@@ -133,7 +146,11 @@ const Navbar = props => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Sign Out</MenuItem>
+      <MenuItemWithRouter onClick={
+      	() => {signOut(props)}
+      }>
+      	Sign Out
+      </MenuItemWithRouter>
     </Menu>
   );
 

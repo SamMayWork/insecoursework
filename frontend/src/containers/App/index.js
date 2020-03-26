@@ -17,6 +17,7 @@ import PostEditPage from '../PostEdit';
 import CommentEditPage from '../CommentEdit';
 import BoardsPage from '../BoardsPage';
 import BoardPage from '../BoardPage';
+import PostSearchPage from '../PostSearchPage';
 
 import {
   BrowserRouter as Router,
@@ -38,7 +39,8 @@ export default function App() {
           <Route path="/boards" component={BoardsPage}/>
           <Route path="/board" component={BoardPage}/>
           <Route path="/post" component={PostPage}/>
-          <Route path="/forum/create" component={CommentEditPage}/>
+          <Route path="/search" component={PostSearchPage}/>
+          <Route path="/forum/create" component={PostEditPage}/>
           {/*
           DEBUG:
           Temporarily remove these two paths as they don't make sense with

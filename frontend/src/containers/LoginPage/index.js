@@ -19,6 +19,7 @@ function responseGoogle(response, history) {
   // SET USER SESSION DETAILS
   localStorage.setItem('real_name', response.profileObj.name);
   localStorage.setItem('email', response.profileObj.email);
+  localStorage.setItem('token', token);
   
   // AUTH TEST
   fetch('/auth/test', {
