@@ -214,9 +214,9 @@ async function createKeywords(keywords) {
  */
 async function createPost(title, content, keywords, authorid, boardid) {
   const keywordsId = await createKeywords(keywords);
-  const postQuery = 'INSERT INTO Posts (post_id, keyword_id, board_id, post_title, post_content, post_likes, user_id, created_date, reported) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9);';
+  const postQuery = 'INSERT INTO Posts (post_id, keyword_id, board_id, post_title, post_content, post_likes, user_id, created_date, reported, post_views) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9, $10);';
   const id = generateId(8);
-  await executeQuery(postQuery, [id, keywordsId, boardid, title, content, 0, authorid, new Date(), false]);
+  await executeQuery(postQuery, [id, keywordsId, boardid, title, content, 0, authorid, new Date(), false, 0]);
 
   return {
     keyword_id: keywordsId,
@@ -232,9 +232,9 @@ async function createPost(title, content, keywords, authorid, boardid) {
  */
 
 async function createComment(comment_content, user_id, post_id) {
-  const commentQuery = 'INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id, reported) VALUES($1, $2, $3, $4, $5, $6);';
+  const commentQuery = 'INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id, reported, comment_views) VALUES($1, $2, $3, $4, $5, $6, $7);';
   const id = generateId(8);
-  await executeQuery(commentQuery, [id, comment_content, 0, user_id, post_id, false]);
+  await executeQuery(commentQuery, [id, comment_content, 0, user_id, post_id, false, 0]);
   return {
     comment_id: id,
     comment_content,
@@ -316,11 +316,8 @@ async function reportComment(comment_id) {
  * @param {String} postid The post id
  */
 async function increasePostViews(postid) {
-  const query = 'UPDATE Post_Views SET views = views + 1 WHERE post_id = $1';
-  const query2 = 'SELECT * FROM Post_Views WHERE post_id = $1';
+  const query = 'UPDATE posts SET post_views = post_views + 1 WHERE post_id = $1';
   await executeQuery(query, [postid]);
-  const result = await executeQuery(query2, [postid]);
-  return result.rows[0];
 }
 
 /**
@@ -328,10 +325,8 @@ async function increasePostViews(postid) {
  * @param {String} commentid
  */
 async function increaseCommentViews(commentid) {
-  const query = 'UPDATE Comment_Views SET views = views + 1 WHERE comment_id = $1';
+  const query = 'UPDATE comments SET comment_views = comment_views + 1 WHERE comment_id = $1';
   await executeQuery(query, [commentid]);
-  const result = await executeQuery(query, [commentid]);
-  return result;
 }
 
 // #endregion
