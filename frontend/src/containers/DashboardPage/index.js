@@ -16,8 +16,7 @@ import Weather from 'simple-react-weather'
 import links from "./data.js";
 import './dashboard.css';
 
-
-
+import { TwitterTimelineEmbed } from 'react-twitter-embed';
 
 export default class DashboardPage extends Component {
   constructor(props) {
@@ -29,7 +28,6 @@ export default class DashboardPage extends Component {
       openSidebar: false,
     }
   }
-  
   render() {
     const {error, isLoaded, comments } = this.state;
     const divStyle = {
@@ -51,14 +49,10 @@ export default class DashboardPage extends Component {
       return <div>Loading...</div>
     } else {
       console.log(comments);
-      
-      
-      
-      
       return (
         <div>
         <Navbar
-						title = "Modules"
+						title = "Dashboard"
 						onSidebarOpen = {handleSidebarOpen}
 					/>
         <div className = "dashboardPage">
@@ -67,51 +61,24 @@ export default class DashboardPage extends Component {
 						open = {this.state.openSidebar}
 						variant = {'temporary'}
 					/>
-          
+          <TwitterTimelineEmbed
+          	sourceType = "profile"
+          	screenName = "portsmouthuni"
+          	options = {{height: 300}}
+          />
           <Weather style={divStyle} unit="C" city="Portsmouth" appid="45a03a49afb30df0fdfba49509ef8c1a" />
-
           <DataCard
             links = {links}
           /> 
-
-          
-         
         </div>
         </div>
       );
     }
   }
   componentDidMount() {
-    fetch("https://www.reddit.com/r/popular.json")
-      .then(res => res.json())
-      .then(
-        (result) => {
-          let comments = [];
-          result.data.children.forEach((comment) => {
-            let commentData = comment.data;
-            let commentObj = {
-              title: commentData.title,
-              author: commentData.author,
-              replies: commentData.num_comments,
-              date: commentData.created * 1000
-            };
-            comments.push(commentObj);
-          })
-          this.setState({
-            isLoaded: true,
-            comments: comments
-          });
-          console.log(result);
-        },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      )
-  }
+  	this.setState({
+      isLoaded: true
+      // comments: comments
+    });
+	}
 }

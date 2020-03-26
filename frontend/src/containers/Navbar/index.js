@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(2),
   },
   title: {
-    display: 'none',
+    // display: 'none',
     [theme.breakpoints.up('sm')]: {
       display: 'block',
     },
@@ -92,6 +92,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Navbar = props => {
+	const {showSearch, setShowSearch} = React.useState(false);
 	const {className, onSidebarOpen, ...rest} = props;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -173,7 +174,7 @@ const Navbar = props => {
           <Typography className={classes.title} variant="h6" noWrap>
             {props.title}
           </Typography>
-          <div className={classes.search}>
+          <div style = {showSearch ? {} : {display: 'none'}} className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
@@ -221,7 +222,8 @@ const Navbar = props => {
 
 Navbar.propTypes = {
 	className: PropTypes.string,
-	onSidebarOpen: PropTypes.func
+	onSidebarOpen: PropTypes.func.isRequired,
+	title: PropTypes.string.isRequired
 }
 
 export default Navbar;
