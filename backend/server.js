@@ -206,7 +206,7 @@ app.post('/forum/like', async (req, res) => {
 // Handler for HTTP posts to the report system of the application
 // /forum/report?post=[param] - Reports a post using the given ID
 // /forum/report?comment=[param] - Reports a comment using the given ID
-app.post('forum/report', (req, res) => {
+app.post('forum/report', async (req, res) => {
   handleNoDB(req, res);
   handlePostLogging(req);
 

@@ -97,6 +97,15 @@ async function getPost(postid) {
   const results = await executeQuery(query, [postid]);
   return results.rows[0];
 }
+/**
+ * Gets all posts within a board and aranges them by date
+ * @param {string} boardid The ID of the board of al the posts you want
+ */
+async function getPostByDate(boardid) {
+  const query = 'SELECT * FROM posts WHERE board_id = $1 ORDER BY created_date ASC;';
+  const results = await executeQuery(query, [boardid]);
+  return results.rows;
+}
 
 /**
  * Returns all of the comments related to a given post, this method does not hide
@@ -491,6 +500,7 @@ module.exports.getComments = getComments;
 module.exports.getComment = getComment;
 module.exports.getAllBoards = getAllBoards;
 module.exports.getBoard = getBoard;
+module.exports.getPostByDate = getPostByDate;
 
 module.exports.searchPosts = searchPosts;
 module.exports.searchTags = searchTags;

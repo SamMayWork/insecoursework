@@ -44,8 +44,14 @@ describe('PMS Module DB Tests', () => {
       assert.equal(results.length, 6);
     });
   });
-  //#endregion
-
+ 
+  describe('getPostByDate', () => {
+    it('Should return all rows/posts from a board, in ascending date order', async() => {
+      const results = await dbabs.getPostByDate('bf35c787');
+      assert.equal(results.length, 6);
+    });
+  });
+ //#endregion
 
   describe('searchPosts', () => {
     it('Should not return undefined for post_title drawn tube heat bean', async () => {
