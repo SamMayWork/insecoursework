@@ -10,10 +10,11 @@ import React from 'react';
 import Login from '../LoginPage';
 import Dashboard from '../DashboardPage';
 import Account from '../AccountPage';
-import Post from '../PostPage';
+import PostPage from '../PostPage';
 import Comment from '../CommentEdit';
 import PostView from '../PostView';
 import PostEditPage from '../PostEdit';
+import CommentEditPage from '../CommentEdit';
 import BoardsPage from '../BoardsPage';
 import BoardPage from '../BoardPage';
 
@@ -36,13 +37,12 @@ export default function App() {
           <Route path="/dashboard" component={Dashboard}/>
           <Route path="/boards" component={BoardsPage}/>
           <Route path="/board" component={BoardPage}/>
-          <Route path="/post" component={Post}/>
+          <Route path="/post" component={PostPage}/>
+          <Route path="/forum/create" component={CommentEditPage}/>
           {/*
           DEBUG:
           Temporarily remove these two paths as they don't make sense with
           our URL scheme
-          <Route path="/PostEdit" component={PostEditPage}/>
-          <Route path="/postview" component={PostView}/>
           */}
         </Switch>
       </Router>

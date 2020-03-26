@@ -14,15 +14,44 @@ import {
   Button
 } from '@material-ui/core';
 import Comment from '../../components/Comment';
-
+import {
+	useLocation
+} from 'react-router-dom';
 
 import './commentedit.css';
 
+const useQuery = (location) => {
+	return new URLSearchParams(location.search);
+};
 
 export default class CommentEditPage extends Component {
+	constructor(props) {
+		super(props);
+		this.query = useQuery(this.props.location);
+	}
 	state = {
 		pageTitle: "Create a new comment",
+		reply: null
 	}
+	componentDidMount() {
+		this.updateReply(this.query.get('reply_id'));
+	}
+	updateReply = reply_id => {
+		fetch(`/get?commentid=${reply_id}`)
+			.then(res => res.json())
+			.then(
+				(result) => {
+					let reply = result;
+					console.log('reply:', reply[0]);
+					this.setState({
+						reply: reply[0]
+					});
+				},
+				(error) => {
+					console.log('[ERROR: CANT LOAD COMMENT WHICH IS BEING REPLIED TO]', error);
+				}
+			)
+	};
 	handleReply = () => {
 		fetch("/get?commentid=[id]", {
 		  method: 'POST',
@@ -60,45 +89,35 @@ export default class CommentEditPage extends Component {
 		  console.log('[Body CONTENT]:', this.state.bodyContent);
 		});
 	}
-	render() {
-		return (
-
-		  <div><BackBar
-		    title = {this.state.pageTitle}
-		    />
-
-
-		    <div class="postPage">
-		    
-		    <FormControl fullWidth>
-
-
-		    <Comment
-		      text={this.replied.body}
-		      author={this.replied.author}
-		      date={this.replied.date}
-		    />
-
-
-		      <TextField
-		        autoFocus
-		        margin="dense"
-		        id="postTitle"
-		        type="text"
-		        label="Comment"
-		        onKeyDown={this.handleBodyChange}
-		        inputProps={{ maxLength: 1500 }}
-		        fullWidth
-		      />
-		     
-		    
-		     <Button onClick={this.handleSubmit} color="primary">
-		      Confirm
-		    </Button>
-		    </FormControl>
-		    </div></div>
-		)
+render() {
+	let reply = null;
+	if (this.state.reply !== null) {
+		reply = (
+			<Comment
+				content={this.state.reply.comment_content}
+			/>
+		);
 	}
+	return (
+	<div>
+		<BackBar title = {this.state.pageTitle}/>
+		<div className="postPage">
+			<FormControl fullWidth>
+				{reply}
+				<TextField
+				autoFocus
+				margin="dense"
+				id="postTitle"
+				type="text"
+				label="Comment"
+				onKeyDown={this.handleBodyChange}
+				inputProps={{ maxLength: 2000 }}
+				fullWidth
+				/>
+				<Button onClick={this.handleSubmit} color="primary">Confirm</Button>
+			</FormControl>
+		</div>
+	</div>
+	)
 }
-
-
+}
