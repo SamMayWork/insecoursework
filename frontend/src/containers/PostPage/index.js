@@ -4,11 +4,20 @@ import Navbar from '../../containers/Navbar';
 import Sidebar from '../../components/Sidebar';
 import Post from '../../components/Post';
 import Comment from '../../components/Comment';
+import {
+	useLocation
+} from 'react-router-dom';
+
+const useQuery = () => {
+	return new URLSearchParams(useLocation().search);
+};
 
 const PostPage = props => {
 	const [openSidebar, setOpenSidebar] = useState(false);
 	const [post, setPost] = useState("");
 	const [comments, setComments] = useState([]);
+	let query = useQuery();
+	
 	const handleSidebarOpen = () => {
 		setOpenSidebar(true);
 	};
@@ -17,28 +26,23 @@ const PostPage = props => {
 	};
 	
 	// NOTE: Load boards from DB, here
-	const updatePost = post => {
-		 fetch(`/get?postid=ad7e89d1`)
-      .then(res => res.json())
-      .then(
-        (result) => {
-          setPost(result.post_information);
-          setComments(result.comments_information);
-        },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
-        (error) => {
-        	/*
-          this.setState({
-            isLoaded: true,
-            error
-          });
-          */
-        }
-      )
-	}
-	useEffect(() => {updatePost(post)}, []);
+	const updatePost = post_id => {
+		fetch(`/get?postid=${post_id}`)
+			.then(res => res.json())
+			.then(
+				(result) => {
+					let posts = result;
+					console.log(posts);
+					setPost(posts);
+				},
+				(error) => {
+					console.log('[ERROR: CANT LOAD POSTS INTO BOAD]', error);
+				}
+			)
+	};
+	useEffect(() => {
+		updatePost(query.get('id'));
+	}, []);
 	
 	return (
 		<div style = {{'height': '100%'}}>

@@ -25,7 +25,6 @@ const BoardPage = props => {
 	let query = useQuery();
 	
 	const updatePosts = board_id => {
-		console.log('board_id:', board_id);
 		fetch(`/get?boardid=${board_id}`)
 			.then(res => res.json())
 			.then(
