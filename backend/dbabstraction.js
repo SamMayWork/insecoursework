@@ -137,6 +137,17 @@ async function getComment(commentid) {
   const results = await executeQuery(query, [commentid]);
   return results.rows[0];
 }
+
+/**
+ * Gets all posts from all forums using their Date
+ * @param {string} status either ASC or DESC 
+ */
+async function getPostsByDate (status) {
+  const query = `SELECT * FROM posts ORDER BY created_date ${status.toUpperCase()}`;
+  const results = await executeQuery(query, []);
+  return results.rows;
+}
+
 // #endregion
 // ////////////////////////////////////////////////////////////// SEARCHING
 // #region Searching Content
@@ -486,6 +497,7 @@ module.exports.getComments = getComments;
 module.exports.getComment = getComment;
 module.exports.getAllBoards = getAllBoards;
 module.exports.getBoard = getBoard;
+module.exports.getPostsByDate = getPostsByDate;
 
 module.exports.deletePost = deletePost;
 module.exports.deleteComment = deleteComment;
