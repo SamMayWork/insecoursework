@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core';
 import ViewsIcon from '@material-ui/icons/Visibility';
 
-const Module = props => {
+const Board = props => {
 	return (
 		<Card style = {{ margin: '1rem' }}>
 			<CardHeader
@@ -21,16 +21,16 @@ const Module = props => {
 				contentTypographyProps = {{variant: 'h8'}}
 				style = {{ fontSize: '0.8rem' }}
 			>
-				<div style = {{ marginBottom: '1rem' }}>Module Summary</div>
-				<Chip icon={<ViewsIcon />} label={props.views}></Chip>
+				<div style = {{ marginBottom: '1rem' }}>{props.year}</div>
+				{/*<Chip icon={<ViewsIcon />} label={props.views}></Chip>*/}
 			</CardContent>
 		</Card>
 	);
 }
 
-Module.propTypes = {
+Board.propTypes = {
 	title: PropTypes.string.isRequired,
 	
 };
 
-export default Module;
+export default Board;

@@ -14,7 +14,7 @@ import Post from '../PostPage';
 import Comment from '../CommentEdit';
 import PostView from '../PostView';
 import PostEditPage from '../PostEdit';
-import ModulesPage from '../ModulesPage';
+import BoardsPage from '../BoardsPage';
 
 import {
   BrowserRouter as Router,
@@ -33,7 +33,7 @@ export default function App() {
           <Route path="/account" component={Account}/>
           <Route path="/comment" component={Comment}/>
           <Route path="/dashboard" component={Dashboard}/>
-          <Route path="/modules" component={ModulesPage}/>
+          <Route path="/boards" component={BoardsPage}/>
           <Route path="/post" component={Post}/>
           {/*
           DEBUG:
@@ -41,7 +41,7 @@ export default function App() {
           our URL scheme
           <Route path="/PostEdit" component={PostEditPage}/>
           <Route path="/postview" component={PostView}/>
-          *}
+          */}
         </Switch>
       </Router>
     </div>
