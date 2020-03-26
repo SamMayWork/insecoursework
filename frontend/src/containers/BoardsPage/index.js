@@ -43,7 +43,7 @@ const BoardsPage = props => {
 	const handleSidebarClose = () => {
 		setOpenSidebar(false);
 	};
-	useEffect(() => {updateBoards(boards)}, [boards]);
+	useEffect(() => {updateBoards(boards)}, []);
 	return (
 		<div>
 			<Navbar

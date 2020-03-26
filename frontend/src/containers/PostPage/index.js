@@ -38,7 +38,7 @@ const PostPage = props => {
         }
       )
 	}
-	useEffect(() => {updatePost(post)}, [post]);
+	useEffect(() => {updatePost(post)}, []);
 	
 	return (
 		<div style = {{'height': '100%'}}>
