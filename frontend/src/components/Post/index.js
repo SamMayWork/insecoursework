@@ -1,8 +1,8 @@
 import React from "react";
-import LikeButton from "../LikeButton";
+
+import Rating from '../Rating';
 
 import momentPropTypes from 'react-moment-proptypes';
-
 import PropTypes from 'prop-types';
 
 import "./index.css";
@@ -26,7 +26,7 @@ const Post = props => {
           </div>
           <div className="comment_stats">
 		        <div className="comment_likes">
-		          <LikeButton/>
+		          <Rating/>
 		        </div>  
           </div>
         </div>

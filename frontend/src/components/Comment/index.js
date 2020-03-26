@@ -1,5 +1,5 @@
 import React from "react";
-import LikeButton from "../LikeButton";
+import Rating from "../Rating";
 
 import PropTypes from 'prop-types';
 
@@ -18,8 +18,8 @@ const Comment = props => {
           </div>
           <div className="comment_stats">
 		        <div className="comment_likes">
-		          <LikeButton/>
-		        </div>  
+		          <Rating/>
+		        </div>
           </div>
         </div>
       </div>

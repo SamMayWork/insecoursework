@@ -42,6 +42,11 @@ const useStyles = makeStyles(theme => ({
       display: 'block',
     },
   },
+  boardTitle: {
+		[theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
+  },
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
@@ -92,7 +97,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Navbar = props => {
-	const {showSearch, setShowSearch} = React.useState(false);
 	const {className, onSidebarOpen, ...rest} = props;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -171,10 +175,10 @@ const Navbar = props => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
+          <Typography className={props.showSearch ? {} : classes.boardTitle} variant="h6" noWrap>
             {props.title}
           </Typography>
-          <div style = {showSearch ? {} : {display: 'none'}} className={classes.search}>
+          <div style = {props.showSearch ? {} : {display: 'none'}} className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>

@@ -15,6 +15,7 @@ import Comment from '../CommentEdit';
 import PostView from '../PostView';
 import PostEditPage from '../PostEdit';
 import BoardsPage from '../BoardsPage';
+import BoardPage from '../BoardPage';
 
 import {
   BrowserRouter as Router,
@@ -34,6 +35,7 @@ export default function App() {
           <Route path="/comment" component={Comment}/>
           <Route path="/dashboard" component={Dashboard}/>
           <Route path="/boards" component={BoardsPage}/>
+          <Route path="/board" component={BoardPage}/>
           <Route path="/post" component={Post}/>
           {/*
           DEBUG:
