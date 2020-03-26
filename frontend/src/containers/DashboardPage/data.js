@@ -1,8 +1,7 @@
 export default [
     {
-        label: "Modules",
-        href: "/module",
-        
+        label: "Boards",
+        href: "/boards",
     },
     {
         label: "MyPort",

@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<BoardsPage/> Validation testing should render and match the snapshot 1`] = `<BoardsPage />`;

@@ -10,11 +10,7 @@ import testData from './testData.js';
 const testComponent = props => {
 	return (
 		<PostSearch
-			title = {testData.title}
-			startDate = {testData.startData}
-			startTime = {testData.startTime}
-			keywords = {testData.keywords}
-			author = {testData.author}
+			board = {testData.board}
 			boards = {testData.boards}
 		/>
 	);

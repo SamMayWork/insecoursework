@@ -2,48 +2,27 @@
 
 exports[`<PostSearch/> Validation testing should render and match the snapshot 1`] = `
 <PostSearch
-  author="Jimbob Dingleberry"
+  board={
+    Object {
+      "title": "INDADD",
+      "year": 2019,
+    }
+  }
   boards={
     Array [
-      "INDADD",
-      "INTPROG",
-      "MATHFUN",
+      Object {
+        "title": "INDADD",
+        "year": 2019,
+      },
+      Object {
+        "title": "INTPROG",
+        "year": 2019,
+      },
+      Object {
+        "title": "MATHFUN",
+        "year": 2020,
+      },
     ]
   }
-  keywords={
-    Array [
-      "a",
-      "b",
-      "c",
-      "d",
-      "e",
-    ]
-  }
-  startTime={"2020-03-25T11:53:26.241Z"}
-  title="Top Quality Content"
-/>
-`;
-
-exports[`<PostSearch/> Validation testing should render and match the snapshot 2`] = `
-<PostSearch
-  author="Jimbob Dingleberry"
-  boards={
-    Array [
-      "INDADD",
-      "INTPROG",
-      "MATHFUN",
-    ]
-  }
-  keywords={
-    Array [
-      "a",
-      "b",
-      "c",
-      "d",
-      "e",
-    ]
-  }
-  startTime={"2020-03-25T12:00:10.349Z"}
-  title="Top Quality Content"
 />
 `;

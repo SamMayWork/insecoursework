@@ -20,7 +20,6 @@ const BoardsPage = props => {
       .then(res => res.json())
       .then(
         (result) => {
-        	console.log(result);
         	let boards = result;
           setBoards(boards);
         },

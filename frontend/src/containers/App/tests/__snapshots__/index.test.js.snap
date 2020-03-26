@@ -25,19 +25,11 @@ exports[`<App /> Validation testing should render and match the snapshot 1`] = `
       />
       <Route
         component={[Function]}
-        path="/modules"
+        path="/boards"
       />
       <Route
         component={[Function]}
         path="/post"
-      />
-      <Route
-        component={[Function]}
-        path="/PostEdit"
-      />
-      <Route
-        component={[Function]}
-        path="/postview"
       />
     </Switch>
   </BrowserRouter>
