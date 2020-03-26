@@ -350,8 +350,36 @@ function generateRetrievePostContent(post, comments) {
   return info;
 }
 // #endregion
+// ////////////////////////////////////////////////////////////// DELETING COMMENTS / POSTS
+
+/**
+ * Deletes a post from the DB
+ * @param {request} req 
+ * @param {response} res 
+ */
+async function deletePost (req, res) {
+  if (await dbabs.getPost(req.query.postid) !== undefined) {
+    if (await dbabs.getPostAuthor(req.query.postid) === await dbabs.getUserId(req.user.emails[0].value)) {
+      await dbabs.deletePost(req.query.postid);
+    }
+  }
+}
+
+/**
+ * Deletes a comment from the DB
+ * @param {request} req 
+ * @param {response} res 
+ */
+async function deleteComment (req, res) {
+
+}
+
+
 // ////////////////////////////////////////////////////////////// EXPORTS
 // #region Exports
+module.exports.deleteComment = deleteComment;
+module.exports.deletePost = deletePost;
+
 module.exports.getPost = getPost;
 module.exports.getComment = getComment;
 module.exports.getBoard = getBoard;

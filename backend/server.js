@@ -139,6 +139,24 @@ app.post('/forum/create', async (req, res) => {
   }
 });
 // #endregion
+// ////////////////////////////////////////////////////////////// DELETING POSTS/COMMENTS
+//#region 
+app.get ('/forum/delete', async (req, res) => {
+  handleGetLogging(req);
+
+  if(!uac.checkUserExists(req)) {
+    forbidden(res);
+  }
+
+  if (req.query.postid !== undefined) {
+    await pms.deletePost(req, res);
+  }
+
+  if (req.query.commentid !== undefined) {
+    await pms.deleteComment(req, res);
+  }
+});
+//#endregion
 // ////////////////////////////////////////////////////////////// MARKING COMMENT AS ANSWER
 //#region 
 app.get('/forum/comment', async (req, res) => {

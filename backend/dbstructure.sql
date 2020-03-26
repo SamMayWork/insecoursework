@@ -80,7 +80,7 @@ insert into Users (user_id, user_displayname, user_userealname, user_email, user
 insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('a91b934a', 'quick', true, 'sducketti@51.la',                 '2020-02-04');
 insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('800447a8', 'film',  true, 'ncotgrovej@dot.gov',              '2020-02-07');
 insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('6080c8a5', 'Sam',  true, 'up891153@myport.ac.uk',              '2020-03-17');
-
+insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('00000000', 'Removed',  true, 'removed@removed.ac.uk',              '2020-03-17');
 
 insert into Board (board_id, board_module, board_year) values ('bf35c787', 'Introduction to Hong Kong SAR China', '2020/2021');
 insert into Board (board_id, board_module, board_year) values ('cfd5636c', 'Introduction to Sierra Leone', '2020/2021');

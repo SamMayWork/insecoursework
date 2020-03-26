@@ -469,15 +469,15 @@ async function getDisplayNameByEmail(email) {
 // #endregion
 // ////////////////////////////////////////////////////////////// DELETING CONTENT
 // #region Deletion
-
-/**
- * Deletes all of the content from the table board
- */
-async function deleteRecordBoard() {
-  const query = 'DELETE FROM board;';
-  await executeQuery(query);
+async function deletePost(postid) {
+  const query = 'DELETE FROM posts WHERE post_id = $1;';
+  executeQuery(query, [postid]);
 }
 
+async function deleteComment(commentid) {
+  const query = 'UPDATE comments SET comment_content = $1 AND user_id = $2 WHERE comment_id = $3;';
+  await executeQuery(query, ['This comment has been removed by its author', '00000000', 'commentid']);
+}
 // #endregion
 // ////////////////////////////////////////////////////////////// EXPORTS
 // #region Exports
@@ -486,6 +486,9 @@ module.exports.getComments = getComments;
 module.exports.getComment = getComment;
 module.exports.getAllBoards = getAllBoards;
 module.exports.getBoard = getBoard;
+
+module.exports.deletePost = deletePost;
+module.exports.deleteComment = deleteComment;
 
 module.exports.searchPosts = searchPosts;
 module.exports.searchTags = searchTags;
@@ -499,8 +502,6 @@ module.exports.createReplyComment = createReplyComment;
 
 module.exports.editPost = editPost;
 module.exports.editComment = editComment;
-
-module.exports.deleteRecordBoard = deleteRecordBoard;
 
 module.exports.enrollUser = enrollUser;
 module.exports.checkUserExists = checkUserExists;
