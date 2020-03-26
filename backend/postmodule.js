@@ -325,13 +325,7 @@ async function convertCommentsIdToName (comments) {
  */
 function generateRetrievePostContent(post, comments) {
   const info = {
-    post_information: {
-      id: post.post_id,
-      title: post.post_title,
-      content: post.post_content,
-      likes: post.post_likes,
-      user: post.user_id,
-    },
+    post,
 
     comments_information: [
 
