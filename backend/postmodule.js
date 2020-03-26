@@ -126,12 +126,13 @@ async function createPost(req, res) {
     // The user is authorised if the email is within our database
     const title = filterContent(req.body.title);
     const content = filterContent(req.body.content);
+    const boardid = req.query.boardid;
 
     for (let i = 0; i < req.body.keywords.length; i++) {
       req.body.keywords[i] = filterContent(req.body.keywords[i]);
     }
 
-    dbabs.createPost(title, content, keywords);
+    dbabs.createPost(title, content, keywords, await dbabs.getUserId(req.user.emails[0]), boardid);
     res.status(200);
     res.end();
   }
