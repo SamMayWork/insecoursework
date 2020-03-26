@@ -129,7 +129,7 @@ describe('PMS Module DB Tests', () => {
 
     it('Should return the expected content for the row ad7e89d1', async () => {
       const result = await dbabs.getComments('ad7e89d1');
-      assert.deepEqual(result, {
+      assert.deepEqual(result[0], {
         comment_id: 'q1f3b99f',
         comment_content: 'Sight house has sex never. No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.',
         comment_likes: 0,
