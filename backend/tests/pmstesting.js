@@ -21,6 +21,7 @@ describe('PMS Module DB Tests', () => {
         post_content: 'exclaimed scene ice game also closer became law damage hold mail hour care give definition spread bent step walk modern mad whole beautiful your tank sense cold picture listen hunt phrase construction grade direction shaking fastened summer chair purpose birds herd safety discover toward folks nature talk truck',
         post_likes: 10,
         user_id: 'acc45ba4',
+        post_views : 0,
         created_date: new Date('2020-02-02T00:00:00.000Z'),
         edited_date: new Date('2020-02-06T00:00:00.000Z'),
         reported : false
@@ -68,6 +69,7 @@ describe('PMS Module DB Tests', () => {
         post_title: 'drawn tube heat bean',
         post_content: 'classroom political history gradually exercise log introduced goes brought over art hollow won rabbit worker respect affect difference package greater first pilot be stems explore first these loud waste let recently slave hill war bone plant his care storm bend attached try forest army library manner happened half',
         post_likes: 53,
+        post_views : 0,
         user_id: 'acc45ba4',
         created_date: new Date('2020-02-21T00:00:00.000Z'),
         edited_date: new Date('2020-02-07T00:00:00.000Z'),
@@ -134,6 +136,7 @@ describe('PMS Module DB Tests', () => {
         comment_id: 'q1f3b99f',
         comment_content: 'Sight house has sex never. No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.',
         comment_likes: 0,
+        comment_views : 0,
         user_id: '75b6d7e5',
         post_id: 'ad7e89d1',
         reply_id: null,
@@ -161,6 +164,7 @@ describe('PMS Module DB Tests', () => {
         comment_id: 'q1f3b99f',
         comment_content: 'Sight house has sex never. No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.',
         comment_likes: 0,
+        comment_views : 0,
         user_id: '75b6d7e5',
         post_id: 'ad7e89d1',
         reply_id: undefined,
@@ -171,20 +175,6 @@ describe('PMS Module DB Tests', () => {
     it('Should return undefined if the post does not exist', async () => {
       const result = await dbabs.getComment('DOESNOTE');
       assert.equal(result, undefined);
-    });
-  });
-
-
-  // //////////////////////////////////////////////////////////// INCRISING VIEWS
-
-
-  describe('increasing_Post_Views', () => {
-    it('Should increase the view by 1', async () => {
-      const result = await dbabs.increasePostViews('11f3b99f');
-      assert.deepEqual(result, {
-        post_id: '11f3b99f',
-        views: 1,
-      });
     });
   });
 
@@ -315,12 +305,18 @@ describe('Post Module Testing', () => {
       }
 
       await pms.getPost(req, res);
-      assert.deepEqual(res.jsonresponse.post_information, {
-        id: '11f3b99f',
-        title: 'stems till wore stretch',
-        content: 'exclaimed scene ice game also closer became law damage hold mail hour care give definition spread bent step walk modern mad whole beautiful your tank sense cold picture listen hunt phrase construction grade direction shaking fastened summer chair purpose birds herd safety discover toward folks nature talk truck',
-        likes: 10,
-        user: 'think',
+      assert.deepEqual(res.jsonresponse.post, {
+        post_id: '11f3b99f',
+        keyword_id: '986fcdbe',
+        board_id: 'bf35c787',
+        post_title: 'stems till wore stretch',
+        post_content: 'exclaimed scene ice game also closer became law damage hold mail hour care give definition spread bent step walk modern mad whole beautiful your tank sense cold picture listen hunt phrase construction grade direction shaking fastened summer chair purpose birds herd safety discover toward folks nature talk truck',
+        post_likes: 10,
+        user_id: 'think',
+        post_views : 2,
+        created_date: new Date('2020-02-02T00:00:00.000Z'),
+        edited_date: new Date('2020-02-06T00:00:00.000Z'),
+        reported : false
       });
     });
   });

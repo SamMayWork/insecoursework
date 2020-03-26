@@ -146,6 +146,17 @@ async function getComment(commentid) {
   const results = await executeQuery(query, [commentid]);
   return results.rows[0];
 }
+
+/**
+ * Gets all posts from all forums using their Date
+ * @param {string} status either ASC or DESC 
+ */
+async function getPostsByDate (status) {
+  const query = `SELECT * FROM posts ORDER BY created_date ${status.toUpperCase()}`;
+  const results = await executeQuery(query, []);
+  return results.rows;
+}
+
 // #endregion
 // ////////////////////////////////////////////////////////////// SEARCHING
 // #region Searching Content
@@ -223,9 +234,9 @@ async function createKeywords(keywords) {
  */
 async function createPost(title, content, keywords, authorid, boardid) {
   const keywordsId = await createKeywords(keywords);
-  const postQuery = 'INSERT INTO Posts (post_id, keyword_id, board_id, post_title, post_content, post_likes, user_id, created_date, reported) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9);';
+  const postQuery = 'INSERT INTO Posts (post_id, keyword_id, board_id, post_title, post_content, post_likes, user_id, created_date, reported, post_views) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9, $10);';
   const id = generateId(8);
-  await executeQuery(postQuery, [id, keywordsId, boardid, title, content, 0, authorid, new Date(), false]);
+  await executeQuery(postQuery, [id, keywordsId, boardid, title, content, 0, authorid, new Date(), false, 0]);
 
   return {
     keyword_id: keywordsId,
@@ -241,9 +252,9 @@ async function createPost(title, content, keywords, authorid, boardid) {
  */
 
 async function createComment(comment_content, user_id, post_id) {
-  const commentQuery = 'INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id, reported) VALUES($1, $2, $3, $4, $5, $6);';
+  const commentQuery = 'INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id, reported, comment_views) VALUES($1, $2, $3, $4, $5, $6, $7);';
   const id = generateId(8);
-  await executeQuery(commentQuery, [id, comment_content, 0, user_id, post_id, false]);
+  await executeQuery(commentQuery, [id, comment_content, 0, user_id, post_id, false, 0]);
   return {
     comment_id: id,
     comment_content,
@@ -325,11 +336,8 @@ async function reportComment(comment_id) {
  * @param {String} postid The post id
  */
 async function increasePostViews(postid) {
-  const query = 'UPDATE Post_Views SET views = views + 1 WHERE post_id = $1';
-  const query2 = 'SELECT * FROM Post_Views WHERE post_id = $1';
+  const query = 'UPDATE posts SET post_views = post_views + 1 WHERE post_id = $1';
   await executeQuery(query, [postid]);
-  const result = await executeQuery(query2, [postid]);
-  return result.rows[0];
 }
 
 /**
@@ -337,10 +345,8 @@ async function increasePostViews(postid) {
  * @param {String} commentid
  */
 async function increaseCommentViews(commentid) {
-  const query = 'UPDATE Comment_Views SET views = views + 1 WHERE comment_id = $1';
+  const query = 'UPDATE comments SET comment_views = comment_views + 1 WHERE comment_id = $1';
   await executeQuery(query, [commentid]);
-  const result = await executeQuery(query, [commentid]);
-  return result;
 }
 
 // #endregion
@@ -483,15 +489,15 @@ async function getDisplayNameByEmail(email) {
 // #endregion
 // ////////////////////////////////////////////////////////////// DELETING CONTENT
 // #region Deletion
-
-/**
- * Deletes all of the content from the table board
- */
-async function deleteRecordBoard() {
-  const query = 'DELETE FROM board;';
-  await executeQuery(query);
+async function deletePost(postid) {
+  const query = 'DELETE FROM posts WHERE post_id = $1;';
+  executeQuery(query, [postid]);
 }
 
+async function deleteComment(commentid) {
+  const query = 'UPDATE comments SET comment_content = $1 AND user_id = $2 WHERE comment_id = $3;';
+  await executeQuery(query, ['This comment has been removed by its author', '00000000', 'commentid']);
+}
 // #endregion
 // ////////////////////////////////////////////////////////////// EXPORTS
 // #region Exports
@@ -500,7 +506,10 @@ module.exports.getComments = getComments;
 module.exports.getComment = getComment;
 module.exports.getAllBoards = getAllBoards;
 module.exports.getBoard = getBoard;
-module.exports.getPostByDate = getPostByDate;
+module.exports.getPostsByDate = getPostsByDate;
+
+module.exports.deletePost = deletePost;
+module.exports.deleteComment = deleteComment;
 
 module.exports.searchPosts = searchPosts;
 module.exports.searchTags = searchTags;
@@ -514,8 +523,6 @@ module.exports.createReplyComment = createReplyComment;
 
 module.exports.editPost = editPost;
 module.exports.editComment = editComment;
-
-module.exports.deleteRecordBoard = deleteRecordBoard;
 
 module.exports.enrollUser = enrollUser;
 module.exports.checkUserExists = checkUserExists;
