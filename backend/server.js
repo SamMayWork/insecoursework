@@ -139,6 +139,14 @@ app.post('/forum/create', async (req, res) => {
   }
 });
 // #endregion
+// ////////////////////////////////////////////////////////////// MARKING COMMENT AS ANSWER
+//#region 
+app.get('/forum/comment', async (req, res) => {
+  if (req.query.correct  === true && req.query.commentid !== undefined) {
+    await pms.markCommentAsAnswer(req, res); 
+  }
+});
+//#endregion
 // ////////////////////////////////////////////////////////////// EDITING CONTENT
 // #region Editing
 // Handler for edit requests, endpoints are:

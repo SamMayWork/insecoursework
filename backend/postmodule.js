@@ -75,6 +75,18 @@ async function getComment(req, res) {
 }
 
 /**
+ * Allows the user to mark a comment as correct
+ * @param {request} req 
+ * @param {response} res 
+ */
+async function markCommentAsAnswer (req, res) {
+  const commentid = req.query.commentid;
+  await dbabs.markCommentAsAnswer(commentid);
+  res.status(200);
+  res.end();
+}
+
+/**
  * Gets all of the content from a board
  * @param {request} req
  * @param {response} res
@@ -350,6 +362,8 @@ module.exports.getPost = getPost;
 module.exports.getComment = getComment;
 module.exports.getBoard = getBoard;
 module.exports.getAll = getAll;
+
+module.exports.markCommentAsAnswer = markCommentAsAnswer;
 
 module.exports.searchPosts = searchPosts;
 module.exports.searchTags = searchTags;
