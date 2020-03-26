@@ -46,9 +46,10 @@ CREATE TABLE IF NOT EXISTS Comments (
   user_id varchar(8) NOT NULL REFERENCES Users(user_id),
   post_id varchar(8) NOT NULL REFERENCES Posts(post_id),
   reply_id varchar(8) REFERENCES Comments(comment_id),
-  correct Boolean NOT NULL,
+  correct Boolean NOT NULL, 
   reported Boolean NOT NULL
 );
+
 
 CREATE TABLE IF NOT EXISTS Notifications (
   user_id varchar (8) NOT NULL REFERENCES Users(user_id),
