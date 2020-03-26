@@ -23,6 +23,7 @@ describe('PMS Module DB Tests', () => {
         user_id: 'acc45ba4',
         created_date: new Date('2020-02-02T00:00:00.000Z'),
         edited_date: new Date('2020-02-06T00:00:00.000Z'),
+        reported : false
       });
     });
 
@@ -64,6 +65,7 @@ describe('PMS Module DB Tests', () => {
         user_id: 'acc45ba4',
         created_date: new Date('2020-02-21T00:00:00.000Z'),
         edited_date: new Date('2020-02-07T00:00:00.000Z'),
+        reported : false
       });
     });
 
@@ -134,6 +136,7 @@ describe('PMS Module DB Tests', () => {
         user_id: '75b6d7e5',
         post_id: 'ad7e89d1',
         reply_id: null,
+        reported : false
       });
     });
 
@@ -160,6 +163,7 @@ describe('PMS Module DB Tests', () => {
         user_id: '75b6d7e5',
         post_id: 'ad7e89d1',
         reply_id: undefined,
+        reported : false
       });
     });
 
@@ -317,6 +321,42 @@ describe('Post Module Testing', () => {
         likes: 10,
         user: 'think',
       });
+    });
+  });
+
+  describe('ratePost', () => {
+    it('Should increase the likes of a post by 1 for the row 81e46a20', async () => {
+      await dbabs.ratePost('81e46a20', true);
+      const content = await dbabs.getPost('81e46a20');
+      assert.equal(content.post_likes, 1);
+    });
+
+    it('Should not crash when the row does not exist', async () => {
+      assert.doesNotThrow(async () => { await dbabs.ratePost('DOESNOTE', true); });
+    });
+
+    it('Should decrease the likes of a post by 1 for the row 81e46a20', async () => {
+      await dbabs.ratePost('81e46a20', false);
+      const content = await dbabs.getPost('81e46a20');
+      assert.equal(content.post_likes, 0);
+    });
+  });
+
+  describe('rateComment', () => {
+    it('Should increase the likes of a comment by 1 for the row c1dbe80b', async () => {
+      await dbabs.rateComment('c1dbe80b', true);
+      const content = await dbabs.getComment('c1dbe80b');
+      assert.equal(content.comment_likes, 1);
+    });
+
+    it('Should not crash when the row does not exist', async () => {
+      assert.doesNotThrow(async () => { await dbabs.rateComment("DOESNOTE", true); });
+    });
+
+    it('Should decrease the likes of a comment by 1 for the row c1dbe80b', async () => {
+      await dbabs.rateComment('c1dbe80b', false);
+      const content = await dbabs.getComment('c1dbe80b');
+      assert.equal(content.comment_likes, 0);
     });
   });
 });
