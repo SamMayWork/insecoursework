@@ -63,6 +63,9 @@ const NotificationZone = props => {
       />
       <div>
         <List>
+        	<ListItem justifyContent="center">
+        		{localStorage.getItem('email')}
+        	</ListItem>
           <ListItem>
             <ListItemIcon>
               <Checkbox/>

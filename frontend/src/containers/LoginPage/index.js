@@ -12,9 +12,15 @@ import './loginPage.css';
 
 const clientID = "817279853236-toe6rfq5ebg7rife6fvd82hh0eclpt3t.apps.googleusercontent.com";
 
-function responseGoogle(response) {
+function responseGoogle(response, history) {
   let token = response.uc.id_token;
   console.log(response, token);
+  
+  // SET USER SESSION DETAILS
+  localStorage.setItem('real_name', response.profileObj.name);
+  localStorage.setItem('email', response.profileObj.email);
+  
+  // AUTH TEST
   fetch('/auth/test', {
     credentials: 'same-origin',
     method: 'GET',
@@ -22,11 +28,14 @@ function responseGoogle(response) {
       'Authorization': 'Bearer ' + token
     }
   }).then((res) => console.log(res)).then(
-    (res) => console.log(res)
-  );
+    (res) => {
+    	history.push('/dashboard');
+    }
+  )
+  .catch((error) => console.log(error));
 }
 
-export function LoginPage() {
+export function LoginPage(props) {
   return (
     <div className = "loginPage">
       <h1>
@@ -35,7 +44,7 @@ export function LoginPage() {
       <GoogleLogin
         buttonText="Login with Google"
         clientId={clientID}
-        onSuccess={responseGoogle}
+        onSuccess={(response) => (responseGoogle(response, props.history))}
       />
     </div>
   );

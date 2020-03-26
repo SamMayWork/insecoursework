@@ -52,6 +52,7 @@ export default class CommentEditPage extends Component {
 				}
 			)
 	};
+	/*
 	handleReply = () => {
 		fetch("/get?commentid=[id]", {
 		  method: 'POST',
@@ -64,6 +65,7 @@ export default class CommentEditPage extends Component {
 		  // body: JSON.stringify(body)
 		}) 
 	}
+	*/
 	//Require function to grab the post ID and the potential reply to ID
 	handleSubmit = () => {
 		const body = {

@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 		borderLeft: '1px solid lightgray'
 	},
 	fab: {
-		position: 'absolute',
+		position: 'fixed',
 		right: theme.spacing(2),
 		bottom: theme.spacing(2)
 	}
