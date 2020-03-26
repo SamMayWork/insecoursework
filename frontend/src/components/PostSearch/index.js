@@ -3,14 +3,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import momentPropTypes from 'react-moment-proptypes';
 
-import testData from './tests/testData.js';
-
 import moment from 'moment';
 
 import {
 	TextField,
 	Chip,
 	FormControl,
+	Card,
 	InputLabel,
 	Select,
 	MenuItem,
@@ -21,7 +20,6 @@ import {
 import {
 	KeyboardDatePicker,
 	KeyboardTimePicker,
-	DatePicker,
 	MuiPickersUtilsProvider
 } from '@material-ui/pickers';
 
@@ -44,13 +42,14 @@ const useStyles = makeStyles(theme => ({
 
 const PostSearch = props => {
 	const classes = useStyles();
-	const [keywords, setKeywords] = useState(props.keywords);
-	console.log('props.boards:', props);
-	const [board, setBoard] = useState(props.boards[0]);
+	const [title, setTitle] = useState("");
+	const [keywords, setKeywords] = useState([]);
+	const [board, setBoard] = useState(props.board);
+	const [author, setAuthor] = useState("");
 	const [startDate, setStartDate] = useState(props.startDate);
 	const [startTime, setStartTime] = useState(props.startTime);
 	const handleKeyWordChange = (e) => {
-    if (e.keyCode == 13 || e.keyCode == 32) {
+    if (e.keyCode === 13 || e.keyCode === 32) {
       let val = e.target.value.trim();
 
       if((!keywords.includes(val)) && (val.length > 0 && val.length <= 30) && keywords.length < 5) {
@@ -74,10 +73,11 @@ const PostSearch = props => {
   	setStartTime(time);
   }
 	return (
-		<div className = {classes.root}>
+		<Card className = {classes.root}>
 			<FormControl className = {classes.formControl}>
 				<TextField
-					value = {props.title}
+					maxLength = {50}
+					value = {title}
 		      placeholder="Title..."
 		      classes={{
 		        root: classes.title
@@ -150,7 +150,8 @@ const PostSearch = props => {
       </FormControl>
       <FormControl className = {classes.formControl}>
 		    <TextField
-		    	value = {props.author}
+		    	maxLength = {100}
+		    	value = {author}
 		      placeholder="Author..."
 		      classes={{
 		        root: classes.title
@@ -158,42 +159,63 @@ const PostSearch = props => {
 		      inputProps={{ 'aria-label': 'author' }}
 		    />
       </FormControl>
-      <FormControl className = {classes.formControl}>
-		    <InputLabel id="demo-simple-select-label">
-		    	Board
-		    </InputLabel>
-		    <Select
-		      labelId="demo-simple-select-label"
-		      id="demo-simple-select"
-		      value={board}
-		      onChange={handleChangeBoard}
-		    >
-		    	{
-		    		props.boards.map((board, i) =>
-		    			<MenuItem key={i} value={board}>
-		    				{board}
-		    			</MenuItem>
-		    		)
-		    	}
-		    </Select>
-      </FormControl>
+	    <Grid
+	    	className = {classes.formControl}
+  			container
+  			direction="row"	
+  		>
+  			{/*
+  			<Grid container item xs={6}>
+  				<InputLabel id="board-name-label">Board Name</InputLabel>
+					<Select
+						labelId = "board-name-label"
+						id="board-name-select"
+						value={board}
+						
+						onChange={handleChangeBoard}
+					>
+						{
+							props.boards.map((board, i) =>
+								<MenuItem key={i} value={board}>
+									{board}
+								</MenuItem>
+							)
+						}
+					</Select>
+			  </Grid>
+			  <Grid container item xs={6}>
+			  	<InputLabel id="board-year-label">Board Year</InputLabel>
+					<Select
+						labelId = "board-year-label"
+						id="board-year-select"
+						value={board}
+						
+						onChange={handleChangeBoard}
+					>
+						{
+							props.boards.map((board, i) =>
+								<MenuItem key={i} value={board}>
+									{board}
+								</MenuItem>
+							)
+						}
+					</Select>
+	      </Grid>
+	      */}
+      </Grid>
       <Button
       	variant="contained"
       	color="primary"
       >
       	Search
       </Button>
-		</div>
+		</Card>
 	);
 }
 
 PostSearch.propTypes = {
-	title: PropTypes.string.isRequired,
 	boards: PropTypes.array.isRequired,
-	startTime: momentPropTypes.momentObj,
-	startDate: momentPropTypes.momentObj,
-	author: PropTypes.string.isRequired,
-	keywords: PropTypes.array.isRequired
+	board: PropTypes.object.isRequired
 }
 
 export default PostSearch;

@@ -7,6 +7,9 @@ import TestModules from './data.js';
 
 import Module from '../../components/Module';
 
+import testData from '../../components/PostSearch/tests/testData.js';
+import PostSearch from '../../components/PostSearch';
+
 const ModulesPage = props => {
 	const [openSidebar, setOpenSidebar] = useState(false);
 	const [modules, setModules] = useState([]);
@@ -31,8 +34,13 @@ const ModulesPage = props => {
 				open = {openSidebar}
 				variant = {'temporary'}
 			/>
+			<PostSearch
+				board = {testData.board}
+				boards = {testData.boards}
+			/>
 			{modules.map((module, i) => (
 				<Module
+					key = {i}
 					title = {module}
 					views = {(i+1) * 10}
 				/>

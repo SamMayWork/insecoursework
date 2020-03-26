@@ -19,7 +19,31 @@ exports[`<PostSearch/> Validation testing should render and match the snapshot 1
       "e",
     ]
   }
-  startTime={"2020-03-25T11:44:43.029Z"}
+  startTime={"2020-03-25T11:53:26.241Z"}
+  title="Top Quality Content"
+/>
+`;
+
+exports[`<PostSearch/> Validation testing should render and match the snapshot 2`] = `
+<PostSearch
+  author="Jimbob Dingleberry"
+  boards={
+    Array [
+      "INDADD",
+      "INTPROG",
+      "MATHFUN",
+    ]
+  }
+  keywords={
+    Array [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+    ]
+  }
+  startTime={"2020-03-25T12:00:10.349Z"}
   title="Top Quality Content"
 />
 `;

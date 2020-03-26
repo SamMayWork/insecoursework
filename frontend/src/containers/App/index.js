@@ -35,8 +35,13 @@ export default function App() {
           <Route path="/dashboard" component={Dashboard}/>
           <Route path="/modules" component={ModulesPage}/>
           <Route path="/post" component={Post}/>
+          {/*
+          DEBUG:
+          Temporarily remove these two paths as they don't make sense with
+          our URL scheme
           <Route path="/PostEdit" component={PostEditPage}/>
           <Route path="/postview" component={PostView}/>
+          *}
         </Switch>
       </Router>
     </div>
