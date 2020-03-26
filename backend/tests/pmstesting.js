@@ -136,6 +136,7 @@ describe('PMS Module DB Tests', () => {
         user_id: '75b6d7e5',
         post_id: 'ad7e89d1',
         reply_id: null,
+        correct: true,
         reported : false
       });
     });
@@ -163,6 +164,7 @@ describe('PMS Module DB Tests', () => {
         user_id: '75b6d7e5',
         post_id: 'ad7e89d1',
         reply_id: undefined,
+        correct: true,
         reported : false
       });
     });
