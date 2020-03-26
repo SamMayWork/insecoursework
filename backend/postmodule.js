@@ -363,6 +363,8 @@ async function deletePost (req, res) {
       await dbabs.deletePost(req.query.postid);
     }
   }
+  res.status(200);
+  res.end();
 }
 
 /**
@@ -371,7 +373,13 @@ async function deletePost (req, res) {
  * @param {response} res 
  */
 async function deleteComment (req, res) {
-
+  if (await dbabs.getComment(req.query.commentid) !== undefined) {
+    if (await dbabs.getCommentAuthor(req.query.commentid) === await dbabs.getUserId(req.user.emails[0].value)) {
+      await dbabs.deleteComment(req.query.commentid);
+    }
+  }
+  res.status(200);
+  res.end();
 }
 
 
