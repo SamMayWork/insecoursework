@@ -171,9 +171,10 @@ async function createPost(req, res) {
  * @param {response} res
  * @param {string} userid UserID for the database
  */
-async function createComment(req, res, userid) {
+async function createComment(req, res) {
   try {
     let results;
+    let userid = await dbabs.getUserId(req.user.emails[0].value);
     if (req.body.reply === true) {
       results = await dbabs.createReplyComment(
         req.body.content,
