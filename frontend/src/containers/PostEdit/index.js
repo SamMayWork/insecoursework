@@ -77,9 +77,9 @@ export default class PostEditPage extends Component {
       email: localStorage.getItem('email'),
       boardid: this.state.board_id
     }
-    console.log(body);
     if (this.query.get('post_id')) {
     	let postid = this.query.get('post_id');
+    	console.log(postid, body);
     	fetch(`/forum/edit?type=post&postid=${postid}`, {
 		    method: 'POST',
 		    mode: 'cors',
@@ -93,7 +93,8 @@ export default class PostEditPage extends Component {
 		  })
 		  .catch((error) => console.log(error));
     } else {
-    	fetch("/forum/create?type=post", {
+    	console.log('post');
+    	fetch(`/forum/create?type=post`, {
 		    method: 'POST',
 		    mode: 'cors',
 		    cache: 'no-cache',
@@ -103,6 +104,11 @@ export default class PostEditPage extends Component {
 		      'Authorization': 'Bearer ' + localStorage.getItem('token')
 		    },
 		    body: JSON.stringify(body)
+		  })
+		  .then(res => {
+		  	if (res.status === 500) {
+		  		alert('CANNOT SUBMIT MESSAGE. CONTAINS OFFENSIVE CONTENT')
+		  	}
 		  })
 		  .catch((error) => console.log(error));
     }
@@ -115,7 +121,7 @@ export default class PostEditPage extends Component {
     let val = e.target.value.trim(); 
     if(val.length > 0 && val.length <= 50) {
       this.setState({
-        titleContent: e.target.value
+        title: e.target.value
       });
     }
   }

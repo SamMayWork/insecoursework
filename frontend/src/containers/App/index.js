@@ -41,6 +41,7 @@ export default function App() {
           <Route path="/post" component={PostPage}/>
           <Route path="/search" component={PostSearchPage}/>
           <Route path="/forum/create" component={PostEditPage}/>
+          <Route path="/forum/comment" component={CommentEditPage}/>
           {/*
           DEBUG:
           Temporarily remove these two paths as they don't make sense with

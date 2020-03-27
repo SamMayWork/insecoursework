@@ -11,6 +11,12 @@
 	transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 }
 
+.reply {
+	margin-left: 1rem;
+	box-sizing: border-box;
+	width: calc(100% - 1rem);
+}
+
 .comment_overlay {
 	cursor: pointer;
 	display: flex;

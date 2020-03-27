@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from 'react-router-dom';
 
-import Rating from '../Rating';
+import {
+	useLocation
+} from 'react-router-dom';
+
+import LikeButton from '../LikeButton';
+import DislikeButton from '../LikeButton';
 
 import momentPropTypes from 'react-moment-proptypes';
 import PropTypes from 'prop-types';
@@ -11,7 +16,8 @@ import {
 	Delete as DeleteIcon,
 	MoreVert as OptionsIcon,
 	Report as ReportIcon,
-	VisibilityOff as HideIcon
+	VisibilityOff as HideIcon,
+	Reply as ReplyIcon
 } from '@material-ui/icons';
 
 import {
@@ -39,10 +45,16 @@ import {
 
 import "./index.css";
 
+const useQuery = () => {
+	return new URLSearchParams(useLocation().search);
+};
+
 // NOTE: HIDE AUTHOR OPTIONS IF THE VIEWER IS NOT THE AUTHOR
 const CommentOptions = props => {
 	const history = useHistory();
 	const [open, setOpen] = useState(false);
+	let query = useQuery();
+	
 	const handleClose = () => {
     setOpen(false);
   }
@@ -53,7 +65,13 @@ const CommentOptions = props => {
   	setOpen(false);
   	history.push(`/forum/create?comment_id=${props.comment_id}`);
   }
+  const handleReply = () => {
+  	setOpen(false);
+  	const replyid = props.comment_id;
+  	history.push(`/forum/comment?postid=${query.get('id')}&replyid=${replyid}`);
+  }
   const handleDelete = () => {
+  	console.log('comment_id:', props.comment_id);
   	let email = localStorage.getItem('email');
   	let token = localStorage.getItem('token');
   	let URL = `/forum/delete?commentid=${props.comment_id}&email=${email}`;
@@ -111,6 +129,12 @@ const CommentOptions = props => {
 						</ListItemAvatar>
 						<ListItemText primary={"Delete"} />
 					</ListItem>
+					<ListItem autoFocus button onClick={handleReply}>
+						<ListItemAvatar>
+							<ReplyIcon />
+						</ListItemAvatar>
+						<ListItemText primary={"Reply"} />
+					</ListItem>
 					<ListItem autoFocus button onClick={handleReport}>
 						<ListItemAvatar>
 							<ReportIcon />
@@ -140,13 +164,24 @@ const CommentOverlay = props => {
 }
 
 const Comment = props => {
+	console.log('repliesto:', props.reply);
 	const history = useHistory();
 	const [reported, setReported] = useState(props.reported);
+	const [correct, setCorrect] = useState(false);
+	const [marked, setMarked] = useState(localStorage.getItem(`${props.comment_id} MARKED`));
 	const handleOverlayClick = e => {
 		setReported(false);
 	}
 	const handleOpenComment = () => {
 		history.push(`/comment?id=${props.comment_id}`);
+	}
+	const rootClass = "";
+	if (props.repliesto) {
+		rootClass = "reply";
+	}
+	const handleMarkedChange = e => {
+		setMarked(e.target.checked);
+		localStorage.setItem(`${props.comment_id} MARKED`, e.target.checked);
 	}
 	const content = (
 		<div>
@@ -172,8 +207,19 @@ const Comment = props => {
 				  	{props.replies}
 				  </div>
 				  <div className="comment_stats">
+				  	<div>
+							<span>Correct</span>
+							<Checkbox
+								label = {"Correct"}
+								checked = {marked}
+								onChange = {handleMarkedChange}
+					  	/>
+			    	</div>
 				    <div className="comment_likes">
-				      <Rating/>
+				      <LikeButton
+				      	comment_id = {props.comment_id}
+				      />
+				      <DislikeButton/>
 				    </div>  
 				  </div>
 				</div>
@@ -187,7 +233,7 @@ const Comment = props => {
 		/>
 	);
   return (
-    <div className="comment">
+    <div className= {props.reply ? "comment reply" : "comment"}>
     	{reported ? overlay : content}
 		</div>
   );

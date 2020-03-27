@@ -56,7 +56,7 @@ const PostPage = props => {
 				(result) => {
 					let post = result.post;
 					let comments = result.comments_information;
-					console.log('post info:', post);
+					console.log('comments', comments);
 					setPost(post);
 					setComments(comments);
 				},
@@ -93,7 +93,9 @@ const PostPage = props => {
 				{
 					comments.slice(0, 20).map((comment, i) => 
 						<Comment
+							comment_id = {comment.id}
 							key = {i}
+							reply = {comment.repliesto}
 							title = {comment.title}
 							content = {comment.content}
 							likes = {comment.likes}
@@ -103,7 +105,7 @@ const PostPage = props => {
 				}
 				</div>
 			</div>
-			<Fab href='/forum/create' className={classes.fab} color="primary" aria-label="add">
+			<Fab href={`/forum/comment?postid=${query.get('id')}`} className={classes.fab} color="primary" aria-label="add">
 				<AddIcon/>
 			</Fab>
 		</div>

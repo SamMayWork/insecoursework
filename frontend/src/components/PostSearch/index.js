@@ -66,7 +66,7 @@ const PostSearch = props => {
   	// console.log(title, keywords, author, startDate, startTime, board);
   	let searchterm = title;
   	let searchtags = keywords;
-  	history.push(`/board?searchtags=${searchtags}`);
+  	history.push(`/board?searchterm=${searchterm}&searchtags=${searchtags}`);
   }
   const handleDeleteKeyword = keyword => {
     setKeywords(keywords.filter((chip) => chip !== keyword));

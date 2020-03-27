@@ -68,7 +68,7 @@ const BoardPage = props => {
 			let searchterm = query.get('searchterm');
 			let searchtags = query.get('searchtags');
 			console.log(searchterm, searchtags);
-			fetch(`/get/search?type=post&searchtags=${searchtags}`)
+			fetch(`/get/search?type=post&searchterm=${searchterm}`)
 			.then(res => res.json())
 			.then(
 				(result) => {

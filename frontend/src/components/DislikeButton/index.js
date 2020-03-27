@@ -1,6 +1,6 @@
 import React, {Component} from "react";
-import dislikeImg from "../../../../images/dislike.svg";
-import noDislikeImg from "../../../../images/nodislike.svg";
+import dislikeImg from "../../images/dislike.svg";
+import noDislikeImg from "../../images/nodislike.svg";
 
 class DislikeButton extends Component {
   state = {

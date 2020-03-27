@@ -34,14 +34,14 @@ function responseGoogle(response, history) {
   )
   .catch((error) => console.log(error));
   
-  // AUTH TEST
   /*
-  fetch('/forum/uac', {
+  // AUTH TEST
+  fetch('/forum/uac?register=true', {
     credentials: 'same-origin',
     method: 'POST',
     headers: {
       'Authorization': 'Bearer ' + token
-    }
+    },
   }).then((res) => console.log(res)).then(
     (res) => {
     	history.push('/dashboard');

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from 'react-router-dom';
 
-import Rating from '../Rating';
 
 import momentPropTypes from 'react-moment-proptypes';
 import PropTypes from 'prop-types';
@@ -173,7 +172,7 @@ const Post = props => {
 				  </div>
 				  <div className="comment_stats">
 				    <div className="comment_likes">
-				      <Rating/>
+				      
 				    </div>  
 				  </div>
 				</div>
