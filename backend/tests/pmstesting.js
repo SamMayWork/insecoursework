@@ -4,6 +4,13 @@ const pms = require('../postmodule');
 
 describe('PMS Module DB Tests', () => {
 
+  describe('deletePost', () => {
+    it('Should delete the post properly', async () => {
+      await dbabs.deletePost('c2ce837e');
+      assert.equal(await dbabs.getPost('c2ce837e'), undefined);
+    });
+  });
+
   //#region Getting Content
   describe('getPost', () => {
     it('Should not return undefined for row for ID 11f3b99f', async () => {
