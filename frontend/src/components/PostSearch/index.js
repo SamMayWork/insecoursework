@@ -42,6 +42,13 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
+/**
+ * 
+ * @param {Object} props Accepts an object containing the elements state
+ *  
+ */
+
+
 const PostSearch = props => {
 	const history = useHistory();
 	const classes = useStyles();

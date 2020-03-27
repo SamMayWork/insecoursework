@@ -24,6 +24,13 @@ const useQuery = (location) => {
 	return new URLSearchParams(location.search);
 };
 
+/**
+ * 
+ * @param {Object} props Accepts an object containing the elements state
+ *  
+ */
+
+
 export default class CommentEditPage extends Component {
 	constructor(props) {
 		super(props);

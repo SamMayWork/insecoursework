@@ -39,6 +39,13 @@ import {
 
 import "./index.css";
 
+
+/**
+ * 
+ * @param {Object} props Accepts an object containing the elements state
+ *  
+ */
+
 // NOTE: HIDE AUTHOR OPTIONS IF THE VIEWER IS NOT THE AUTHOR
 const PostOptions = props => {
 	const history = useHistory();

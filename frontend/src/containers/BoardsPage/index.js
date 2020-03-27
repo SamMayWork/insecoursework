@@ -10,6 +10,13 @@ import {
 	List
 } from '@material-ui/core';
 
+/**
+ * 
+ * @param {Object} props Accepts an object containing the elements state
+ *  
+ */
+
+
 const BoardsPage = props => {
 	const [openSidebar, setOpenSidebar] = useState(false);
 	const [boards, setBoards] = useState([]);

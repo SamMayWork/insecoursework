@@ -24,6 +24,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+/**
+ * 
+ * @param {Object} props Accepts an object containing the elements state
+ *  
+ */
+
 export default function BackBar(props) {
   const classes = useStyles();
   return (

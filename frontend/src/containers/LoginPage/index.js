@@ -51,6 +51,13 @@ function responseGoogle(response, history) {
   */
 }
 
+/**
+ * 
+ * @param {Object} props Accepts an object containing the elements state
+ *  
+ */
+
+
 export function LoginPage(props) {
   return (
     <div className = "loginPage">

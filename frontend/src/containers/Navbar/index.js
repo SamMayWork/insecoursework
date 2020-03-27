@@ -79,6 +79,13 @@ const useStyles = makeStyles(theme => ({
 
 const MenuItemWithRouter = withRouter(MenuItem);
 
+/**
+ * 
+ * @param {Object} props Accepts an object containing the elements state
+ *  
+ */
+
+
 const Navbar = props => {
 	const history = useHistory();
 	const {className, onSidebarOpen, ...rest} = props;

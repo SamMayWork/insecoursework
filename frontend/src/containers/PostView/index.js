@@ -19,7 +19,13 @@ import Navbar from '../../containers/Navbar';
 
 import './commentedit.css';
 
+/**
+ * 
+ * @param {Object} props Accepts an object containing the elements state
+ *  
+ */
 
+ 
 export default class PostView extends Component {
   constructor(props) {
     super(props);

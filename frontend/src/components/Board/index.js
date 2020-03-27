@@ -20,6 +20,13 @@ const CustomRouterLink = forwardRef((props, ref) => (
 	</Card>
 ));
 
+/**
+ * 
+ * @param {Object} props Accepts an object containing the elements state
+ *  
+ */
+
+
 const Board = props => {
 	return (
 		<Card

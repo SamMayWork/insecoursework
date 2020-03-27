@@ -32,6 +32,13 @@ import styled from 'styled-components';
 
 import './accountPage.css';
 
+/**
+ * 
+ * @param {Object} props Accepts an object containing the elements state
+ *  
+ */
+
+
 const PrivacyZone = props => {
 	const [realname, setRealname] = useState(false);
 	const [displayName, setDisplayName] = useState('');

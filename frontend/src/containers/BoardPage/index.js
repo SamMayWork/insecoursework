@@ -42,6 +42,13 @@ const useQuery = () => {
 	return new URLSearchParams(useLocation().search);
 };
 	
+/**
+ * 
+ * @param {Object} props Accepts an object containing the elements state
+ *  
+ */
+
+
 const BoardPage = props => {
 	const [posts, setPosts] = useState([]);
 	const [openSidebar, setOpenSidebar] = useState(false);

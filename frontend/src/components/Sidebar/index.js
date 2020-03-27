@@ -36,6 +36,13 @@ const CustomRouterLink = forwardRef((props, ref) => (
 	</div>
 ));
 
+/**
+ * 
+ * @param {Object} props Accepts an object containing the elements state
+ *  
+ */
+
+
 const Sidebar = props => {
 	const { open, variant, onClose, className, ...rest } = props;
 	const classes = useStyles();

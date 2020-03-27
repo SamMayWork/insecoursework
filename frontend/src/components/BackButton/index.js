@@ -12,6 +12,13 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+/**
+ * 
+ * @param {Object} props Accepts an object containing the elements state
+ *  
+ */
+
+
 function BackButton(props) {
 	const classes = useStyles();
 	const handleBack = () => {

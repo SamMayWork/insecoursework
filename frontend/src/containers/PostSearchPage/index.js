@@ -9,6 +9,13 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
+/**
+ * 
+ * @param {Object} props Accepts an object containing the elements state
+ *  
+ */
+
+
 const PostSearchPage = props => {
 	const classes = useStyles();
   return (
