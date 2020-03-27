@@ -17,3 +17,6 @@ Once the server has been established, the frontend files should be contactable u
 Backend functionality can also be tested by manually firing GET/POST Requests at localhost:8080
 
 Definition of the API can be found inside of the backend/docs/api and docmentation for all of the backend can be found in backend/docs/out
+
+Legend detailing team member's names is located in legend.md
+Joao's work does not seem to appear under contributors, but he has absolutely committed a great deal to the code which is all visible in the pulse section of Insights.
