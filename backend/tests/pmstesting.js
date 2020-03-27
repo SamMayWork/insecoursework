@@ -6,15 +6,15 @@ describe('PMS Module DB Tests', () => {
 
   describe('deletePost', () => {
     it('Should delete the post properly', async () => {
-      await dbabs.deletePost('c2ce837e');
-      assert.equal(await dbabs.getPost('c2ce837e'), undefined);
+      await dbabs.deletePost('11f3b99f');
+      assert.equal(await dbabs.getPost('11f3b99f'), undefined);
     });
   });
 
   //#region Getting Content
   describe('getPost', () => {
-    it('Should not return undefined for row for ID 11f3b99f', async () => {
-      const result = await dbabs.getPost('11f3b99f');
+    it('Should not return undefined for row for ID ba5524ac', async () => {
+      const result = await dbabs.getPost('ba5524ac');
       assert.notEqual(result, undefined);
     });
 

@@ -493,7 +493,7 @@ async function changeNotificationState (email, status) {
 async function deletePost(postid) {
   let query = 'DELETE FROM comments WHERE post_id = $1;';
   await executeQuery(query, [postid]);
-  query = 'DELETE FROM keywords WHERE post_id = $1;';
+  query = 'DELETE FROM keywords WHERE keyword_id = $1;';
   await executeQuery(query, [postid]);
   query = 'DELETE FROM posts WHERE post_id = $1;';
   await executeQuery(query, [postid]);
