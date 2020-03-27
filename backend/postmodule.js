@@ -2,16 +2,6 @@
 //
 // This is the module that is responsible for all of the actions related to
 // the post management system (PMS) inside of the system architecture
-//
-// GETTING POSTS
-// The flow for getting posts from the server is:
-// Incoming Request -> thismodule -> Get Post Data    --> package data -> send to client
-//                                -> Get Comment Data --^
-//
-// This is accomplished by having a set of request handlers and data-packers, the
-// structure of the data can be changed by altering the data-packers (the handlers
-// themselves should not need to be changed).
-
 
 const dbabs = require('./dbabstraction');
 const logging = require('./logging');
@@ -28,16 +18,14 @@ const logging = require('./logging');
  * @param {request} req The Request from the user
  * @param {response} res The Response to the user
  */
-
 async function getPost(req, res) {
-
-  // Increase the views, get the content and then start processing
   await dbabs.increasePostViews(req.query.postid);
+
   const { postid } = req.query;
   let postResult = await dbabs.getPost(postid);
   let commentsResult = await dbabs.getComments(postid);
 
-  if (postResult === undefined || commentsResult === undefined) {
+  if (postResult === undefined) {
     res.status(404);
     res.end();
     return;
@@ -73,6 +61,8 @@ async function getComment(req, res) {
   res.status(200);
   res.end();
 }
+
+
 
 /**
  * Gets all of the content from a board
@@ -111,7 +101,35 @@ async function getAll(req, res) {
   res.end();
 }
 
+/**
+ * Gets all of the posts on the DB using their date ASC or DESC
+ * @param {request} req 
+ * @param {response} res 
+ */
+async function getPostsByDate(req, res) {
+  //if (req.query.)
+
+  let result = await dbabs.getPostsByDate(req.query.status);
+  res.json(result);
+  res.status(200);
+  res.end();
+}
+
 // #endregion
+// ////////////////////////////////////////////////////////////// MARKING
+//#region Marking comment as correct
+/**
+ * Allows the user to mark a comment as correct
+ * @param {request} req 
+ * @param {response} res 
+ */
+async function markCommentAsAnswer (req, res) {
+  const commentid = req.query.commentid;
+  await dbabs.markCommentAsAnswer(commentid);
+  res.status(200);
+  res.end();
+}
+//#endregion
 // ////////////////////////////////////////////////////////////// POSTING CONTENT
 // #region Posting Content //GREENED OUT
 /**
@@ -120,21 +138,27 @@ async function getAll(req, res) {
  * @param {response} res The response to the user
  */
 async function createPost(req, res) {
-  /*
-  const userid = await dbabs.getUserIDFromEmail(req.user.emails[0]);
-
+  const userid = await dbabs.getUserId(req.user.emails[0]);
   if (userid !== undefined) {
     */
     // The user is authorised if the email is within our database
-    const title = filterContent(req.body.title);
-    const content = filterContent(req.body.content);
-
-    for (let i = 0; i < req.body.keywords.length; i++) {
-      req.body.keywords[i] = filterContent(req.body.keywords[i]);
+    if (containsOffensiveLanguage(req.body.title) ||
+    containsOffensiveLanguage(req.body.content)) {
+      res.status(500);
+      res.end();
+      return;
     }
 
-    console.log(title, content, req.body.keywords);
-    dbabs.createPost(title, content, keywords);
+    const boardid = req.query.boardid;
+
+    for (let i = 0; i < req.body.keywords.length; i++) {
+      if(containsOffensiveLanguage(req.body.keywords[i])) {
+        res.status(500);
+        res.end();
+        return;
+      }
+    }
+    dbabs.createPost(title, content, keywords, await dbabs.getUserId(req.user.emails[0]), boardid);
     res.status(200);
     res.end();
     
@@ -147,11 +171,10 @@ async function createPost(req, res) {
  * @param {response} res
  * @param {string} userid UserID for the database
  */
-async function createComment(req, res, userid) {
-  console.log(req.body);
-  
+async function createComment(req, res) {
   try {
     let results;
+    let userid = await dbabs.getUserId(req.user.emails[0].value);
     if (req.body.reply === true) {
       results = await dbabs.createReplyComment(
         req.body.content,
@@ -261,6 +284,11 @@ const offensivelanguage = {
   ],
 };
 
+const bannedWords = [
+  'hate',
+  'stupid'
+]
+
 /**
  * Filters a given string for swear/offensive words
  * @param {string} content Content to be filtered
@@ -279,6 +307,18 @@ function filterContent(content) {
     }
   }
   return filteredContent;
+}
+
+/**
+ * Checks to see if a string contains offensive language
+ */
+function containsOffensiveLanguage (input) {
+  for (let word of bannedWords) {
+    if (input.includes(word)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 // #endregion
@@ -320,13 +360,7 @@ async function convertCommentsIdToName (comments) {
  */
 function generateRetrievePostContent(post, comments) {
   const info = {
-    post_information: {
-      id: post.post_id,
-      title: post.post_title,
-      content: post.post_content,
-      likes: post.post_likes,
-      user: post.user_id,
-    },
+    post,
 
     comments_information: [
 
@@ -351,12 +385,51 @@ function generateRetrievePostContent(post, comments) {
   return info;
 }
 // #endregion
+// ////////////////////////////////////////////////////////////// DELETING COMMENTS / POSTS
+//#region Deleting Comments/Posts
+/**
+ * Deletes a post from the DB
+ * @param {request} req 
+ * @param {response} res 
+ */
+async function deletePost (req, res) {
+  if (await dbabs.getPost(req.query.postid) !== undefined) {
+    if (await dbabs.getPostAuthor(req.query.postid) === await dbabs.getUserId(req.user.emails[0].value)) {
+      await dbabs.deletePost(req.query.postid);
+    }
+  }
+  res.status(200);
+  res.end();
+}
+
+/**
+ * Deletes a comment from the DB
+ * @param {request} req 
+ * @param {response} res 
+ */
+async function deleteComment (req, res) {
+  if (await dbabs.getComment(req.query.commentid) !== undefined) {
+    if (await dbabs.getCommentAuthor(req.query.commentid) === await dbabs.getUserId(req.user.emails[0].value)) {
+      await dbabs.deleteComment(req.query.commentid);
+    }
+  }
+  res.status(200);
+  res.end();
+}
+//#endregion
 // ////////////////////////////////////////////////////////////// EXPORTS
 // #region Exports
+module.exports.deleteComment = deleteComment;
+module.exports.deletePost = deletePost;
+
+module.exports.getPostsByDate = getPostsByDate;
+
 module.exports.getPost = getPost;
 module.exports.getComment = getComment;
 module.exports.getBoard = getBoard;
 module.exports.getAll = getAll;
+
+module.exports.markCommentAsAnswer = markCommentAsAnswer;
 
 module.exports.searchPosts = searchPosts;
 module.exports.searchTags = searchTags;

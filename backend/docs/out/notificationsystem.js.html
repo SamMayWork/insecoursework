@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: useraccountsystem.js</title>
+    <title>JSDoc: Source: notificationsystem.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: useraccountsystem.js</h1>
+    <h1 class="page-title">Source: notificationsystem.js</h1>
 
     
 
@@ -26,152 +26,145 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>// Created on 12/02/2020
-//
-// This is the User Account System file for the backend, all of the converting between
-// ID's happens here along with all of the enrolling and deletion
+            <pre class="prettyprint source linenums"><code>// File created on 17/02/2020
+
+// This file is responsible for receiving messages and sending notifications
+// out to the target using, any module can call it and it interfaces with the
+// email API and with dbabs itself
+
+// Status Codes
+// 252 - Everything went alright but we're not confirming the address is correct
+// 111 - Client Error
+// 101 - Connection blocked
 
 // ////////////////////////////////////////////////////////////// REQUIRES
 
+const mailer = require('nodemailer');
 const dbabs = require('./dbabstraction');
+const login = require('../emaillogin');
 const logging = require('./logging');
 
-// ////////////////////////////////////////////////////////////// CREATING USERS
+let available = true;
+let transporter;
 
-/**
- * Enrolls a new user in the DB using the information provided in the
- * authenticated request
- * @param {request} req
- * @param {response} res
- * @
- */
-async function enrollUser(req, res) {
+// ////////////////////////////////////////////////////////////// CONNECTION GENERATOR
+
+function startConnection() {
   try {
-    if (checkUserExists(req) === true) {
-      throw new error();
-    } else {
-      dbabs.enrollUser(req.user.displayName, req.user.emails[0].value);
-      res.status(200);
-      res.end();
-    }
+    transporter = mailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: emailinformation.email,
+        pass: emailinformation.password,
+      },
+    });
   } catch (exception) {
-    res.status(500);
-    res.end();
+    available = false;
+    logging.errorMessage(exception);
+    logging.errorMessage('Email Spin-up failed, continuing without mailing services');
+    logging.warningMessage("(Have you made sure you've got an emaillogin.js file?)");
   }
 }
 
-// ////////////////////////////////////////////////////////////// DELETING USERS
+startConnection();
+
+// ////////////////////////////////////////////////////////////// EMAIL-SENDER
 
 /**
- * Deletes a user from the database
- * @param {request} req
- * @param {response} res
+ * Generates and sends an SMTP email
+ * @param {string} email Email address to send to
+ * @param {string} subject Subject line
+ * @param {string} message Content of the email (plaintext only currently)
+ *
+ * @returns A JSON object containing a status code (.code) and a messageId if successful
  */
-async function deleteUser(req, res) {
+async function sendEmail(email, subject, message) {
+  if (!available) {
+    logging.errorMessage('Email functionality has been turned off');
+    return {
+      code: 101,
+    };
+  }
+
   try {
-    if (checkUserExists(req) === false) {
-      res.status(403);
-      res.end();
-      return;
-    }
-
-    // If the caller requires a hard-delete we need to remove all data for a given
-    // user, otherwise change their displayname and email to be the ID of the row
-
-    if (req.body.hardDelete === true) {
-      await dbabs.hardDeleteUser(getUsersID(req));
-    } else {
-      await dbabs.softDeleteUser(getUsersID(req));
-    }
+    const info = await transporter.sendMail({
+      from: 'inseforum@gmail.com',
+      to: email,
+      subject,
+      text: message,
+    });
+    return {
+      id: info.messageId,
+      code: 252,
+    };
   } catch (exception) {
-    res.status(500);
-    res.end();
+    logging.errorMessage(exception);
+    return {
+      code: 111,
+    };
   }
 }
 
-// ////////////////////////////////////////////////////////////// PREFERENCES
+/**
+ * Changes the status of email sending from the notification module
+ * @param {boolean} status
+ */
+function emailAvailableStatus(status) {
+  available = status;
+}
+
+// ////////////////////////////////////////////////////////////// EMAIL-GENERATORS
 
 /**
- * Allows a user to change between using their real name and their UP number
+ * Generates an email to the request address using only the provided message parameter
  * @param {request} req
- * @param {response} res
+ * @param {string} message Message to send to the user
  */
-async function useRealName(req, res) {
-  try {
-    if (checkUserExists(req) === false) {
-      res.status(403);
-      res.end();
-      return;
-    }
-
-    await dbabs.switchDisplayNameType(getUsersID(req), req.body.status);
-    res.status(200);
-    res.end();
-  } catch (exception) {
-    res.status(500);
-    res.end();
-  }
+async function generateGenericEmail(req, subject, message) {
+  const content = `Hi, ${await dbabs.getDisplayNameById(await dbabs.getUserId(req.user.emails[0].value))}\n${message}`;
+  const result = await sendEmail(req.user.emails[0].value, `UoP Forum ${subject}`, content);
+  return result.code;
 }
 
-
-// ////////////////////////////////////////////////////////////// AUTHORISATION
-
 /**
- * Checks users email exsists inside of our database
+ * Sends an emai to the user when their post has been successfully created
  * @param {request} req
+ * @param {string} postid ID of the created post
  */
-async function checkUserExists(req) {
-  try {
-    return await dbabs.checkUserExists(req.user.emails[0].value);
-  } catch (exception) {
-    logging.warningMessage(exception);
-    return false;
+async function generatePostConfirmation(req, postid) {
+  const postInformation = await dbabs.getPost(postid);
+  if (postInformation === undefined || await !dbabs.checkUserExists(req.user.emails[0].value)) {
+    return 101;
   }
+  let content = `Hi ${await dbabs.getDisplayNameByEmail(req.user.emails[0].value)},\n\n`;
+  content += `We're sending you this email to confirm ✔️ that "${postInformation.post_title}" was posted on ${postInformation.created_date}\n\n`;
+  content += 'Thanks, (Unofficial)UoP Forum team\n\nBleep Bloop I am a robot 🤖, report any errors ❌ to up891153@myport.ac.uk';
+  const result = await sendEmail(req.user.emails[0].value, 'Post Confirmation!', content);
+  return result.code;
 }
 
 /**
- * Gets the author ID of a given post
- * @param {string} postid
+ * Generates a confirmation sent to the user when they have registered
+ * @param {request} req 
  */
-async function getPostAuthor(postid) {
-  return dbabs.getPostAuthor(postid);
+async function generateRegistrationConfirmation (req) {
+  let content = `Hi ${req.user.displayName},\n\n`;
+  content += `We are just letting you know you have been successfully enrolled in the UUoP Forum site!\n\n`;
+  content += 'Thanks, (Unofficial)UoP Forum team\n\nBleep Bloop I am a robot 🤖, report any errors ❌ to up891153@myport.ac.uk';  
+  const result = await sendEmail(req.user.emails[0].value, 'Registration Confirmation', content);
+  return result.code;
 }
-
-/**
- * Gets the author ID of a given comment
- * @param {string} commentid
- */
-async function getCommentAuthor(commentid) {
-  return dbabs.getCommentAuthor(commentid);
-}
-
-// ////////////////////////////////////////////////////////////// NOTIFICATION SETTINGS
-
-async function changeNotificationState (req, res) {
-  if (req.query.status !== undefined) {
-    await dbabs.changeNotificationState(req.user.emails[0].value, req.query.status);
-    res.status(200);
-    res.end();
-    return;
-  }
-  res.status(500);
-  res.end();
-}
-
 
 // ////////////////////////////////////////////////////////////// EXPORTS
 
-module.exports.enrollUser = enrollUser;
+module.exports.emailAvailableStatus = emailAvailableStatus;
 
-module.exports.useRealName = useRealName;
+module.exports.generateGenericEmail = generateGenericEmail;
+module.exports.generatePostConfirmation = generatePostConfirmation;
+module.exports.generateRegistrationConfirmation = generateRegistrationConfirmation;
 
-module.exports.deleteUser = deleteUser;
-
-module.exports.checkUserExists = checkUserExists;
-module.exports.getPostAuthor = getPostAuthor;
-module.exports.getCommentAuthor = getCommentAuthor;
-
-module.exports.changeNotificationState = changeNotificationState;</code></pre>
+module.exports.sendEmail = sendEmail;
+</code></pre>
         </article>
     </section>
 

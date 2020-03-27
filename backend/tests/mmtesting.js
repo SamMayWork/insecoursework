@@ -8,10 +8,18 @@ const assert = require('assert');
 const dbabs = require('../dbabstraction');
 const mm = require('../maintainmodule');
 
+// File edited, linted, and commited ✔️
+
 // ////////////////////////////////////////////////////////////// ESLINT DISABLES
 
 /* eslint-disable no-undef */
 
+// ////////////////////////////////////////////////////////////// TEST FLOW
+/*
+This test should check that
+  - The script does not throw any errors when it is run ✔️
+  - The rows that are inserted are present on the DB ✔️
+*/
 // ////////////////////////////////////////////////////////////// MMM TESTING
 
 describe('Maintenance Module', () => {

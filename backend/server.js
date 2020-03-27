@@ -155,6 +155,32 @@ app.post('/forum/create', async (req, res) => {
   }
 });
 // #endregion
+// ////////////////////////////////////////////////////////////// DELETING POSTS/COMMENTS
+//#region 
+app.get ('/forum/delete', async (req, res) => {
+  handleGetLogging(req);
+
+  if(!uac.checkUserExists(req)) {
+    forbidden(res);
+  }
+
+  if (req.query.postid !== undefined) {
+    await pms.deletePost(req, res);
+  }
+
+  if (req.query.commentid !== undefined) {
+    await pms.deleteComment(req, res);
+  }
+});
+//#endregion
+// ////////////////////////////////////////////////////////////// MARKING COMMENT AS ANSWER
+//#region 
+app.get('/forum/comment', async (req, res) => {
+  if (req.query.correct  === true && req.query.commentid !== undefined) {
+    await pms.markCommentAsAnswer(req, res); 
+  }
+});
+//#endregion
 // ////////////////////////////////////////////////////////////// EDITING CONTENT
 // #region Editing
 // Handler for edit requests, endpoints are:
@@ -222,7 +248,7 @@ app.post('/forum/like', async (req, res) => {
 // Handler for HTTP posts to the report system of the application
 // /forum/report?post=[param] - Reports a post using the given ID
 // /forum/report?comment=[param] - Reports a comment using the given ID
-app.post('forum/report', (req, res) => {
+app.post('forum/report', async (req, res) => {
   handleNoDB(req, res);
   handlePostLogging(req);
 
@@ -231,12 +257,12 @@ app.post('forum/report', (req, res) => {
     return;
   }
 
-  if (req.query.post !== undefined) {
-    reporting.reportPost(req, res);
+  if (req.query.postid !== undefined) {
+    await reporting.reportPost(req, res);
   }
 
-  if (req.query.comment !== undefined) {
-    reporting.reportComment(req, res);
+  if (req.query.commentid !== undefined) {
+    await reporting.reportComment(req, res);
   }
 
   res.end();
@@ -245,12 +271,15 @@ app.post('forum/report', (req, res) => {
 // ////////////////////////////////////////////////////////////// UAC ENDPOINTS
 // #region UAC Endpoints
 
-app.post('uac/register', async () => {
+app.post('/forum/uac', async (req, res) => {
+  handleNoDB(req, res);
+  handlePostLogging(req);
 
-});
-
-app.post('forum/uac/', async () => {
-
+  // Save the user into the DB
+  if (req.query.register === 1) {
+    enrollUser(req, res);
+    await ns.generateRegistrationConfirmation (req);
+  }
 });
 
 

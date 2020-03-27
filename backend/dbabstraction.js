@@ -111,13 +111,13 @@ async function getComments(postid) {
 }
 
 /**
- * Gets a specific board
- * @param {string} boardid
+ * Gets all of the posts from a specific board
+ * @param {string} boardid The ID of the board to get the posts for
  */
 async function getBoard(boardid) {
-  const query = 'SELECT * FROM board WHERE board_id = $1;';
+  const query = 'SELECT * FROM posts WHERE board_id = $1;';
   const results = await executeQuery(query, [boardid]);
-  return results.rows[0];
+  return results.rows;
 }
 
 /**
@@ -138,6 +138,17 @@ async function getComment(commentid) {
   const results = await executeQuery(query, [commentid]);
   return results.rows[0];
 }
+
+/**
+ * Gets all posts from all forums using their Date
+ * @param {string} status either ASC or DESC 
+ */
+async function getPostsByDate (status) {
+  const query = `SELECT * FROM posts ORDER BY created_date ${status.toUpperCase()}`;
+  const results = await executeQuery(query, []);
+  return results.rows;
+}
+
 // #endregion
 // ////////////////////////////////////////////////////////////// SEARCHING
 // #region Searching Content
@@ -149,7 +160,7 @@ async function getComment(commentid) {
 async function searchPosts(searchstring) {
   const query = 'SELECT * FROM posts WHERE post_title LIKE $1;';
   const results = await executeQuery(query, [searchstring]);
-  return results.rows[0];
+  return results.rows;
 }
 
 /**
@@ -215,9 +226,9 @@ async function createKeywords(keywords) {
  */
 async function createPost(title, content, keywords, authorid, boardid) {
   const keywordsId = await createKeywords(keywords);
-  const postQuery = 'INSERT INTO Posts (post_id, keyword_id, board_id, post_title, post_content, post_likes, user_id, created_date) VALUES ($1,$2,$3,$4,$5,$6,$7,$8);';
+  const postQuery = 'INSERT INTO Posts (post_id, keyword_id, board_id, post_title, post_content, post_likes, user_id, created_date, reported, post_views) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9, $10);';
   const id = generateId(8);
-  await executeQuery(postQuery, [id, keywordsId, boardid, title, content, 0, authorid, new Date()]);
+  await executeQuery(postQuery, [id, keywordsId, boardid, title, content, 0, authorid, new Date(), false, 0]);
 
   return {
     keyword_id: keywordsId,
@@ -233,9 +244,9 @@ async function createPost(title, content, keywords, authorid, boardid) {
  */
 
 async function createComment(comment_content, user_id, post_id) {
-  const commentQuery = 'INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id) VALUES($1, $2, $3, $4, $5);';
+  const commentQuery = 'INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id, reported, comment_views, correct) VALUES($1, $2, $3, $4, $5, $6, $7, $8);';
   const id = generateId(8);
-  await executeQuery(commentQuery, [id, comment_content, 0, user_id, post_id]);
+  await executeQuery(commentQuery, [id, comment_content, 0, user_id, post_id, false, 0, false]);
   return {
     comment_id: id,
     comment_content,
@@ -251,8 +262,8 @@ async function createComment(comment_content, user_id, post_id) {
  */
 
 async function createReplyComment(comment_content, user_id, post_id, reply_id) {
-  const query = 'INSERT INTO Comments VALUES($1, $2, $3, $4, $5, $6);';
-  const results = await executeQuery(query, [generateId(8), comment_content, 0, user_id, post_id, reply_id]);
+  const query = 'INSERT INTO Comments VALUES($1, $2, $3, $4, $5, $6, $7);';
+  const results = await executeQuery(query, [generateId(8), comment_content, 0, user_id, post_id, reply_id, false]);
   return results;
 }
 
@@ -288,13 +299,12 @@ async function editComment(commentContent, commentid) {
 // #region Reporting
 
 /**
- * Reporting a post
- * @param {String} user_id user_id of the useres that report
- * @param {String} post_id Post_id that is being reported
+ * Sets the reported field of a post to true
+ * @param {string} post_id 
  */
-async function reportPost(user_id, post_id) {
-  const query = 'INSERT INTO Reports_Posts VALUES($1, $2);';
-  const result = await executeQuery(query, [user_id, post_id]);
+async function reportPost(post_id) {
+  const query = 'UPDATE posts SET reported = $1 WHERE post_id = $2;';
+  const result = await executeQuery(query, [true, post_id]);
   return result;
 }
 
@@ -303,9 +313,9 @@ async function reportPost(user_id, post_id) {
  * @param {String} user_id User_id that reported
  * @param {String} comment_id comment_id that is being reported
  */
-async function reportComment(user_id, comment_id) {
-  const query = 'INSERT INTO Reports_Comments VALUES($1, $2);';
-  const result = await executeQuery(query, [user_id, comment_id]);
+async function reportComment(comment_id) {
+  const query = 'UPDATE comments SET reported = $1 WHERE comment_id = $2;';
+  const result = await executeQuery(query, [true, comment_id]);
   return result;
 }
 
@@ -318,11 +328,8 @@ async function reportComment(user_id, comment_id) {
  * @param {String} postid The post id
  */
 async function increasePostViews(postid) {
-  const query = 'UPDATE Post_Views SET views = views + 1 WHERE post_id = $1';
-  const query2 = 'SELECT * FROM Post_Views WHERE post_id = $1';
+  const query = 'UPDATE posts SET post_views = post_views + 1 WHERE post_id = $1';
   await executeQuery(query, [postid]);
-  const result = await executeQuery(query2, [postid]);
-  return result.rows[0];
 }
 
 /**
@@ -330,10 +337,8 @@ async function increasePostViews(postid) {
  * @param {String} commentid
  */
 async function increaseCommentViews(commentid) {
-  const query = 'UPDATE Comment_Views SET views = views + 1 WHERE comment_id = $1';
+  const query = 'UPDATE comments SET comment_views = comment_views + 1 WHERE comment_id = $1';
   await executeQuery(query, [commentid]);
-  const result = await executeQuery(query, [commentid]);
-  return result;
 }
 
 // #endregion
@@ -344,44 +349,23 @@ async function increaseCommentViews(commentid) {
  * Function for liking/disliking a post
  * @param {boolean} like if true, the post is liked, if false it is disliked
  * @param {string} postId is the id of the post that is being liked/disliked
-//  */
-// async function ratePost(postid, like) {
-//   try {
-//     let query;
-//     if (like === true) {
-//       query = `update Posts set post_likes = post_likes + 1 where post_id = $1;`;
-//     } else {
-//       query = `update Posts set post_likes = post_likes - 1 where post_id = $1;`;
-//     }
-//     await executeQuery(query, [postid]);
-//   }
-//   catch (error) {
-//     logging.errorMessage(error);
-//   }
-// }
+ */
+async function ratePost(postid, like) {
+  let value = like ? 1 : -1;
+  let query = `UPDATE posts SET post_likes = post_likes + ${value} WHERE post_id = $1;`;
+  await executeQuery(query, [postid]);
+}
 
 /**
  * Function for liking/disliking comments on posts
  * @param {string} commentid is the id of the comment that is being liked/disliked
  * @param {boolean} like if true, the post is like, if false it is disliked
  */
-
-// async function rateComment(commentid, like) {
-//   try {
-//     let query;
-//     if (like === true) {
-//       query = `update Comments set comment_likes = comment_likes + 1 where comment_id = ${commentid};`;
-//     } else {
-//       query = `update Comments set comment_likes = comment_likes - 1 where comment_id = ${commentid}`;
-//     }
-//     return true;
-//   }
-//   const results = await executeQuery(query, [commentid]);
-//   catch (error) {
-//     logging.errorMessage(error);
-//     return false;
-//   }
-// }
+async function rateComment(commentid, like) {
+  let value = like ? 1 : -1;
+  let query = `UPDATE comments SET comment_likes = comment_likes + ${value} WHERE comment_id = $1;`;
+  await executeQuery(query, [commentid]);
+}
 
 // #endregion
 // ////////////////////////////////////////////////////////////// USER ACCOUNT QUERIES
@@ -434,6 +418,7 @@ async function enrollUser(displayname, email) {
   const query = 'INSERT INTO users VALUES ($1, $2, $3, $4, $5);';
   const id = generateId(8);
   await executeQuery(query, [id, displayname, true, email, new Date()]);
+  console.log(displayname);
   return {
     user_name: displayname,
     user_email: email,
@@ -493,18 +478,32 @@ async function getDisplayNameByEmail(email) {
   return await getDisplayNameById(await getUserId(email));
 }
 
+/**
+ * Changes the global on/off setting for notifications
+ * @param {string} email 
+ * @param {boolean} status 
+ */
+async function changeNotificationState (email, status) {
+  const query = `UPDATE notifications SET notif_global = $1 WHERE user_id = $2;`;
+  await executeQuery(query, [status, await getUserId(email)]);
+}
+
 // #endregion
 // ////////////////////////////////////////////////////////////// DELETING CONTENT
 // #region Deletion
-
-/**
- * Deletes all of the content from the table board
- */
-async function deleteRecordBoard() {
-  const query = 'DELETE FROM board;';
-  await executeQuery(query);
+async function deletePost(postid) {
+  let query = 'DELETE FROM comments WHERE post_id = $1;';
+  await executeQuery(query, [postid]);
+  query = 'DELETE FROM keywords WHERE keyword_id = $1;';
+  await executeQuery(query, [postid]);
+  query = 'DELETE FROM posts WHERE post_id = $1;';
+  await executeQuery(query, [postid]);
 }
 
+async function deleteComment(commentid) {
+  const query = 'UPDATE comments SET comment_content = $1 AND user_id = $2 WHERE comment_id = $3;';
+  await executeQuery(query, ['This comment has been removed by its author', '00000000', 'commentid']);
+}
 // #endregion
 // ////////////////////////////////////////////////////////////// EXPORTS
 // #region Exports
@@ -513,6 +512,12 @@ module.exports.getComments = getComments;
 module.exports.getComment = getComment;
 module.exports.getAllBoards = getAllBoards;
 module.exports.getBoard = getBoard;
+module.exports.getPostsByDate = getPostsByDate;
+
+module.exports.changeNotificationState = changeNotificationState;
+
+module.exports.deletePost = deletePost;
+module.exports.deleteComment = deleteComment;
 
 module.exports.searchPosts = searchPosts;
 module.exports.searchTags = searchTags;
@@ -522,12 +527,10 @@ module.exports.generateId = generateId;
 module.exports.createBoard = createBoard;
 module.exports.createPost = createPost;
 module.exports.createComment = createComment;
-module.exports.createReplyComment = createComment;
+module.exports.createReplyComment = createReplyComment;
 
 module.exports.editPost = editPost;
 module.exports.editComment = editComment;
-
-module.exports.deleteRecordBoard = deleteRecordBoard;
 
 module.exports.enrollUser = enrollUser;
 module.exports.checkUserExists = checkUserExists;
@@ -543,6 +546,9 @@ module.exports.reportComment = reportComment;
 
 module.exports.increasePostViews = increasePostViews;
 module.exports.increaseCommentViews = increaseCommentViews;
+
+module.exports.ratePost = ratePost;
+module.exports.rateComment = rateComment;
 
 module.exports.executeRawQuerySync = executeRawQuerySync;
 // #endregion
