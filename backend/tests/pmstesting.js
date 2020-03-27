@@ -6,8 +6,8 @@ describe('PMS Module DB Tests', () => {
 
   describe('deletePost', () => {
     it('Should delete the post properly', async () => {
-      await dbabs.deletePost('11f3b99f');
-      assert.equal(await dbabs.getPost('11f3b99f'), undefined);
+      await dbabs.deletePost('fe5b5840');
+      assert.equal(await dbabs.getPost('fe5b5840'), undefined);
     });
   });
 
