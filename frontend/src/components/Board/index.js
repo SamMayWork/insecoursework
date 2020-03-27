@@ -10,6 +10,13 @@ import {
 	Chip
 } from '@material-ui/core';
 
+
+/*
+*
+* Routerlink for forwarding the user to the selected link when interacting with a board card
+*
+*/
+
 const CustomRouterLink = forwardRef((props, ref) => (
 	<Card
 		ref={ref}

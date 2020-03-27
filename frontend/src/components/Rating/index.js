@@ -3,6 +3,14 @@ import React, {useState} from 'react';
 import LikeButton from './components/LikeButton';
 import DislikeButton from './components/DislikeButton';
 
+
+
+/*
+*
+* Styles for the Rating Setup using passed through data from the like and dislike button
+*
+*/
+
 /**
  * 
  * @param {Object} props Accepts an object containing the elements state

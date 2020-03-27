@@ -25,7 +25,7 @@ import './commentedit.css';
  *  
  */
 
- 
+
 export default class PostView extends Component {
   constructor(props) {
     super(props);
@@ -35,6 +35,7 @@ export default class PostView extends Component {
       items: []
     }
   }
+  //Structure of the page
   render() {
     const {error, isLoaded, comments } = this.state;
     if (error) {
@@ -61,6 +62,8 @@ export default class PostView extends Component {
       );
     }
   }
+
+  //Check to see if the component is loaded correctly into view
   componentDidMount() {
     fetch("/get?postid=11f3b99f")
       .then(res => res.json())

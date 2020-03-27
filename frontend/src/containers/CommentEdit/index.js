@@ -40,6 +40,7 @@ export default class CommentEditPage extends Component {
 		pageTitle: "Create a new comment",
 		reply: null
 	}
+	//checks the component is in view and has loaded correctly
 	componentDidMount() {
 		this.updateReply(this.query.get('reply_id'));
 	}
@@ -101,12 +102,14 @@ export default class CommentEditPage extends Component {
 render() {
 	let reply = null;
 	if (this.state.reply !== null) {
+		//Structure of the reply
 		reply = (
 			<Comment
 				content={this.state.reply.comment_content}
 			/>
 		);
 	}
+	//Structure of the comment reply
 	return (
 	<div>
 		<BackBar title = {this.state.pageTitle}/>

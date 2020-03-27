@@ -136,6 +136,7 @@ const Navbar = props => {
 	}
 	
   const menuId = 'primary-search-account-menu';
+  //Structure of the nav
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -154,6 +155,7 @@ const Navbar = props => {
   );
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
+  //Structure of the mobile nav
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}

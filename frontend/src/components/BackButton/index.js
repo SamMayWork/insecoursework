@@ -6,6 +6,14 @@ import {
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { withRouter } from 'react-router-dom';
 
+
+
+/*
+*
+* Styles for the Back Button Component (Adds a backwards functionality to the application)
+*
+*/
+
 const useStyles = makeStyles(theme => ({
   backButton: {
     

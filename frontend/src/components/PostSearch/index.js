@@ -27,6 +27,12 @@ import {
 
 import MomentUtils from '@date-io/moment';
 
+/*
+*
+* Styles for the PostSearch Component (The search bar persistent on msot pages)
+*
+*/
+
 const useStyles = makeStyles(theme => ({
 	root: {
 		display: 'flex',
@@ -47,7 +53,6 @@ const useStyles = makeStyles(theme => ({
  * @param {Object} props Accepts an object containing the elements state
  *  
  */
-
 
 const PostSearch = props => {
 	const history = useHistory();

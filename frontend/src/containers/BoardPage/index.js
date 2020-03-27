@@ -17,6 +17,13 @@ import {
 
 import Post from '../../components/Post';
 
+
+/*
+*
+* Styles for the BoardPage
+*
+*/
+
 const useStyles = makeStyles(theme => ({
 	root: {
 		padding: theme.spacing(2)

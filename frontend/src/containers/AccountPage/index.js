@@ -32,6 +32,12 @@ import styled from 'styled-components';
 
 import './accountPage.css';
 
+/*
+*
+* General structure of Account Management page, contains functions for the set options given to the user
+*
+*/
+
 /**
  * 
  * @param {Object} props Accepts an object containing the elements state
@@ -39,6 +45,7 @@ import './accountPage.css';
  */
 
 
+ //Zone for the privacy handling and structure
 const PrivacyZone = props => {
 	const [realname, setRealname] = useState(false);
 	const [displayName, setDisplayName] = useState('');
@@ -81,6 +88,7 @@ const PrivacyZone = props => {
   );
 };
 
+//Zone for the notification handling and structure
 const NotificationZone = props => {
   return (
     <div className="accountPageZone">
@@ -109,6 +117,7 @@ const NotificationZone = props => {
   )
 }
 
+//Styling of button
 const StyledButton = styled(Button)`
   & {
     font-weight: 600;
@@ -119,6 +128,7 @@ const StyledButton = styled(Button)`
   }
 `;
 
+//Delete your account Handling and Structure 
 const DangerZone = props => {
   return (
     <div className="accountPageZone">

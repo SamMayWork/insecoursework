@@ -59,6 +59,7 @@ function responseGoogle(response, history) {
 
 
 export function LoginPage(props) {
+  //Structure of the page
   return (
     <div className = "loginPage">
       <h1>

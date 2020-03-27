@@ -18,6 +18,12 @@ import {
 	List
 } from '@material-ui/core';
 
+/*
+*
+* Styles for the SideBar Component (The sidebar is available on any page that has a navbar)
+*
+*/
+
 const useStyles = makeStyles(theme => ({
 	root: {
 		display: 'flex',
@@ -63,6 +69,7 @@ const Sidebar = props => {
       icon: <AccountBoxIcon />
     }
   ];
+  //Sidebar structure
 	return (
 		<Drawer
 			anchor="left"

@@ -48,6 +48,7 @@ export default class DashboardPage extends Component {
     } else if (!isLoaded) {
       return <div>Loading...</div>
     } else {
+      //Structure of the page
       return (
         <div>
 		      <Navbar

@@ -15,9 +15,11 @@ const useStyles = makeStyles(theme => ({
  *  
  */
 
-
+ 
+//Allows for post searching functionality
 const PostSearchPage = props => {
 	const classes = useStyles();
+	//Structure of the page
   return (
     <div>
     	<BackBar

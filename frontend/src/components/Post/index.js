@@ -53,13 +53,16 @@ const PostOptions = props => {
 	const handleClose = () => {
     setOpen(false);
   }
+  //Handle the open
   const handleClickOpen = () => {
     setOpen(true);
   }
+  //Handle the edit option for the post
   const handleEdit = () => {
   	setOpen(false);
   	history.push(`/forum/create?post_id=${props.post_id}`);
   }
+  //Handle The delete option for the post
   const handleDelete = () => {
   	let email = localStorage.getItem('email');
   	let token = localStorage.getItem('token');
@@ -76,6 +79,7 @@ const PostOptions = props => {
   		.catch(err => console.log(err));
   	setOpen(false);
   }
+  //Handle the report functionality
   const handleReport = () => {
   	let email = localStorage.getItem('email');
   	let token = localStorage.getItem('token');
@@ -95,6 +99,7 @@ const PostOptions = props => {
   		.catch(err => console.log(err));
   	setOpen(false);
   }
+  //Template for structure of post page
 	return (
 		<div>
 			<IconButton onClick={handleClickOpen}>
@@ -130,6 +135,7 @@ const PostOptions = props => {
 	);
 };
 
+//Shows an overlay on posts marked as NSFW
 const PostOverlay = props => {
 	return (
 		<div
@@ -146,6 +152,7 @@ const PostOverlay = props => {
 	);
 }
 
+//Handles the structure of comments and posts, based on other factors such as reporting etc
 const Post = props => {
 	const history = useHistory();
 	const [reported, setReported] = useState(props.reported);

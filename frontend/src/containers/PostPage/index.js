@@ -14,6 +14,13 @@ import {
 	Add as AddIcon
 } from '@material-ui/icons';
 
+
+/*
+*
+* Styles for the PostPage 
+*
+*/
+
 const useStyles = makeStyles(theme => ({
 	root: {
 		padding: theme.spacing(2)
@@ -40,6 +47,7 @@ const useQuery = () => {
  */
 
 
+//Handles the state for the post and proceeding comments
 const PostPage = props => {
 	const [openSidebar, setOpenSidebar] = useState(false);
 	const [post, setPost] = useState("");
@@ -75,7 +83,7 @@ const PostPage = props => {
 	useEffect(() => {
 		updatePost(query.get('id'));
 	}, []);
-	
+	//Structure of the page
 	return (
 		<div style = {{'height': '100%'}}>
 			<Navbar

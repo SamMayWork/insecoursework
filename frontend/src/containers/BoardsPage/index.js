@@ -10,12 +10,14 @@ import {
 	List
 } from '@material-ui/core';
 
+
+
+
 /**
  * 
  * @param {Object} props Accepts an object containing the elements state
  *  
  */
-
 
 const BoardsPage = props => {
 	const [openSidebar, setOpenSidebar] = useState(false);
@@ -44,13 +46,16 @@ const BoardsPage = props => {
       )
 	}
 	
+	//Open Sidebar
 	const handleSidebarOpen = () => {
 		setOpenSidebar(true);
 	};
+	//Close Sidebar
 	const handleSidebarClose = () => {
 		setOpenSidebar(false);
 	};
 	useEffect(() => {updateBoards(boards)}, []);
+	//Structure of the page
 	return (
 		<div>
 			<Navbar
