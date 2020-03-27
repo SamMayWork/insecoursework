@@ -21,7 +21,21 @@ function responseGoogle(response, history) {
   localStorage.setItem('email', response.profileObj.email);
   localStorage.setItem('token', token);
   
+  fetch('/auth/test', {
+    credentials: 'same-origin',
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + token
+    }
+  }).then((res) => console.log(res)).then(
+    (res) => {
+    	history.push('/dashboard');
+    }
+  )
+  .catch((error) => console.log(error));
+  
   // AUTH TEST
+  /*
   fetch('/forum/uac', {
     credentials: 'same-origin',
     method: 'POST',
@@ -34,6 +48,7 @@ function responseGoogle(response, history) {
     }
   )
   .catch((error) => console.log(error));
+  */
 }
 
 export function LoginPage(props) {

@@ -79,7 +79,8 @@ export default class PostEditPage extends Component {
     }
     console.log(body);
     if (this.query.get('post_id')) {
-    	fetch("/forum/create?type=post", {
+    	let postid = this.query.get('post_id');
+    	fetch(`/forum/edit?type=post&postid=${postid}`, {
 		    method: 'POST',
 		    mode: 'cors',
 		    cache: 'no-cache',
