@@ -261,8 +261,8 @@ async function createComment(comment_content, user_id, post_id) {
  */
 
 async function createReplyComment(comment_content, user_id, post_id, reply_id) {
-  const query = 'INSERT INTO Comments VALUES($1, $2, $3, $4, $5, $6, $7);';
-  const results = await executeQuery(query, [generateId(8), comment_content, 0, user_id, post_id, reply_id, false]);
+  const query = 'INSERT INTO Comments VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9);';
+  const results = await executeQuery(query, [generateId(8), comment_content, 0, 0, user_id, post_id, reply_id, false, false]);
   return results;
 }
 
