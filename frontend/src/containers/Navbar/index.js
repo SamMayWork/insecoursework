@@ -23,7 +23,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link, Redirect, useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -41,26 +41,6 @@ const useStyles = makeStyles(theme => ({
     // display: 'none',
     [theme.breakpoints.up('sm')]: {
       display: 'block',
-    },
-  },
-  boardTitle: {
-		[theme.breakpoints.up('sm')]: {
-      display: 'none',
-    },
-  },
-  search: {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
-      width: 'auto',
     },
   },
   searchIcon: {
@@ -100,11 +80,14 @@ const useStyles = makeStyles(theme => ({
 const MenuItemWithRouter = withRouter(MenuItem);
 
 const Navbar = props => {
+	const history = useHistory();
 	const {className, onSidebarOpen, ...rest} = props;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
+	const [leave, setLeave] = React.useState(false);
+	const [gotoSearch, setGotosearch] = React.useState(false);
+	
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -123,7 +106,11 @@ const Navbar = props => {
 		localStorage.clear();
 		
 		// 2. Re-direct to login page
-		
+		setLeave(true);
+	}
+	
+	const navTo = href => {
+		history.push(href);
 	}
 	
   const handleMenuClose = () => {
@@ -134,7 +121,13 @@ const Navbar = props => {
   const handleMobileMenuOpen = event => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
-
+	
+	let signOutRedirect = null;
+	let gotosearch = null;
+	if (leave) {
+		signOutRedirect = <Redirect to={'/'}/>;
+	}
+	
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -146,11 +139,10 @@ const Navbar = props => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItemWithRouter onClick={
-      	() => {signOut(props)}
-      }>
+      <MenuItem onClick={signOut}>
       	Sign Out
-      </MenuItemWithRouter>
+      	{signOutRedirect}
+      </MenuItem>
     </Menu>
   );
 
@@ -178,7 +170,17 @@ const Navbar = props => {
       </MenuItem>
     </Menu>
   );
-
+	let searchComponent = null;
+	if (props.showSearch) {
+		searchComponent = (
+			<IconButton onClick={() => {navTo(`/search?boardid=${props.boardid}`)}}>
+				<SearchIcon 
+					style = {{fill: 'white'}}
+					edge="end"
+				/>
+			</IconButton>
+		);
+	}
   return (
     <div className={classes.grow, classes.root}>
       <AppBar position="static">
@@ -192,23 +194,13 @@ const Navbar = props => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography className={props.showSearch ? {} : classes.boardTitle} variant="h6" noWrap>
+          <Typography className={props.showSearch ? "" : classes.boardTitle} variant="h6" noWrap>
             {props.title}
           </Typography>
-          <div style = {props.showSearch ? {} : {display: 'none'}} className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </div>
           <div className={classes.grow} />
+          <div>
+          	{searchComponent}
+          </div>
           <div className={classes.sectionDesktop}>
             <IconButton
               edge="end"
@@ -244,7 +236,8 @@ const Navbar = props => {
 Navbar.propTypes = {
 	className: PropTypes.string,
 	onSidebarOpen: PropTypes.func.isRequired,
-	title: PropTypes.string.isRequired
+	title: PropTypes.string.isRequired,
+	showSearch: PropTypes.bool
 }
 
 export default Navbar;

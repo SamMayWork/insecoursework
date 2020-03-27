@@ -17,7 +17,8 @@ import {
   Chip
 } from '@material-ui/core';
 import {
-	useLocation
+	useLocation,
+	withRouter
 } from 'react-router-dom';
 
 import './post.css';
@@ -29,33 +30,81 @@ const useQuery = location => {
 export default class PostEditPage extends Component {
   state = {
     keywords: [],
-    pageTitle: 'Create a New Thread'
+    pageTitle: 'Create a New Thread',
+    board_id: null
   }
   constructor(props) {
 		super(props);
 		this.query = useQuery(this.props.location);
 	}
+	componentDidMount() {
+		if (this.query.get('post_id')) {
+			let post_id = this.query.get('post_id');
+			this.setState({
+				pageTitle: "Edit an Existing Thread"
+			});
+			fetch(`/get?postid=${post_id}`)
+			.then(res => res.json())
+			.then(
+				(result) => {
+					let post = result.post;
+					let comments = result.comments_information;
+					console.log('post info:', post);
+					
+					// Set fields
+					this.setState({
+						title: post.post_title,
+						content: post.post_content,
+						keywords: ['a', 'b', 'c', 'd', 'e'],
+						board_id: post.board_id
+					});
+				},
+				(error) => {
+					console.log('[ERROR: CANT LOAD POSTS INTO BOAD]', error);
+				}
+			)
+		} else {
+			this.setState({
+				board_id: this.query.get('board_id')
+			});
+		}
+	}
   handleSubmit = () => {
     const body = {
-      title: this.state.titleContent,
-      content: this.state.bodyContent,
+      title: this.state.title,
+      content: this.state.content,
       keywords: this.state.keywords,
       email: localStorage.getItem('email'),
-      boardid: this.query.get('board_id')
+      boardid: this.state.board_id
     }
     console.log(body);
-    fetch("/forum/create?type=post", {
-      method: 'POST',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
-      },
-      body: JSON.stringify(body)
-    })
-    .catch((error) => console.log(error));
+    if (this.query.get('post_id')) {
+    	fetch("/forum/create?type=post", {
+		    method: 'POST',
+		    mode: 'cors',
+		    cache: 'no-cache',
+		    credentials: 'same-origin',
+		    headers: {
+		      'Content-Type': 'application/json;charset=utf-8',
+		      'Authorization': 'Bearer ' + localStorage.getItem('token')
+		    },
+		    body: JSON.stringify(body)
+		  })
+		  .catch((error) => console.log(error));
+    } else {
+    	fetch("/forum/create?type=post", {
+		    method: 'POST',
+		    mode: 'cors',
+		    cache: 'no-cache',
+		    credentials: 'same-origin',
+		    headers: {
+		      'Content-Type': 'application/json;charset=utf-8',
+		      'Authorization': 'Bearer ' + localStorage.getItem('token')
+		    },
+		    body: JSON.stringify(body)
+		  })
+		  .catch((error) => console.log(error));
+    }
   }
   //Send to server
   //confirmation of post success
@@ -72,10 +121,9 @@ export default class PostEditPage extends Component {
 
   handleBodyChange = (e) => {
     this.setState({
-      bodyContent: e.target.value
+      content: e.target.value
     });
   }
-
   
   handleKeyWordChange = (e) => {
     if (e.keyCode == 13 || e.keyCode == 32) {
@@ -98,6 +146,11 @@ export default class PostEditPage extends Component {
       keywords: this.state.keywords.filter((chip) => chip !== keyword)
     })
     console.log(this.state.keywords)
+  }
+  handleEditMode() {
+  	this.setState({
+  		pageTitle: 'Edit an Existing Thread'
+  	});
   }
   render() {
     return (

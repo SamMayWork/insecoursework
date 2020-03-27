@@ -22,9 +22,9 @@ function responseGoogle(response, history) {
   localStorage.setItem('token', token);
   
   // AUTH TEST
-  fetch('/auth/test', {
+  fetch('/forum/uac', {
     credentials: 'same-origin',
-    method: 'GET',
+    method: 'POST',
     headers: {
       'Authorization': 'Bearer ' + token
     }

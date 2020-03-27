@@ -5,7 +5,7 @@
  * This page allows users to change privacy settings and delete their account
  */
 
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import {
   Checkbox,
   CardHeader,
@@ -33,6 +33,17 @@ import styled from 'styled-components';
 import './accountPage.css';
 
 const PrivacyZone = props => {
+	const [realname, setRealname] = useState(false);
+	const [displayName, setDisplayName] = useState('');
+	const handleRealnameChange = e => {
+		let realname = e.target.checked;
+		setRealname(realname);
+		if (realname) {
+			setDisplayName(localStorage.getItem('real_name'));
+		} else {
+			setDisplayName(localStorage.getItem('email'));
+		}
+	}
   return (
     <div className="accountPageZone">
       <CardHeader
@@ -40,9 +51,17 @@ const PrivacyZone = props => {
       />
       <div>
         <List>
+        	<ListItem>
+        		<ListItemText>
+        			{displayName}
+        		</ListItemText>
+        	</ListItem>
           <ListItem>
             <ListItemIcon>
-              <Checkbox/>
+              <Checkbox
+              	checked={realname}
+              	onChange={handleRealnameChange}
+              />
             </ListItemIcon>
             <ListItemText
               primary="Real Name"
@@ -64,11 +83,13 @@ const NotificationZone = props => {
       <div>
         <List>
         	<ListItem justifyContent="center">
-        		{localStorage.getItem('email')}
+        		
         	</ListItem>
           <ListItem>
             <ListItemIcon>
-              <Checkbox/>
+              <Checkbox
+								
+              />
             </ListItemIcon>
             <ListItemText
               primary="Active"

@@ -54,8 +54,9 @@ const PostPage = props => {
 			.then(res => res.json())
 			.then(
 				(result) => {
-					let post = result.post_information;
+					let post = result.post;
 					let comments = result.comments_information;
+					console.log('post info:', post);
 					setPost(post);
 					setComments(comments);
 				},
@@ -81,9 +82,12 @@ const PostPage = props => {
 			/>
 			<div className = {classes.root}>
 			<Post
-				title = {post.title}
-				content = {post.content}
-				likes = {post.likes}
+				post_id = {post.post_id}
+				title = {post.post_title}
+				content = {post.post_content}
+				likes = {post.post_likes}
+				author = {post.user_id}
+				views = {post.views}
 			/>
 				<div className = {classes.comments}>
 				{

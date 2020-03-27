@@ -17,10 +17,7 @@ const PostSearchPage = props => {
     		title = "Post Search"
     	/>
     	<div className={classes.root}>
-    	<PostSearch
-    		boards={['Board A', 'Board B']}
-    		board={'Board A'}
-    	/>
+    		<PostSearch/>
     	</div>
     </div>
   );

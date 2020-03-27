@@ -11,12 +11,12 @@ import DataCard from '../../components/DataCard';
 
 import Navbar from '../../containers/Navbar';
 import Sidebar from '../../components/Sidebar';
+import LinkTable from './components/LinkTable';
 
-import Weather from 'simple-react-weather'
+import Weather from './components/Weather';
+import TwitterWidget from './components/TwitterWidget';
 import links from "./data.js";
 import './dashboard.css';
-
-import { TwitterTimelineEmbed } from 'react-twitter-embed';
 
 export default class DashboardPage extends Component {
   constructor(props) {
@@ -48,29 +48,22 @@ export default class DashboardPage extends Component {
     } else if (!isLoaded) {
       return <div>Loading...</div>
     } else {
-      console.log(comments);
       return (
         <div>
-        <Navbar
-					title = "Dashboard"
-					onSidebarOpen = {handleSidebarOpen}
-				/>
-        <div className = "dashboardPage">
-					<Sidebar
-						onClose = {handleSidebarClose}
-						open = {this.state.openSidebar}
-						variant = {'temporary'}
+		      <Navbar
+						title = "Dashboard"
+						onSidebarOpen = {handleSidebarOpen}
 					/>
-          <TwitterTimelineEmbed
-          	sourceType = "profile"
-          	screenName = "portsmouthuni"
-          	options = {{height: 300}}
-          />
-          <Weather style={divStyle} unit="C" city="Portsmouth" appid="45a03a49afb30df0fdfba49509ef8c1a" />
-          <DataCard
-            links = {links}
-          /> 
-        </div>
+		      <div className = "dashboardPage">
+						<Sidebar
+							onClose = {handleSidebarClose}
+							open = {this.state.openSidebar}
+							variant = {'temporary'}
+						/>
+		        <TwitterWidget/>
+		        <Weather/>
+		        <LinkTable/>
+		      </div>
         </div>
       );
     }
@@ -78,7 +71,6 @@ export default class DashboardPage extends Component {
   componentDidMount() {
   	this.setState({
       isLoaded: true
-      // comments: comments
     });
 	}
 }

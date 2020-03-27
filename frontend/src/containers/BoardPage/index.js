@@ -2,6 +2,8 @@ import React, {useState, useEffect, forwardRef} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Navbar from '../Navbar';
 import Sidebar from '../../components/Sidebar';
+import moment from 'moment';
+
 import {
 	useLocation,
 	NavLink as RouterLink
@@ -46,8 +48,10 @@ const BoardPage = props => {
 	const classes = useStyles();
 	let query = useQuery();
 	
-	const updatePosts = board_id => {
-		fetch(`/get?boardid=${board_id}`)
+	const updatePosts = () => {
+		if (query.get('id')) {
+			let board_id = query.get('id');
+			fetch(`/get?boardid=${board_id}`)
 			.then(res => res.json())
 			.then(
 				(result) => {
@@ -57,12 +61,29 @@ const BoardPage = props => {
 					setPosts(posts);
 				},
 				(error) => {
-					console.log('[ERROR: CANT LOAD POSTS INTO BOAD]', error);
+					console.log('[ERROR: CANT LOAD POSTS INTO BOARD]', error);
 				}
 			)
+		} else if (query.get('searchterm') || query.get('searchtags')) {
+			let searchterm = query.get('searchterm');
+			let searchtags = query.get('searchtags');
+			console.log(searchterm, searchtags);
+			fetch(`/get/search?type=post&searchtags=${searchtags}`)
+			.then(res => res.json())
+			.then(
+				(result) => {
+					let posts = result;
+					console.log(posts);
+					setPosts(posts);
+				},
+				(error) => {
+					console.log('[ERROR: CANT LOAD POSTS INTO BOARD]', error);
+				}
+			)
+		}
 	};
 	useEffect(() => {
-		updatePosts(query.get('id'));
+		updatePosts();
 	}, []);
 	const handleSidebarOpen = () => {
 		setOpenSidebar(true);
@@ -76,6 +97,7 @@ const BoardPage = props => {
 				title = "Board"
 				onSidebarOpen = {handleSidebarOpen}
 				showSearch = {true}
+				boardid = {query.get('id')}
 			/>
 			<Sidebar
 				onClose = {handleSidebarClose}
@@ -85,11 +107,16 @@ const BoardPage = props => {
 			<div className = {classes.root}>
 				{posts.slice(0, 20).map((post, i) => (
 					<Post
+						post_id = {post.post_id}
 						component = {CustomRouterLink}
 						to = {`/post?id=${post.post_id}`}
 						key = {i}
 						title = {post.post_title}
 						content = {post.post_content}
+						author = {post.user_id}
+						likes = {post.post_likes}
+						creationDate = {moment(post.created_date)}
+						reported = {post.reported}
 					/>
 				))}
 			</div>

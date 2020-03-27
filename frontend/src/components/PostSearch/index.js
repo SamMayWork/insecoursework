@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import momentPropTypes from 'react-moment-proptypes';
 
+import { useHistory } from 'react-router-dom';
+
 import moment from 'moment';
 
 import {
@@ -41,6 +43,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const PostSearch = props => {
+	const history = useHistory();
 	const classes = useStyles();
 	const [title, setTitle] = useState("");
 	const [keywords, setKeywords] = useState([]);
@@ -60,10 +63,10 @@ const PostSearch = props => {
     }
   };
   const performSearch = () => {
-  	// 1. Gather non-null fields
-  	// 2. Convert to HTTP GET request and query-rise fields
-  	// 3. Re-direct
-  	console.log(title, keywords, author, startDate, startTime, board);
+  	// console.log(title, keywords, author, startDate, startTime, board);
+  	let searchterm = title;
+  	let searchtags = keywords;
+  	history.push(`/board?searchtags=${searchtags}`);
   }
   const handleDeleteKeyword = keyword => {
     setKeywords(keywords.filter((chip) => chip !== keyword));
@@ -100,6 +103,7 @@ const PostSearch = props => {
 		      inputProps={{ 'aria-label': 'title' }}
 		    />
       </FormControl>
+      {/*
       <FormControl className = {classes.formControl}>
       	<MuiPickersUtilsProvider utils={MomentUtils}>
       		<Grid 
@@ -137,6 +141,7 @@ const PostSearch = props => {
 		      </Grid>
 	      </MuiPickersUtilsProvider>
       </FormControl>
+      */}
       <FormControl className = {classes.formControl}>
 		    <TextField
 		      autoFocus
@@ -163,6 +168,7 @@ const PostSearch = props => {
 		      }
 		    </div>
       </FormControl>
+      {/*
       <FormControl className = {classes.formControl}>
 		    <TextField
 		    	maxLength = {100}
@@ -175,6 +181,8 @@ const PostSearch = props => {
 		      inputProps={{ 'aria-label': 'author' }}
 		    />
       </FormControl>
+      */}
+      {/*
 	    <Grid
 	    	className = {classes.formControl}
   			container
@@ -219,6 +227,7 @@ const PostSearch = props => {
 	      </Grid>
 	      
       </Grid>
+      */}
       <Button
       	variant="contained"
       	color="primary"
@@ -231,7 +240,7 @@ const PostSearch = props => {
 }
 
 PostSearch.propTypes = {
-	board: PropTypes.object.isRequired
+	
 }
 
 export default PostSearch;
