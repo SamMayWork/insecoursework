@@ -4,10 +4,17 @@ const pms = require('../postmodule');
 
 describe('PMS Module DB Tests', () => {
 
+  describe('deletePost', () => {
+    it('Should delete the post properly', async () => {
+      await dbabs.deletePost('fe5b5840');
+      assert.equal(await dbabs.getPost('fe5b5840'), undefined);
+    });
+  });
+
   //#region Getting Content
   describe('getPost', () => {
-    it('Should not return undefined for row for ID 11f3b99f', async () => {
-      const result = await dbabs.getPost('11f3b99f');
+    it('Should not return undefined for row for ID ba5524ac', async () => {
+      const result = await dbabs.getPost('ba5524ac');
       assert.notEqual(result, undefined);
     });
 

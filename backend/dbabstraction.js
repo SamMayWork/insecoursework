@@ -491,8 +491,12 @@ async function changeNotificationState (email, status) {
 // ////////////////////////////////////////////////////////////// DELETING CONTENT
 // #region Deletion
 async function deletePost(postid) {
-  const query = 'DELETE FROM posts WHERE post_id = $1;';
-  executeQuery(query, [postid]);
+  let query = 'DELETE FROM comments WHERE post_id = $1;';
+  await executeQuery(query, [postid]);
+  query = 'DELETE FROM keywords WHERE keyword_id = $1;';
+  await executeQuery(query, [postid]);
+  query = 'DELETE FROM posts WHERE post_id = $1;';
+  await executeQuery(query, [postid]);
 }
 
 async function deleteComment(commentid) {
