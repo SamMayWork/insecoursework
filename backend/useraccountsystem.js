@@ -117,6 +117,20 @@ async function getCommentAuthor(commentid) {
   return dbabs.getCommentAuthor(commentid);
 }
 
+// ////////////////////////////////////////////////////////////// NOTIFICATION SETTINGS
+
+async function changeNotificationState (req, res) {
+  if (req.query.status !== undefined) {
+    await dbabs.changeNotificationState(req.user.emails[0].value, req.query.status);
+    res.status(200);
+    res.end();
+    return;
+  }
+  res.status(500);
+  res.end();
+}
+
+
 // ////////////////////////////////////////////////////////////// EXPORTS
 
 module.exports.enrollUser = enrollUser;
@@ -128,3 +142,5 @@ module.exports.deleteUser = deleteUser;
 module.exports.checkUserExists = checkUserExists;
 module.exports.getPostAuthor = getPostAuthor;
 module.exports.getCommentAuthor = getCommentAuthor;
+
+module.exports.changeNotificationState = changeNotificationState;
