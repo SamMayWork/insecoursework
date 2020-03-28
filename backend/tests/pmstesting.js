@@ -4,10 +4,17 @@ const pms = require('../postmodule');
 
 describe('PMS Module DB Tests', () => {
 
+  describe('deletePost', () => {
+    it('Should delete the post properly', async () => {
+      await dbabs.deletePost('fe5b5840');
+      assert.equal(await dbabs.getPost('fe5b5840'), undefined);
+    });
+  });
+
   //#region Getting Content
   describe('getPost', () => {
-    it('Should not return undefined for row for ID 11f3b99f', async () => {
-      const result = await dbabs.getPost('11f3b99f');
+    it('Should not return undefined for row for ID ba5524ac', async () => {
+      const result = await dbabs.getPost('ba5524ac');
       assert.notEqual(result, undefined);
     });
 
@@ -62,7 +69,7 @@ describe('PMS Module DB Tests', () => {
 
     it('Should return the expected content for the post_title drawn tube heat bean', async () => {
       const result = await dbabs.searchPosts('drawn tube heat bean');
-      assert.deepEqual(result, {
+      assert.deepEqual(result[0], {
         post_id: 'ad7e89d1',
         keyword_id: '2f64b1d3',
         board_id: 'cfd5636c',
@@ -79,7 +86,7 @@ describe('PMS Module DB Tests', () => {
 
     it('Should return undefined if the post does not exist', async () => {
       const result = await dbabs.searchPosts('DOESNOTE');
-      assert.equal(result, undefined);
+      assert.equal(result[0], undefined);
     });
   });
 
@@ -140,7 +147,8 @@ describe('PMS Module DB Tests', () => {
         user_id: '75b6d7e5',
         post_id: 'ad7e89d1',
         reply_id: null,
-        reported : false
+        reported : false,
+        correct : false
       });
     });
 
@@ -168,7 +176,8 @@ describe('PMS Module DB Tests', () => {
         user_id: '75b6d7e5',
         post_id: 'ad7e89d1',
         reply_id: undefined,
-        reported : false
+        reported : false,
+        correct : false
       });
     });
 

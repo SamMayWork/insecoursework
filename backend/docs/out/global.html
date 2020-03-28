@@ -104,7 +104,7 @@
     
 
     
-    <h4 class="name" id="changeDisplayName"><span class="type-signature">(async) </span>changeDisplayName<span class="signature">(req, res)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="changeNotificationState"><span class="type-signature">(async) </span>changeNotificationState<span class="signature">(email, status)</span><span class="type-signature"></span></h4>
     
 
     
@@ -112,7 +112,7 @@
 
 
 <div class="description">
-    Allows a user to change between using their real name and their UP number
+    Changes the global on/off setting for notifications
 </div>
 
 
@@ -148,167 +148,7 @@
 
         <tr>
             
-                <td class="name"><code>req</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">request</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>res</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">response</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="useraccountsystem.js.html">useraccountsystem.js</a>, <a href="useraccountsystem.js.html#line63">line 63</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="changeName"><span class="type-signature">(async) </span>changeName<span class="signature">(userid, status)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Switches between using the users real name and their UP number
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>userid</code></td>
+                <td class="name"><code>email</code></td>
             
 
             <td class="type">
@@ -388,7 +228,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line415">line 415</a>
+        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line485">line 485</a>
     </li></ul></dd>
     
 
@@ -526,7 +366,7 @@ the ID of the user if a record is found
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line395">line 395</a>
+        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line378">line 378</a>
     </li></ul></dd>
     
 
@@ -663,7 +503,7 @@ the ID of the user if a record is found
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="useraccountsystem.js.html">useraccountsystem.js</a>, <a href="useraccountsystem.js.html#line87">line 87</a>
+        <a href="useraccountsystem.js.html">useraccountsystem.js</a>, <a href="useraccountsystem.js.html#line95">line 95</a>
     </li></ul></dd>
     
 
@@ -707,7 +547,7 @@ the ID of the user if a record is found
 
 
 <div class="description">
-    Starts the cold-start prodedure for the forum by creating boards for all of the modules inside
+    Starts the cold-start procedure for the forum by creating boards for all of the modules inside
 of the application
 </div>
 
@@ -752,7 +592,7 @@ of the application
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="maintainmodule.js.html">maintainmodule.js</a>, <a href="maintainmodule.js.html#line20">line 20</a>
+        <a href="maintainmodule.js.html">maintainmodule.js</a>, <a href="maintainmodule.js.html#line17">line 17</a>
     </li></ul></dd>
     
 
@@ -925,6 +765,280 @@ of the application
     
 
     
+    <h4 class="name" id="convertCommentsIdToName"><span class="type-signature">(async) </span>convertCommentsIdToName<span class="signature">(comments)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Converts a comment ID to the correct display name
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>comments</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The JSON Comment to convert</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line315">line 315</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="convertPostIdToName"><span class="type-signature">(async) </span>convertPostIdToName<span class="signature">(post)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Converts a post's user_id to the correct display name
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>post</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The JSON Post to convert</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line303">line 303</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="createBoard"><span class="type-signature">(async) </span>createBoard<span class="signature">(board_name, board_year)</span><span class="type-signature"></span></h4>
     
 
@@ -1049,7 +1163,7 @@ of the application
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line181">line 181</a>
+        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line192">line 192</a>
     </li></ul></dd>
     
 
@@ -1232,7 +1346,7 @@ of the application
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line234">line 234</a>
+        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line245">line 245</a>
     </li></ul></dd>
     
 
@@ -1415,7 +1529,7 @@ of the application
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line138">line 138</a>
+        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line165">line 165</a>
     </li></ul></dd>
     
 
@@ -1547,7 +1661,7 @@ of the application
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line196">line 196</a>
+        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line207">line 207</a>
     </li></ul></dd>
     
 
@@ -1781,7 +1895,7 @@ of the application
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line215">line 215</a>
+        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line226">line 226</a>
     </li></ul></dd>
     
 
@@ -1951,7 +2065,7 @@ of the application
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line114">line 114</a>
+        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line140">line 140</a>
     </li></ul></dd>
     
 
@@ -2157,7 +2271,7 @@ of the application
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line252">line 252</a>
+        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line263">line 263</a>
     </li></ul></dd>
     
 
@@ -2193,7 +2307,7 @@ of the application
     
 
     
-    <h4 class="name" id="deleteRecordBoard"><span class="type-signature">(async) </span>deleteRecordBoard<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="deleteComment"><span class="type-signature">(async) </span>deleteComment<span class="signature">(req, res)</span><span class="type-signature"></span></h4>
     
 
     
@@ -2201,7 +2315,7 @@ of the application
 
 
 <div class="description">
-    Deletes all of the content from the table board
+    Deletes a comment from the DB
 </div>
 
 
@@ -2210,6 +2324,78 @@ of the application
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>req</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">request</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>res</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">response</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -2245,7 +2431,167 @@ of the application
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line469">line 469</a>
+        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line381">line 381</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="deletePost"><span class="type-signature">(async) </span>deletePost<span class="signature">(req, res)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Deletes a post from the DB
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>req</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">request</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>res</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">response</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line366">line 366</a>
     </li></ul></dd>
     
 
@@ -2405,7 +2751,7 @@ of the application
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="useraccountsystem.js.html">useraccountsystem.js</a>, <a href="useraccountsystem.js.html#line44">line 44</a>
+        <a href="useraccountsystem.js.html">useraccountsystem.js</a>, <a href="useraccountsystem.js.html#line42">line 42</a>
     </li></ul></dd>
     
 
@@ -2565,7 +2911,7 @@ of the application
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line280">line 280</a>
+        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line291">line 291</a>
     </li></ul></dd>
     
 
@@ -2725,7 +3071,7 @@ of the application
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line194">line 194</a>
+        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line221">line 221</a>
     </li></ul></dd>
     
 
@@ -2862,7 +3208,7 @@ of the application
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line266">line 266</a>
+        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line277">line 277</a>
     </li></ul></dd>
     
 
@@ -3022,7 +3368,144 @@ of the application
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line175">line 175</a>
+        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line202">line 202</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="emailAvailableStatus"><span class="type-signature"></span>emailAvailableStatus<span class="signature">(status)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Changes the status of email sending from the notification module
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>status</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="notificationsystem.js.html">notificationsystem.js</a>, <a href="notificationsystem.js.html#line84">line 84</a>
     </li></ul></dd>
     
 
@@ -3159,7 +3642,7 @@ of the application
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line424">line 424</a>
+        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line416">line 416</a>
     </li></ul></dd>
     
 
@@ -3203,7 +3686,8 @@ of the application
 
 
 <div class="description">
-    Enrolls a new user in the DB
+    Enrolls a new user in the DB using the information provided in the
+authenticated request
 </div>
 
 
@@ -3278,7 +3762,7 @@ of the application
 
             
 
-            <td class="description last"></td>
+            <td class="description last">@</td>
         </tr>
 
     
@@ -3319,7 +3803,7 @@ of the application
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="useraccountsystem.js.html">useraccountsystem.js</a>, <a href="useraccountsystem.js.html#line18">line 18</a>
+        <a href="useraccountsystem.js.html">useraccountsystem.js</a>, <a href="useraccountsystem.js.html#line20">line 20</a>
     </li></ul></dd>
     
 
@@ -3887,7 +4371,167 @@ FOR TESTING ONLY!
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line252">line 252</a>
+        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line279">line 279</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="generateGenericEmail"><span class="type-signature">(async) </span>generateGenericEmail<span class="signature">(req, message)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Generates an email to the request address using only the provided message parameter
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>req</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">request</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Message to send to the user</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="notificationsystem.js.html">notificationsystem.js</a>, <a href="notificationsystem.js.html#line95">line 95</a>
     </li></ul></dd>
     
 
@@ -4060,6 +4704,303 @@ FOR TESTING ONLY!
     
 
     
+    <h4 class="name" id="generatePostConfirmation"><span class="type-signature">(async) </span>generatePostConfirmation<span class="signature">(req, postid)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Sends an emai to the user when their post has been successfully created
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>req</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">request</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>postid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ID of the created post</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="notificationsystem.js.html">notificationsystem.js</a>, <a href="notificationsystem.js.html#line106">line 106</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="generateRegistrationConfirmation"><span class="type-signature">(async) </span>generateRegistrationConfirmation<span class="signature">(req)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Generates a confirmation sent to the user when they have registered
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>req</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">request</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="notificationsystem.js.html">notificationsystem.js</a>, <a href="notificationsystem.js.html#line122">line 122</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="generateRetrievePostContent"><span class="type-signature"></span>generateRetrievePostContent<span class="signature">(post, comments)</span><span class="type-signature"></span></h4>
     
 
@@ -4184,7 +5125,7 @@ FOR TESTING ONLY!
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line276">line 276</a>
+        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line332">line 332</a>
     </li></ul></dd>
     
 
@@ -4344,7 +5285,7 @@ FOR TESTING ONLY!
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line93">line 93</a>
+        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line91">line 91</a>
     </li></ul></dd>
     
 
@@ -4476,7 +5417,7 @@ FOR TESTING ONLY!
 
 
 <div class="description">
-    Gets a specific board
+    Gets all of the posts from a specific board
 </div>
 
 
@@ -4528,7 +5469,7 @@ FOR TESTING ONLY!
 
             
 
-            <td class="description last"></td>
+            <td class="description last">The ID of the board to get the posts for</td>
         </tr>
 
     
@@ -4729,7 +5670,7 @@ FOR TESTING ONLY!
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line74">line 74</a>
+        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line72">line 72</a>
     </li></ul></dd>
     
 
@@ -5026,7 +5967,7 @@ FOR TESTING ONLY!
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line54">line 54</a>
+        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line48">line 48</a>
     </li></ul></dd>
     
 
@@ -5163,7 +6104,7 @@ FOR TESTING ONLY!
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line448">line 448</a>
+        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line445">line 445</a>
     </li></ul></dd>
     
 
@@ -5300,7 +6241,7 @@ FOR TESTING ONLY!
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="useraccountsystem.js.html">useraccountsystem.js</a>, <a href="useraccountsystem.js.html#line120">line 120</a>
+        <a href="useraccountsystem.js.html">useraccountsystem.js</a>, <a href="useraccountsystem.js.html#line116">line 116</a>
     </li></ul></dd>
     
 
@@ -5482,7 +6423,7 @@ raw database output as processing all comments to change the format would be too
 
 
 <div class="description">
-    Gets the displau name of a user using their ID
+    Gets the display name of a user using their ID
 </div>
 
 
@@ -5534,7 +6475,7 @@ raw database output as processing all comments to change the format would be too
 
             
 
-            <td class="description last"></td>
+            <td class="description last">the user id to get the display name for</td>
         </tr>
 
     
@@ -5575,7 +6516,7 @@ raw database output as processing all comments to change the format would be too
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line458">line 458</a>
+        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line459">line 459</a>
     </li></ul></dd>
     
 
@@ -5619,7 +6560,7 @@ raw database output as processing all comments to change the format would be too
 
 
 <div class="description">
-    Gets a post and all of its content (including comments), this method hides the
+    Gets a post and all of its content, this method hides the
 raw database output in a JSON object with aliases for the column names to simplify use
 </div>
 
@@ -5873,7 +6814,7 @@ raw database output in a JSON object with aliases for the column names to simpli
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line32">line 32</a>
+        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line21">line 21</a>
     </li></ul></dd>
     
 
@@ -6010,7 +6951,7 @@ raw database output in a JSON object with aliases for the column names to simpli
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line438">line 438</a>
+        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line431">line 431</a>
     </li></ul></dd>
     
 
@@ -6147,7 +7088,7 @@ raw database output in a JSON object with aliases for the column names to simpli
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="useraccountsystem.js.html">useraccountsystem.js</a>, <a href="useraccountsystem.js.html#line112">line 112</a>
+        <a href="useraccountsystem.js.html">useraccountsystem.js</a>, <a href="useraccountsystem.js.html#line108">line 108</a>
     </li></ul></dd>
     
 
@@ -6183,7 +7124,7 @@ raw database output in a JSON object with aliases for the column names to simpli
     
 
     
-    <h4 class="name" id="getUsersID"><span class="type-signature">(async) </span>getUsersID<span class="signature">(req)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getPostsByDate"><span class="type-signature">(async) </span>getPostsByDate<span class="signature">(status)</span><span class="type-signature"></span></h4>
     
 
     
@@ -6191,7 +7132,144 @@ raw database output in a JSON object with aliases for the column names to simpli
 
 
 <div class="description">
-    Gets the ID of the user from a request
+    Gets all posts from all forums using their Date
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>status</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">either ASC or DESC</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line145">line 145</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getPostsByDate"><span class="type-signature">(async) </span>getPostsByDate<span class="signature">(req, res)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Gets all of the posts on the DB using their date ASC or DESC
 </div>
 
 
@@ -6247,6 +7325,29 @@ raw database output in a JSON object with aliases for the column names to simpli
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>res</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">response</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -6284,7 +7385,144 @@ raw database output in a JSON object with aliases for the column names to simpli
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="useraccountsystem.js.html">useraccountsystem.js</a>, <a href="useraccountsystem.js.html#line100">line 100</a>
+        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line109">line 109</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getUserId"><span class="type-signature">(async) </span>getUserId<span class="signature">(email)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Gets the UserID for a given email address
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>email</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Email address to search</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line392">line 392</a>
     </li></ul></dd>
     
 
@@ -6444,7 +7682,7 @@ raw database output in a JSON object with aliases for the column names to simpli
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server.js.html">server.js</a>, <a href="server.js.html#line285">line 285</a>
+        <a href="server.js.html">server.js</a>, <a href="server.js.html#line307">line 307</a>
     </li></ul></dd>
     
 
@@ -6604,7 +7842,7 @@ raw database output in a JSON object with aliases for the column names to simpli
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server.js.html">server.js</a>, <a href="server.js.html#line296">line 296</a>
+        <a href="server.js.html">server.js</a>, <a href="server.js.html#line318">line 318</a>
     </li></ul></dd>
     
 
@@ -6764,7 +8002,7 @@ raw database output in a JSON object with aliases for the column names to simpli
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server.js.html">server.js</a>, <a href="server.js.html#line274">line 274</a>
+        <a href="server.js.html">server.js</a>, <a href="server.js.html#line296">line 296</a>
     </li></ul></dd>
     
 
@@ -6901,7 +8139,7 @@ raw database output in a JSON object with aliases for the column names to simpli
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line332">line 332</a>
+        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line338">line 338</a>
     </li></ul></dd>
     
 
@@ -7038,7 +8276,7 @@ raw database output in a JSON object with aliases for the column names to simpli
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line319">line 319</a>
+        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line329">line 329</a>
     </li></ul></dd>
     
 
@@ -7394,6 +8632,486 @@ raw database output in a JSON object with aliases for the column names to simpli
     
 
     
+    <h4 class="name" id="markCommentAsAnswer"><span class="type-signature">(async) </span>markCommentAsAnswer<span class="signature">(req, res)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Allows the user to mark a comment as correct
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>req</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">request</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>res</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">response</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line126">line 126</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="rateComment"><span class="type-signature">(async) </span>rateComment<span class="signature">(commentid, like)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Function for liking/disliking comments on posts
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>commentid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">is the id of the comment that is being liked/disliked</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>like</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">if true, the post is like, if false it is disliked</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line363">line 363</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="ratePost"><span class="type-signature">(async) </span>ratePost<span class="signature">(like, postId)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Function for liking/disliking a post
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>like</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">if true, the post is liked, if false it is disliked</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>postId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">is the id of the post that is being liked/disliked</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line352">line 352</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="reportComment"><span class="type-signature">(async) </span>reportComment<span class="signature">(user_id, comment_id)</span><span class="type-signature"></span></h4>
     
 
@@ -7518,7 +9236,7 @@ raw database output in a JSON object with aliases for the column names to simpli
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line305">line 305</a>
+        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line315">line 315</a>
     </li></ul></dd>
     
 
@@ -7678,7 +9396,7 @@ raw database output in a JSON object with aliases for the column names to simpli
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="reportingsystem.js.html">reportingsystem.js</a>, <a href="reportingsystem.js.html#line29">line 29</a>
+        <a href="reportingsystem.js.html">reportingsystem.js</a>, <a href="reportingsystem.js.html#line32">line 32</a>
     </li></ul></dd>
     
 
@@ -7714,7 +9432,7 @@ raw database output in a JSON object with aliases for the column names to simpli
     
 
     
-    <h4 class="name" id="reportPost"><span class="type-signature">(async) </span>reportPost<span class="signature">(user_id, post_id)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="reportPost"><span class="type-signature">(async) </span>reportPost<span class="signature">(post_id)</span><span class="type-signature"></span></h4>
     
 
     
@@ -7722,7 +9440,7 @@ raw database output in a JSON object with aliases for the column names to simpli
 
 
 <div class="description">
-    Reporting a post
+    Sets the reported field of a post to true
 </div>
 
 
@@ -7758,36 +9476,13 @@ raw database output in a JSON object with aliases for the column names to simpli
 
         <tr>
             
-                <td class="name"><code>user_id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">user_id of the useres that report</td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>post_id</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
@@ -7797,7 +9492,7 @@ raw database output in a JSON object with aliases for the column names to simpli
 
             
 
-            <td class="description last">Post_id that is being reported</td>
+            <td class="description last"></td>
         </tr>
 
     
@@ -7838,7 +9533,7 @@ raw database output in a JSON object with aliases for the column names to simpli
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line294">line 294</a>
+        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line304">line 304</a>
     </li></ul></dd>
     
 
@@ -7998,7 +9693,7 @@ raw database output in a JSON object with aliases for the column names to simpli
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="reportingsystem.js.html">reportingsystem.js</a>, <a href="reportingsystem.js.html#line16">line 16</a>
+        <a href="reportingsystem.js.html">reportingsystem.js</a>, <a href="reportingsystem.js.html#line21">line 21</a>
     </li></ul></dd>
     
 
@@ -8135,7 +9830,7 @@ raw database output in a JSON object with aliases for the column names to simpli
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line148">line 148</a>
+        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line159">line 159</a>
     </li></ul></dd>
     
 
@@ -8295,7 +9990,7 @@ raw database output in a JSON object with aliases for the column names to simpli
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line208">line 208</a>
+        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line235">line 235</a>
     </li></ul></dd>
     
 
@@ -8432,7 +10127,7 @@ raw database output in a JSON object with aliases for the column names to simpli
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line158">line 158</a>
+        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line169">line 169</a>
     </li></ul></dd>
     
 
@@ -8592,7 +10287,7 @@ raw database output in a JSON object with aliases for the column names to simpli
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line226">line 226</a>
+        <a href="postmodule.js.html">postmodule.js</a>, <a href="postmodule.js.html#line253">line 253</a>
     </li></ul></dd>
     
 
@@ -8628,7 +10323,7 @@ raw database output in a JSON object with aliases for the column names to simpli
     
 
     
-    <h4 class="name" id="softReset"><span class="type-signature"></span>softReset<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="sendEmail"><span class="type-signature">(async) </span>sendEmail<span class="signature">(email, subject, message)</span><span class="type-signature"></span></h4>
     
 
     
@@ -8636,9 +10331,7 @@ raw database output in a JSON object with aliases for the column names to simpli
 
 
 <div class="description">
-    Performs a soft reset on the DB, deleting all of the records but preserving the structure
-
-Please know what you're doing if you enable this option on startup.
+    Generates and sends an SMTP email
 </div>
 
 
@@ -8647,6 +10340,101 @@ Please know what you're doing if you enable this option on startup.
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>email</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Email address to send to</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>subject</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Subject line</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Content of the email (plaintext only currently)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -8682,7 +10470,7 @@ Please know what you're doing if you enable this option on startup.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="maintainmodule.js.html">maintainmodule.js</a>, <a href="maintainmodule.js.html#line33">line 33</a>
+        <a href="notificationsystem.js.html">notificationsystem.js</a>, <a href="notificationsystem.js.html#line53">line 53</a>
     </li></ul></dd>
     
 
@@ -8707,6 +10495,16 @@ Please know what you're doing if you enable this option on startup.
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A JSON object containing a status code (.code) and a messageId if successful
+</div>
+
+
+
+    
 
 
 
@@ -8820,6 +10618,326 @@ Please know what you're doing if you enable this option on startup.
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="logging.js.html">logging.js</a>, <a href="logging.js.html#line60">line 60</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="useRealName"><span class="type-signature">(async) </span>useRealName<span class="signature">(userid, status)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Switches between using the users real name and their UP number
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>userid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>status</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">if true, uses real name</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dbabstraction.js.html">dbabstraction.js</a>, <a href="dbabstraction.js.html#line407">line 407</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="useRealName"><span class="type-signature">(async) </span>useRealName<span class="signature">(req, res)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Allows a user to change between using their real name and their UP number
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>req</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">request</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>res</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">response</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="useraccountsystem.js.html">useraccountsystem.js</a>, <a href="useraccountsystem.js.html#line71">line 71</a>
     </li></ul></dd>
     
 
@@ -9002,13 +11120,13 @@ Please know what you're doing if you enable this option on startup.
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#changeDisplayName">changeDisplayName</a></li><li><a href="global.html#changeName">changeName</a></li><li><a href="global.html#checkUserExists">checkUserExists</a></li><li><a href="global.html#coldStart">coldStart</a></li><li><a href="global.html#coldStartMessage">coldStartMessage</a></li><li><a href="global.html#createBoard">createBoard</a></li><li><a href="global.html#createComment">createComment</a></li><li><a href="global.html#createKeywords">createKeywords</a></li><li><a href="global.html#createPost">createPost</a></li><li><a href="global.html#createReplyComment">createReplyComment</a></li><li><a href="global.html#deleteRecordBoard">deleteRecordBoard</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#editComment">editComment</a></li><li><a href="global.html#editPost">editPost</a></li><li><a href="global.html#enrollUser">enrollUser</a></li><li><a href="global.html#errorMessage">errorMessage</a></li><li><a href="global.html#executeQuery">executeQuery</a></li><li><a href="global.html#executeRawQuerySync">executeRawQuerySync</a></li><li><a href="global.html#filterContent">filterContent</a></li><li><a href="global.html#generateId">generateId</a></li><li><a href="global.html#generateRetrievePostContent">generateRetrievePostContent</a></li><li><a href="global.html#getAll">getAll</a></li><li><a href="global.html#getAllBoards">getAllBoards</a></li><li><a href="global.html#getBoard">getBoard</a></li><li><a href="global.html#getComment">getComment</a></li><li><a href="global.html#getCommentAuthor">getCommentAuthor</a></li><li><a href="global.html#getComments">getComments</a></li><li><a href="global.html#getDisplayNameById">getDisplayNameById</a></li><li><a href="global.html#getPost">getPost</a></li><li><a href="global.html#getPostAuthor">getPostAuthor</a></li><li><a href="global.html#getUsersID">getUsersID</a></li><li><a href="global.html#handleGetLogging">handleGetLogging</a></li><li><a href="global.html#handleNoDB">handleNoDB</a></li><li><a href="global.html#handlePostLogging">handlePostLogging</a></li><li><a href="global.html#increaseCommentViews">increaseCommentViews</a></li><li><a href="global.html#increasePostViews">increasePostViews</a></li><li><a href="global.html#logHttpGetMessage">logHttpGetMessage</a></li><li><a href="global.html#logHttpPostMessage">logHttpPostMessage</a></li><li><a href="global.html#reportComment">reportComment</a></li><li><a href="global.html#reportPost">reportPost</a></li><li><a href="global.html#searchPosts">searchPosts</a></li><li><a href="global.html#searchTags">searchTags</a></li><li><a href="global.html#softReset">softReset</a></li><li><a href="global.html#successMessage">successMessage</a></li><li><a href="global.html#warningMessage">warningMessage</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#changeNotificationState">changeNotificationState</a></li><li><a href="global.html#checkUserExists">checkUserExists</a></li><li><a href="global.html#coldStart">coldStart</a></li><li><a href="global.html#coldStartMessage">coldStartMessage</a></li><li><a href="global.html#convertCommentsIdToName">convertCommentsIdToName</a></li><li><a href="global.html#convertPostIdToName">convertPostIdToName</a></li><li><a href="global.html#createBoard">createBoard</a></li><li><a href="global.html#createComment">createComment</a></li><li><a href="global.html#createKeywords">createKeywords</a></li><li><a href="global.html#createPost">createPost</a></li><li><a href="global.html#createReplyComment">createReplyComment</a></li><li><a href="global.html#deleteComment">deleteComment</a></li><li><a href="global.html#deletePost">deletePost</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#editComment">editComment</a></li><li><a href="global.html#editPost">editPost</a></li><li><a href="global.html#emailAvailableStatus">emailAvailableStatus</a></li><li><a href="global.html#enrollUser">enrollUser</a></li><li><a href="global.html#errorMessage">errorMessage</a></li><li><a href="global.html#executeQuery">executeQuery</a></li><li><a href="global.html#executeRawQuerySync">executeRawQuerySync</a></li><li><a href="global.html#filterContent">filterContent</a></li><li><a href="global.html#generateGenericEmail">generateGenericEmail</a></li><li><a href="global.html#generateId">generateId</a></li><li><a href="global.html#generatePostConfirmation">generatePostConfirmation</a></li><li><a href="global.html#generateRegistrationConfirmation">generateRegistrationConfirmation</a></li><li><a href="global.html#generateRetrievePostContent">generateRetrievePostContent</a></li><li><a href="global.html#getAll">getAll</a></li><li><a href="global.html#getAllBoards">getAllBoards</a></li><li><a href="global.html#getBoard">getBoard</a></li><li><a href="global.html#getComment">getComment</a></li><li><a href="global.html#getCommentAuthor">getCommentAuthor</a></li><li><a href="global.html#getComments">getComments</a></li><li><a href="global.html#getDisplayNameById">getDisplayNameById</a></li><li><a href="global.html#getPost">getPost</a></li><li><a href="global.html#getPostAuthor">getPostAuthor</a></li><li><a href="global.html#getPostsByDate">getPostsByDate</a></li><li><a href="global.html#getUserId">getUserId</a></li><li><a href="global.html#handleGetLogging">handleGetLogging</a></li><li><a href="global.html#handleNoDB">handleNoDB</a></li><li><a href="global.html#handlePostLogging">handlePostLogging</a></li><li><a href="global.html#increaseCommentViews">increaseCommentViews</a></li><li><a href="global.html#increasePostViews">increasePostViews</a></li><li><a href="global.html#logHttpGetMessage">logHttpGetMessage</a></li><li><a href="global.html#logHttpPostMessage">logHttpPostMessage</a></li><li><a href="global.html#markCommentAsAnswer">markCommentAsAnswer</a></li><li><a href="global.html#rateComment">rateComment</a></li><li><a href="global.html#ratePost">ratePost</a></li><li><a href="global.html#reportComment">reportComment</a></li><li><a href="global.html#reportPost">reportPost</a></li><li><a href="global.html#searchPosts">searchPosts</a></li><li><a href="global.html#searchTags">searchTags</a></li><li><a href="global.html#sendEmail">sendEmail</a></li><li><a href="global.html#successMessage">successMessage</a></li><li><a href="global.html#useRealName">useRealName</a></li><li><a href="global.html#warningMessage">warningMessage</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Sun Mar 15 2020 22:28:43 GMT+0000 (Greenwich Mean Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Mar 27 2020 10:32:05 GMT+0000 (Greenwich Mean Time)
 </footer>
 
 <script> prettyPrint(); </script>

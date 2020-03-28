@@ -38,7 +38,6 @@
 //  : --logging, logs every HTTP request made to the server, listing the resource and the IP
 //  : --coldstart, cold starts the system and creates all of the tables in the DB, requires restart
 //  : --nodb, starts the server with no attached Database, responding to queries with a template JSON
-//  : --softreset, removes all records from the Database, requires restart
 
 // ////////////////////////////////////////////////////////////// ESLINT-DISABLES
 
@@ -70,9 +69,9 @@ app.use(express.static('frontend/build/'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use(GoogleAuth("817279853236-toe6rfq5ebg7rife6fvd82hh0eclpt3t.apps.googleusercontent.com"));
+app.use(GoogleAuth('817279853236-toe6rfq5ebg7rife6fvd82hh0eclpt3t.apps.googleusercontent.com'));
 app.use('/forum', GoogleAuth.guardMiddleware());
-//#endregion
+// #endregion
 // ////////////////////////////////////////////////////////////// COMMAND LINE ARGUMENTS
 // #region Command line arguments
 if (argv.nodb) {
@@ -86,12 +85,6 @@ if (argv.coldstart) {
   logging.coldStartMessage('Cold-Start procedure has been finished, continuing to start the server!');
 }
 
-if (argv.softreset) {
-  logging.warningMessage('Soft Reset mode has been enabled, clearing the server now.');
-  maintain.softreset();
-  logging.warningMessage('Content of the Database has been cleared and the structure has been preserved');
-  logging.warningMessage('Restart the server without the --softreset, but with the --coldstart operation to begin normal operation');
-}
 // #endregion
 // ////////////////////////////////////////////////////////////// GETTING
 // #region Getting
@@ -125,7 +118,7 @@ app.get('/get', async (req, res) => {
  * Handler for / so if someone just types in our IP they will get index.html
  */
 app.get('/', (req, res) => {
-  res.sendFile('frontend/index.html');
+  res.sendFile('frontend/build/index.html', { root: __dirname });
   res.status(200);
   res.end();
 });
@@ -174,6 +167,32 @@ app.post('/forum/create', async (req, res) => {
   }
 });
 // #endregion
+// ////////////////////////////////////////////////////////////// DELETING POSTS/COMMENTS
+//#region 
+app.get ('/forum/delete', async (req, res) => {
+  handleGetLogging(req);
+
+  if(!uac.checkUserExists(req)) {
+    forbidden(res);
+  }
+
+  if (req.query.postid !== undefined) {
+    await pms.deletePost(req, res);
+  }
+
+  if (req.query.commentid !== undefined) {
+    await pms.deleteComment(req, res);
+  }
+});
+//#endregion
+// ////////////////////////////////////////////////////////////// MARKING COMMENT AS ANSWER
+//#region 
+app.get('/forum/comment', async (req, res) => {
+  if (req.query.correct  === true &amp;&amp; req.query.commentid !== undefined) {
+    await pms.markCommentAsAnswer(req, res); 
+  }
+});
+//#endregion
 // ////////////////////////////////////////////////////////////// EDITING CONTENT
 // #region Editing
 // Handler for edit requests, endpoints are:
@@ -241,7 +260,7 @@ app.post('/forum/like', async (req, res) => {
 // Handler for HTTP posts to the report system of the application
 // /forum/report?post=[param] - Reports a post using the given ID
 // /forum/report?comment=[param] - Reports a comment using the given ID
-app.post('forum/report', (req, res) => {
+app.post('forum/report', async (req, res) => {
   handleNoDB(req, res);
   handlePostLogging(req);
 
@@ -250,30 +269,33 @@ app.post('forum/report', (req, res) => {
     return;
   }
 
-  if (req.query.post !== undefined) {
-    reporting.reportPost(req, res);
+  if (req.query.postid !== undefined) {
+    await reporting.reportPost(req, res);
   }
 
-  if (req.query.comment !== undefined) {
-    reporting.reportComment(req, res);
+  if (req.query.commentid !== undefined) {
+    await reporting.reportComment(req, res);
   }
 
   res.end();
 });
 // #endregion
 // ////////////////////////////////////////////////////////////// UAC ENDPOINTS
-//#region UAC Endpoints
+// #region UAC Endpoints
 
-app.post('uac/register', async function () {
+app.post('/forum/uac', async (req, res) => {
+  handleNoDB(req, res);
+  handlePostLogging(req);
 
+  // Save the user into the DB
+  if (req.query.register === 1) {
+    enrollUser(req, res);
+    await ns.generateRegistrationConfirmation (req);
+  }
 });
 
-app.post('forum/uac/', async function () {
 
-});
-
-
-//#endregion
+// #endregion
 // ////////////////////////////////////////////////////////////// CATCH-ALLS
 // #region 404 Handlers
 // Catch-all for 404's
@@ -342,13 +364,13 @@ app.listen(listeningPort);
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#changeDisplayName">changeDisplayName</a></li><li><a href="global.html#changeName">changeName</a></li><li><a href="global.html#checkUserExists">checkUserExists</a></li><li><a href="global.html#coldStart">coldStart</a></li><li><a href="global.html#coldStartMessage">coldStartMessage</a></li><li><a href="global.html#createBoard">createBoard</a></li><li><a href="global.html#createComment">createComment</a></li><li><a href="global.html#createKeywords">createKeywords</a></li><li><a href="global.html#createPost">createPost</a></li><li><a href="global.html#createReplyComment">createReplyComment</a></li><li><a href="global.html#deleteRecordBoard">deleteRecordBoard</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#editComment">editComment</a></li><li><a href="global.html#editPost">editPost</a></li><li><a href="global.html#enrollUser">enrollUser</a></li><li><a href="global.html#errorMessage">errorMessage</a></li><li><a href="global.html#executeQuery">executeQuery</a></li><li><a href="global.html#executeRawQuerySync">executeRawQuerySync</a></li><li><a href="global.html#filterContent">filterContent</a></li><li><a href="global.html#generateId">generateId</a></li><li><a href="global.html#generateRetrievePostContent">generateRetrievePostContent</a></li><li><a href="global.html#getAll">getAll</a></li><li><a href="global.html#getAllBoards">getAllBoards</a></li><li><a href="global.html#getBoard">getBoard</a></li><li><a href="global.html#getComment">getComment</a></li><li><a href="global.html#getCommentAuthor">getCommentAuthor</a></li><li><a href="global.html#getComments">getComments</a></li><li><a href="global.html#getDisplayNameById">getDisplayNameById</a></li><li><a href="global.html#getPost">getPost</a></li><li><a href="global.html#getPostAuthor">getPostAuthor</a></li><li><a href="global.html#getUsersID">getUsersID</a></li><li><a href="global.html#handleGetLogging">handleGetLogging</a></li><li><a href="global.html#handleNoDB">handleNoDB</a></li><li><a href="global.html#handlePostLogging">handlePostLogging</a></li><li><a href="global.html#increaseCommentViews">increaseCommentViews</a></li><li><a href="global.html#increasePostViews">increasePostViews</a></li><li><a href="global.html#logHttpGetMessage">logHttpGetMessage</a></li><li><a href="global.html#logHttpPostMessage">logHttpPostMessage</a></li><li><a href="global.html#reportComment">reportComment</a></li><li><a href="global.html#reportPost">reportPost</a></li><li><a href="global.html#searchPosts">searchPosts</a></li><li><a href="global.html#searchTags">searchTags</a></li><li><a href="global.html#softReset">softReset</a></li><li><a href="global.html#successMessage">successMessage</a></li><li><a href="global.html#warningMessage">warningMessage</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#changeNotificationState">changeNotificationState</a></li><li><a href="global.html#checkUserExists">checkUserExists</a></li><li><a href="global.html#coldStart">coldStart</a></li><li><a href="global.html#coldStartMessage">coldStartMessage</a></li><li><a href="global.html#convertCommentsIdToName">convertCommentsIdToName</a></li><li><a href="global.html#convertPostIdToName">convertPostIdToName</a></li><li><a href="global.html#createBoard">createBoard</a></li><li><a href="global.html#createComment">createComment</a></li><li><a href="global.html#createKeywords">createKeywords</a></li><li><a href="global.html#createPost">createPost</a></li><li><a href="global.html#createReplyComment">createReplyComment</a></li><li><a href="global.html#deleteComment">deleteComment</a></li><li><a href="global.html#deletePost">deletePost</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#editComment">editComment</a></li><li><a href="global.html#editPost">editPost</a></li><li><a href="global.html#emailAvailableStatus">emailAvailableStatus</a></li><li><a href="global.html#enrollUser">enrollUser</a></li><li><a href="global.html#errorMessage">errorMessage</a></li><li><a href="global.html#executeQuery">executeQuery</a></li><li><a href="global.html#executeRawQuerySync">executeRawQuerySync</a></li><li><a href="global.html#filterContent">filterContent</a></li><li><a href="global.html#generateGenericEmail">generateGenericEmail</a></li><li><a href="global.html#generateId">generateId</a></li><li><a href="global.html#generatePostConfirmation">generatePostConfirmation</a></li><li><a href="global.html#generateRegistrationConfirmation">generateRegistrationConfirmation</a></li><li><a href="global.html#generateRetrievePostContent">generateRetrievePostContent</a></li><li><a href="global.html#getAll">getAll</a></li><li><a href="global.html#getAllBoards">getAllBoards</a></li><li><a href="global.html#getBoard">getBoard</a></li><li><a href="global.html#getComment">getComment</a></li><li><a href="global.html#getCommentAuthor">getCommentAuthor</a></li><li><a href="global.html#getComments">getComments</a></li><li><a href="global.html#getDisplayNameById">getDisplayNameById</a></li><li><a href="global.html#getPost">getPost</a></li><li><a href="global.html#getPostAuthor">getPostAuthor</a></li><li><a href="global.html#getPostsByDate">getPostsByDate</a></li><li><a href="global.html#getUserId">getUserId</a></li><li><a href="global.html#handleGetLogging">handleGetLogging</a></li><li><a href="global.html#handleNoDB">handleNoDB</a></li><li><a href="global.html#handlePostLogging">handlePostLogging</a></li><li><a href="global.html#increaseCommentViews">increaseCommentViews</a></li><li><a href="global.html#increasePostViews">increasePostViews</a></li><li><a href="global.html#logHttpGetMessage">logHttpGetMessage</a></li><li><a href="global.html#logHttpPostMessage">logHttpPostMessage</a></li><li><a href="global.html#markCommentAsAnswer">markCommentAsAnswer</a></li><li><a href="global.html#rateComment">rateComment</a></li><li><a href="global.html#ratePost">ratePost</a></li><li><a href="global.html#reportComment">reportComment</a></li><li><a href="global.html#reportPost">reportPost</a></li><li><a href="global.html#searchPosts">searchPosts</a></li><li><a href="global.html#searchTags">searchTags</a></li><li><a href="global.html#sendEmail">sendEmail</a></li><li><a href="global.html#successMessage">successMessage</a></li><li><a href="global.html#useRealName">useRealName</a></li><li><a href="global.html#warningMessage">warningMessage</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Sun Mar 15 2020 22:28:43 GMT+0000 (Greenwich Mean Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Mar 27 2020 10:32:05 GMT+0000 (Greenwich Mean Time)
 </footer>
 
 <script> prettyPrint(); </script>

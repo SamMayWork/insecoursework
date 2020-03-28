@@ -73,7 +73,7 @@ describe('UAC Module DB Testing', () => {
     });
   
     it('Should return undefined if the email does not exist', async function () {
-      let result = await dbabs.searchPosts('DOESNOTE');
+      let result = await dbabs.getUserId('DOESNOTE');
       assert.equal(result, undefined);
     });
   });

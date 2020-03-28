@@ -48,17 +48,21 @@ CREATE TABLE IF NOT EXISTS Comments (
   user_id varchar(8) NOT NULL REFERENCES Users(user_id),
   post_id varchar(8) NOT NULL REFERENCES Posts(post_id),
   reply_id varchar(8) REFERENCES Comments(comment_id),
+  correct Boolean NOT NULL,
   reported Boolean NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Notifications (
   user_id varchar (8) NOT NULL REFERENCES Users(user_id),
-  notif_global Boolean NOT NULL,
-  notif_new_comment Boolean NOT NULL,
-  notif_activity Boolean NOT NULL,
-  notif_delete Boolean NOT NULL
+  notif_global Boolean NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS Quicklinks (
+  user_id varchar(8) NOT NULL REFERENCES Users(user_id),
+  ql1_label varchar (50),
+  ql1_link varchar(200)
+);
+ 
 insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('a2367eab', 'dish', true, 'sbaldock0@hostgator.com',         '2020-02-07');
 insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('75b6d7e5', 'seed', true, 'jgallelli1@weibo.com',            '2020-02-19');
 insert into Users (user_id, user_displayname, user_userealname, user_email, user_dateofregistration) values ('100bad41', 'come', true, 'rdellow2@storify.com',            '2020-02-04');
@@ -118,7 +122,7 @@ insert into Keywords (keyword_id, keyword_1, keyword_2, keyword_3, keyword_4,key
 insert into Keywords (keyword_id, keyword_1, keyword_2, keyword_3, keyword_4,keyword_5) VALUES ('c6fc5e90', 'settle', 'joined', 'interest', 'plain', 'first');
 insert into Keywords (keyword_id, keyword_1, keyword_2, keyword_3, keyword_4,keyword_5) VALUES ('7bdea98a', 'this', 'band', 'lost', 'sure', 'smell');
 insert into Keywords (keyword_id, keyword_1, keyword_2, keyword_3, keyword_4,keyword_5) VALUES ('d17b519e', 'way', 'largest', 'definition', 'situation', 'proper');
-insert into Keywords (keyword_id, keyword_1, keyword_2, keyword_3, keyword_4,keyword_5) VALUES ('d3ff4bac', 'before', 'game', 'choice', 'sum', 'tribe');
+insert into Keywords (keyword_id, keyword_1, keyword_2, keyword_3, keyword_4,keyword_5) VALUES ('d3ff4bac', 'check', 'game', 'choice', 'sum', 'tribe');
 insert into Keywords (keyword_id, keyword_1, keyword_2, keyword_3, keyword_4,keyword_5) VALUES ('c44651ad', 'great', 'white', 'once', 'fall', 'dry');
 insert into Keywords (keyword_id, keyword_1, keyword_2, keyword_3, keyword_4,keyword_5) VALUES ('c0b54120', 'broke', 'bare', 'society', 'arrow', 'book');
 insert into Keywords (keyword_id, keyword_1, keyword_2, keyword_3, keyword_4,keyword_5) VALUES ('06c044bb', 'better', 'applied', 'twice', 'printed', 'raise');
@@ -187,43 +191,66 @@ insert into Posts (post_id, keyword_id, board_id, post_views, post_title, post_c
 insert into Posts (post_id, keyword_id, board_id, post_views, post_title, post_content, post_likes, user_id, created_date, edited_date, reported) VALUES ('1db2a933','32ac6854', 'ea27b6e3', 0, 'exist scientific great attack','stiff question bite few heavy close yes fruit bill lot luck law climb sugar badly thumb place appropriate brief me change brain health now enter crack combination apple chief got depend detail occur newspaper mood nest cake palace left spoken income put everyone natural fall stranger earlier noon',73                                                                                         ,'100bad41','2020-02-28','2020-02-14', 'false');
 insert into Posts (post_id, keyword_id, board_id, post_views, post_title, post_content, post_likes, user_id, created_date, edited_date, reported) VALUES ('7c367dd6','864cce10', 'd7227788', 0, 'shop south shells fifth','upper unknown house meet mail brick practice hour duck chicken problem give tide poor heavy discussion cool write married expression return can mathematics series garden engine track heavy bottom birds social car evidence beginning labor compass truth quite mountain particular creature balloon hand another refer found having spell',82                                                            ,'100bad41','2020-02-17','2020-02-15', 'false');
 
-insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported) VALUES ('7437e944', 0, 'amount knew just worker pink consist who opportunity prove slept old paragraph aboard paid oil fully related fruit wherever under mysterious recall earn basis', 0, '100bad41', '11f3b99f', 'false');
-insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported) VALUES ('1fd4e936', 0, 'little deal that central easily completely bicycle remember badly wheat either exactly just police proud sunlight taste my quickly world daily automobile single smell', 0, '100bad41', '11f3b99f', 'false');
-insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported) VALUES ('0d0fd1b5', 0, 'square see store six country clothing character make dance activity excitement silver egg gradually children poet flower increase facing completely open area cannot percent', 0, '100bad41', '11f3b99f', 'false');
-insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported) VALUES ('9bff5267', 0, 'bad replace larger dropped experiment smallest south dirty solar worry island cent son free fear income satellites shirt worth beauty poem tide couple porch', 0, '100bad41', '11f3b99f', 'false');
-insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported) VALUES ('3f3d9705', 0, 'fear cave view vessels shadow highest species get bread want row single toward cat cake gently sides club constantly secret disappear song buried clothing', 0, '100bad41', '11f3b99f', 'false');
-insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported) VALUES ('1acba44f', 0, 'battle try living smallest for thee having hot watch however rain tomorrow vessels ready they exclaimed cool wood noun driver highway globe one unknown', 0, '100bad41', '11f3b99f', 'false');
-insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported) VALUES ('52362409', 0, 'tell directly they ear born all cowboy border could atom writing forest obtain cost shout forgot on become smile spend orange word frighten swept', 0, '100bad41', '11f3b99f', 'false');
-insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported) VALUES ('4cf2bee4', 0, 'growth winter pen pride acres mice double plural circle position driver shall cast special tip happen age slabs leg oil lesson slip grade plan', 0, '100bad41', '11f3b99f', 'false');
-insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported) VALUES ('b0baf6f8', 0, 'sent unhappy sheep real suit comfortable crowd lovely breathing when hit table shoot cattle printed but torn lay seven produce open sold leaving summer', 0, '100bad41', '11f3b99f', 'false');
-insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported) VALUES ('8410582e', 0, 'oxygen about poet pond continent band dance question contrast skill screen fifteen key cage golden seldom useful naturally fighting any distance till page knife', 0, '100bad41', '11f3b99f', 'false');
-insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported) VALUES ('c1dbe80b', 0, 'equator attack said bank discover dead store rest wood somebody excitement rise bush beat corn per full arrangement milk short raise medicine speech could', 0, '100bad41', '11f3b99f', 'false');
-insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported) VALUES ('45594aae', 0, 'continued temperature heart morning author driven itself house myself dozen skin failed exist dirt hall handsome block listen nervous library price were pile location', 0, '100bad41', '11f3b99f', 'false');
-insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported) VALUES ('d27324aa', 0, 'write rising whose bare sort dance fruit that jet unless list noon sing law series melted movement shoulder involved clothing public speech indicate type', 0, '100bad41', '11f3b99f', 'false');
-INSERT INTO Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported) VALUES ('qd7e89d1', 0, 'Improved own provided blessing may peculiar domestic. Sight house has sex never. No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.' , 0 , 'a2367eab', '11f3b99f', 'false');
-INSERT INTO Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported) VALUES ('q1f3b99f', 0, 'Sight house has sex never. No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.' , 0 , '75b6d7e5', 'ad7e89d1', 'false');
-INSERT INTO Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported) VALUES ('q10c91e8', 0, 'No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.' , 0 , '100bad41', 'c10c91e8', 'false');
-INSERT INTO Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported) VALUES ('qe645059', 0, 'Hold do at tore in park feet near my case.' , 0 , '1901eddf', '3e645059', 'false');
-INSERT INTO Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported) VALUES ('qac2521e', 0, 'feet near my case.' , 0 , 'f217baa2', '9ac2521e', 'false');
+insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported, correct) VALUES ('7437e944', 0, 'amount knew just worker pink consist who opportunity prove slept old paragraph aboard paid oil fully related fruit wherever under mysterious recall earn basis', 0, '100bad41', '11f3b99f', 'false', 'false');
+insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported, correct) VALUES ('1fd4e936', 0, 'little deal that central easily completely bicycle remember badly wheat either exactly just police proud sunlight taste my quickly world daily automobile single smell', 0, '100bad41', '11f3b99f', 'false', 'false');
+insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported, correct) VALUES ('0d0fd1b5', 0, 'square see store six country clothing character make dance activity excitement silver egg gradually children poet flower increase facing completely open area cannot percent', 0, '100bad41', '11f3b99f', 'false', 'false');
+insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported, correct) VALUES ('9bff5267', 0, 'bad replace larger dropped experiment smallest south dirty solar worry island cent son free fear income satellites shirt worth beauty poem tide couple porch', 0, '100bad41', '11f3b99f', 'false', 'false');
+insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported, correct) VALUES ('3f3d9705', 0, 'fear cave view vessels shadow highest species get bread want row single toward cat cake gently sides club constantly secret disappear song buried clothing', 0, '100bad41', '11f3b99f', 'false', 'false');
+insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported, correct) VALUES ('1acba44f', 0, 'battle try living smallest for thee having hot watch however rain tomorrow vessels ready they exclaimed cool wood noun driver highway globe one unknown', 0, '100bad41', '11f3b99f', 'false', 'false');
+insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported, correct) VALUES ('52362409', 0, 'tell directly they ear born all cowboy border could atom writing forest obtain cost shout forgot on become smile spend orange word frighten swept', 0, '100bad41', '11f3b99f', 'false', 'false');
+insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported, correct) VALUES ('4cf2bee4', 0, 'growth winter pen pride acres mice double plural circle position driver shall cast special tip happen age slabs leg oil lesson slip grade plan', 0, '100bad41', '11f3b99f', 'false', 'false');
+insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported, correct) VALUES ('b0baf6f8', 0, 'sent unhappy sheep real suit comfortable crowd lovely breathing when hit table shoot cattle printed but torn lay seven produce open sold leaving summer', 0, '100bad41', '11f3b99f', 'false', 'false');
+insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported, correct) VALUES ('8410582e', 0, 'oxygen about poet pond continent band dance question contrast skill screen fifteen key cage golden seldom useful naturally fighting any distance till page knife', 0, '100bad41', '11f3b99f', 'false', 'false');
+insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported, correct) VALUES ('c1dbe80b', 0, 'equator attack said bank discover dead store rest wood somebody excitement rise bush beat corn per full arrangement milk short raise medicine speech could', 0, '100bad41', '11f3b99f', 'false', 'false');
+insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported, correct) VALUES ('45594aae', 0, 'continued temperature heart morning author driven itself house myself dozen skin failed exist dirt hall handsome block listen nervous library price were pile location', 0, '100bad41', '11f3b99f', 'false', 'false');
+insert into Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported, correct) VALUES ('d27324aa', 0, 'write rising whose bare sort dance fruit that jet unless list noon sing law series melted movement shoulder involved clothing public speech indicate type', 0, '100bad41', '11f3b99f', 'false', 'false');
+INSERT INTO Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported, correct) VALUES ('qd7e89d1', 0, 'Improved own provided blessing may peculiar domestic. Sight house has sex never. No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.' , 0 , 'a2367eab', '11f3b99f', 'false', 'false');
+INSERT INTO Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported, correct) VALUES ('q1f3b99f', 0, 'Sight house has sex never. No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.' , 0 , '75b6d7e5', 'ad7e89d1', 'false', 'false');
+INSERT INTO Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported, correct) VALUES ('q10c91e8', 0, 'No visited raising gravity outward subject my cottage mr be. Hold do at tore in park feet near my case.' , 0 , '100bad41', 'c10c91e8', 'false', 'false');
+INSERT INTO Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported, correct) VALUES ('qe645059', 0, 'Hold do at tore in park feet near my case.' , 0 , '1901eddf', '3e645059', 'false', 'false');
+INSERT INTO Comments (comment_id, comment_views, comment_content, comment_likes, user_id, post_id, reported, correct) VALUES ('qac2521e', 0, 'feet near my case.' , 0 , 'f217baa2', '9ac2521e', 'false', 'false');
 
 
-insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('a2367eab', 'true', 'true', 'false', 'true');
-insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('75b6d7e5', 'false', 'false', 'false', 'true');
-insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('100bad41', 'true', 'true', 'true', 'true');
-insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('1901eddf', 'true', 'false', 'false', 'true');
-insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('f217baa2', 'true', 'true', 'false', 'true');
-insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('6071154c', 'false', 'false', 'false', 'true');
-insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('03a3f1a2', 'true', 'true', 'false', 'false');
-insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('ca77860f', 'true', 'false', 'true', 'true');
-insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('966abbd2', 'true', 'false', 'true', 'false');
-insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('1d0cf14b', 'false', 'true', 'false', 'false');
-insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('df3a26cf', 'true', 'true', 'true', 'false');
-insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('bb872b73', 'false', 'true', 'false', 'false');
-insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('8aa4a403', 'false', 'true', 'true', 'false');
-insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('9aeb1116', 'true', 'true', 'true', 'true');
-insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('acc45ba4', 'true', 'false', 'true', 'false');
-insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('168bca94', 'false', 'true', 'true', 'true');
-insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('aa0f009d', 'false', 'true', 'false', 'false');
-insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('82c9aefd', 'false', 'false', 'false', 'true');
-insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('a91b934a', 'false', 'true', 'false', 'false');
-insert into Notifications (user_id, notif_global, notif_new_comment, notif_activity, notif_delete) VALUES ('800447a8', 'false', 'true', 'false', 'true');
+insert into Notifications (user_id, notif_global) VALUES ('a2367eab', 'true');
+insert into Notifications (user_id, notif_global) VALUES ('75b6d7e5', 'false');
+insert into Notifications (user_id, notif_global) VALUES ('100bad41', 'true');
+insert into Notifications (user_id, notif_global) VALUES ('1901eddf', 'true');
+insert into Notifications (user_id, notif_global) VALUES ('f217baa2', 'true');
+insert into Notifications (user_id, notif_global) VALUES ('6071154c', 'false');
+insert into Notifications (user_id, notif_global) VALUES ('03a3f1a2', 'true');
+insert into Notifications (user_id, notif_global) VALUES ('ca77860f', 'true');
+insert into Notifications (user_id, notif_global) VALUES ('966abbd2', 'true');
+insert into Notifications (user_id, notif_global) VALUES ('1d0cf14b', 'false');
+insert into Notifications (user_id, notif_global) VALUES ('df3a26cf', 'true');
+insert into Notifications (user_id, notif_global) VALUES ('bb872b73', 'false');
+insert into Notifications (user_id, notif_global) VALUES ('8aa4a403', 'false');
+insert into Notifications (user_id, notif_global) VALUES ('9aeb1116', 'true');
+insert into Notifications (user_id, notif_global) VALUES ('acc45ba4', 'true');
+insert into Notifications (user_id, notif_global) VALUES ('168bca94', 'false');
+insert into Notifications (user_id, notif_global) VALUES ('aa0f009d', 'false');
+insert into Notifications (user_id, notif_global) VALUES ('82c9aefd', 'false');
+insert into Notifications (user_id, notif_global) VALUES ('a91b934a', 'false');
+insert into Notifications (user_id, notif_global) VALUES ('800447a8', 'false');
+
+insert into Quicklinks VALUES ('a2367eab','', '');
+insert into Quicklinks VALUES ('75b6d7e5','', '');
+insert into Quicklinks VALUES ('100bad41','', '');
+insert into Quicklinks VALUES ('1901eddf','', '');
+insert into Quicklinks VALUES ('f217baa2','', '');
+insert into Quicklinks VALUES ('6071154c','', '');
+insert into Quicklinks VALUES ('03a3f1a2','', '');
+insert into Quicklinks VALUES ('ca77860f','', '');
+insert into Quicklinks VALUES ('966abbd2','', '');
+insert into Quicklinks VALUES ('1d0cf14b','', '');
+insert into Quicklinks VALUES ('df3a26cf','', '');
+insert into Quicklinks VALUES ('bb872b73','', '');
+insert into Quicklinks VALUES ('8aa4a403','', '');
+insert into Quicklinks VALUES ('9aeb1116','', '');
+insert into Quicklinks VALUES ('acc45ba4','', '');
+insert into Quicklinks VALUES ('168bca94','', '');
+insert into Quicklinks VALUES ('aa0f009d','', '');
+insert into Quicklinks VALUES ('82c9aefd','', '');
+insert into Quicklinks VALUES ('a91b934a','', '');
+insert into Quicklinks VALUES ('800447a8','', '');
+insert into Quicklinks VALUES ('6080c8a5','', '');
+insert into Quicklinks VALUES ('00000000','', '');

@@ -142,12 +142,21 @@ async function createPost(req, res) {
 
   if (userid !== undefined) {
     // The user is authorised if the email is within our database
-    const title = filterContent(req.body.title);
-    const content = filterContent(req.body.content);
+    if (containsOffensiveLanguage(req.body.title) ||
+    containsOffensiveLanguage(req.body.content)) {
+      res.status(500);
+      res.end();
+      return;
+    }
+
     const boardid = req.query.boardid;
 
     for (let i = 0; i < req.body.keywords.length; i++) {
-      req.body.keywords[i] = filterContent(req.body.keywords[i]);
+      if(containsOffensiveLanguage(req.body.keywords[i])) {
+        res.status(500);
+        res.end();
+        return;
+      }
     }
 
     dbabs.createPost(title, content, keywords, await dbabs.getUserId(req.user.emails[0]), boardid);
@@ -162,9 +171,10 @@ async function createPost(req, res) {
  * @param {response} res
  * @param {string} userid UserID for the database
  */
-async function createComment(req, res, userid) {
+async function createComment(req, res) {
   try {
     let results;
+    let userid = await dbabs.getUserId(req.user.emails[0].value);
     if (req.body.reply === true) {
       results = await dbabs.createReplyComment(
         req.body.content,
@@ -272,6 +282,11 @@ const offensivelanguage = {
   ],
 };
 
+const bannedWords = [
+  'hate',
+  'stupid'
+]
+
 /**
  * Filters a given string for swear/offensive words
  * @param {string} content Content to be filtered
@@ -290,6 +305,18 @@ function filterContent(content) {
     }
   }
   return filteredContent;
+}
+
+/**
+ * Checks to see if a string contains offensive language
+ */
+function containsOffensiveLanguage (input) {
+  for (let word of bannedWords) {
+    if (input.includes(word)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 // #endregion

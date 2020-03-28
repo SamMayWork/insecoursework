@@ -168,7 +168,7 @@ async function getPostsByDate (status) {
 async function searchPosts(searchstring) {
   const query = 'SELECT * FROM posts WHERE post_title LIKE $1;';
   const results = await executeQuery(query, [searchstring]);
-  return results.rows[0];
+  return results.rows;
 }
 
 /**
@@ -252,9 +252,9 @@ async function createPost(title, content, keywords, authorid, boardid) {
  */
 
 async function createComment(comment_content, user_id, post_id) {
-  const commentQuery = 'INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id, reported, comment_views) VALUES($1, $2, $3, $4, $5, $6, $7);';
+  const commentQuery = 'INSERT INTO Comments (comment_id, comment_content, comment_likes, user_id, post_id, reported, comment_views, correct) VALUES($1, $2, $3, $4, $5, $6, $7, $8);';
   const id = generateId(8);
-  await executeQuery(commentQuery, [id, comment_content, 0, user_id, post_id, false, 0]);
+  await executeQuery(commentQuery, [id, comment_content, 0, user_id, post_id, false, 0, false]);
   return {
     comment_id: id,
     comment_content,
@@ -270,8 +270,8 @@ async function createComment(comment_content, user_id, post_id) {
  */
 
 async function createReplyComment(comment_content, user_id, post_id, reply_id) {
-  const query = 'INSERT INTO Comments VALUES($1, $2, $3, $4, $5, $6, $7);';
-  const results = await executeQuery(query, [generateId(8), comment_content, 0, user_id, post_id, reply_id, false]);
+  const query = 'INSERT INTO Comments VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9);';
+  const results = await executeQuery(query, [generateId(8), comment_content, 0, 0, user_id, post_id, reply_id, false, false]);
   return results;
 }
 
@@ -486,12 +486,26 @@ async function getDisplayNameByEmail(email) {
   return await getDisplayNameById(await getUserId(email));
 }
 
+/**
+ * Changes the global on/off setting for notifications
+ * @param {string} email 
+ * @param {boolean} status 
+ */
+async function changeNotificationState (email, status) {
+  const query = `UPDATE notifications SET notif_global = $1 WHERE user_id = $2;`;
+  await executeQuery(query, [status, await getUserId(email)]);
+}
+
 // #endregion
 // ////////////////////////////////////////////////////////////// DELETING CONTENT
 // #region Deletion
 async function deletePost(postid) {
-  const query = 'DELETE FROM posts WHERE post_id = $1;';
-  executeQuery(query, [postid]);
+  let query = 'DELETE FROM comments WHERE post_id = $1;';
+  await executeQuery(query, [postid]);
+  query = 'DELETE FROM keywords WHERE keyword_id = $1;';
+  await executeQuery(query, [postid]);
+  query = 'DELETE FROM posts WHERE post_id = $1;';
+  await executeQuery(query, [postid]);
 }
 
 async function deleteComment(commentid) {
@@ -507,6 +521,8 @@ module.exports.getComment = getComment;
 module.exports.getAllBoards = getAllBoards;
 module.exports.getBoard = getBoard;
 module.exports.getPostsByDate = getPostsByDate;
+
+module.exports.changeNotificationState = changeNotificationState;
 
 module.exports.deletePost = deletePost;
 module.exports.deleteComment = deleteComment;
